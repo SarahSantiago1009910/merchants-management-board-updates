@@ -1280,9 +1280,20 @@ function setLoginRole(role) {
   document.getElementById('login-pass').value = isAdm ? 'yuno123' : 'q2123';
 }
 
-function doLogin() {
+async function doLogin() {
   const e = document.getElementById('login-email').value;
   const p = document.getElementById('login-pass').value;
+  try {
+    const res = await fetch(API_BASE+'/auth', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email:e, password:p})});
+    if (res.ok) {
+      const data = await res.json();
+      currentUser = data.user;
+      await loadData();
+      showApp();
+      return;
+    }
+  } catch(err) {}
+  // Fallback local
   if (e==='sarah@y.uno' && p==='yuno123') {
     currentUser = { type:'admin', name:'Sarah', initial:'S' };
     showApp();
@@ -3092,42 +3103,105 @@ const npsForms = [];
 let planModalCtx = {mid: null, id: null, isNew: true};
 
 // ===== PERSISTÊNCIA =====
+const API_BASE = '/api';
+let _useApi = true;
+
+let _persistTimer = null;
 function persist() {
+  // localStorage cache (instant)
   try { localStorage.setItem('yuno_gm_data', JSON.stringify({merchants, demands, planos, metas, metasGerais, boards, npsForms})); } catch(e) {}
+  // Debounce API sync (300ms) to batch rapid changes
+  if (!_useApi) return;
+  clearTimeout(_persistTimer);
+  _persistTimer = setTimeout(syncToApi, 300);
 }
-(function restoreData() {
+
+async function syncToApi() {
+  if (!_useApi) return;
+  try {
+    // Sync merchants
+    fetch(API_BASE+'/merchants', {method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(merchants)}).catch(()=>{});
+    // Sync demands per merchant
+    Object.keys(demands).forEach(mid => {
+      fetch(API_BASE+'/demands?mid='+encodeURIComponent(mid), {method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(demands[mid]||[])}).catch(()=>{});
+    });
+    // Sync boards
+    Object.keys(boards).forEach(mid => {
+      Object.keys(boards[mid]||{}).forEach(key => {
+        const bd = boards[mid][key];
+        fetch(API_BASE+'/boards?mid='+encodeURIComponent(mid)+'&key='+encodeURIComponent(key), {method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify({columns:bd.columns, cards:bd.cards})}).catch(()=>{});
+      });
+    });
+    // Sync NPS forms
+    npsForms.forEach(f => {
+      fetch(API_BASE+'/nps', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(f)}).catch(()=>{});
+    });
+    // Sync metas gerais
+    fetch(API_BASE+'/metas?type=gerais', {method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(metasGerais)}).catch(()=>{});
+    // Sync metas per merchant
+    Object.keys(metas).forEach(mid => {
+      fetch(API_BASE+'/metas?mid='+encodeURIComponent(mid), {method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(metas[mid]||{})}).catch(()=>{});
+    });
+    // Sync planos per merchant
+    Object.keys(planos).forEach(mid => {
+      fetch(API_BASE+'/planos?mid='+encodeURIComponent(mid), {method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(planos[mid]||[])}).catch(()=>{});
+    });
+  } catch(e) {}
+}
+
+function applyData(data) {
+  if (data.merchants?.length) {
+    merchants.length = 0;
+    data.merchants.forEach(m => merchants.push(m));
+  }
+  if (data.demands) {
+    Object.keys(data.demands).forEach(k => { demands[k] = data.demands[k]; });
+  }
+  if (data.planos) {
+    Object.keys(data.planos).forEach(k => { planos[k] = data.planos[k]; });
+  }
+  if (data.metas) {
+    Object.keys(data.metas).forEach(k => { metas[k] = data.metas[k]; });
+  }
+  if (data.metasGerais?.length) {
+    data.metasGerais.forEach(saved => {
+      const mg = metasGerais.find(m => m.id === saved.id);
+      if (mg) mg.status = saved.status;
+      else metasGerais.push(saved);
+    });
+  }
+  if (data.boards) {
+    Object.keys(data.boards).forEach(k => { boards[k] = data.boards[k]; });
+  }
+  if (data.npsForms?.length) {
+    npsForms.length = 0;
+    data.npsForms.forEach(f => npsForms.push(f));
+  }
+}
+
+async function loadData() {
+  // Try API first
+  try {
+    const res = await fetch(API_BASE+'/sync');
+    if (res.ok) {
+      const data = await res.json();
+      applyData(data);
+      persist(); // cache locally
+      _useApi = true;
+      return;
+    }
+  } catch(e) {}
+  // Fallback: localStorage
+  _useApi = false;
   try {
     const saved = localStorage.getItem('yuno_gm_data');
     if (!saved) return;
-    const data = JSON.parse(saved);
-    if (data.merchants?.length) {
-      merchants.length = 0;
-      data.merchants.forEach(m => merchants.push(m));
-    }
-    if (data.demands) {
-      Object.keys(data.demands).forEach(k => { demands[k] = data.demands[k]; });
-    }
-    if (data.planos) {
-      Object.keys(data.planos).forEach(k => { planos[k] = data.planos[k]; });
-    }
-    if (data.metas) {
-      Object.keys(data.metas).forEach(k => { metas[k] = data.metas[k]; });
-    }
-    if (data.metasGerais?.length) {
-      data.metasGerais.forEach(saved => {
-        const mg = metasGerais.find(m => m.id === saved.id);
-        if (mg) mg.status = saved.status;
-      });
-    }
-    if (data.boards) {
-      Object.keys(data.boards).forEach(k => { boards[k] = data.boards[k]; });
-    }
-    if (data.npsForms?.length) {
-      npsForms.length = 0;
-      data.npsForms.forEach(f => npsForms.push(f));
-    }
+    applyData(JSON.parse(saved));
   } catch(e) {}
-})();
+}
+
+// Load data on page load
+loadData();
 
 function renderPlanos(mid) {
   const pl = planos[mid] || [];
