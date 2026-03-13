@@ -1,6 +1,6 @@
 # Merchants Management Board
 
-Yuno's merchant management portal with Kanban boards, technical demand tracking, implementations, goals, and NPS.
+Yuno's merchant management portal with Kanban boards, technical demand tracking, implementations, goals, NPS surveys, and consolidated overview dashboards.
 
 ## Stack
 
@@ -32,21 +32,34 @@ Fields are pre-filled on the login screen. Use the **Administrator / Merchant** 
 
 ## Features
 
-### Admin View
-- **Merchants Table** — search, filters, sorting, resizable columns, inline editing
-- **Merchant Detail** — click any merchant to see full info, boards, TAM, and ticket creation
-- **Kanban Boards (per merchant)** — Feature Requests, Technical Demand, Projects & Consulting, Implementation
-- **TAM — Technical Demands** — CRUD demands per merchant with priority and status tracking
-- **General & Specific Goals** — goal boards with Canvas charts (status bars and % achieved)
-- **Create Ticket** — create tickets directly into any merchant's Kanban board
-- **About (Sobre)** — editable merchant profile with multi-select dropdowns for all fields
+### Admin Sidebar
 
-### Merchant View
-- **Home** — dynamic hero banner (pulls website, countries, providers, integration from About) + 7 status stat cards
-- **Kanban Boards** — Feature Requests, Technical Demand, Projects & Consulting, Implementation
-- **About (Sobre)** — edit merchant info: name, website, business, communication channels, payment methods, providers, countries, KAM, TAM, integration type, billing types
-- **Create Ticket** — submit tickets directly to the correct Kanban board
-- **NPS** — satisfaction tracking (coming soon)
+| Section | Description |
+|---------|-------------|
+| **Merchants Overview** | Full merchants table with search, filters, sorting, resizable columns, and inline editing |
+| **Home** | Dynamic hero banner + 7 status stat cards per merchant |
+| **Overview (Visão Geral)** | Consolidated view across all merchants with tabs: Technical Demands, Feature Requests, Projects & Consulting, Implementation. Includes merchant filter, create/edit/delete |
+| **Feature Requests** | Kanban board for feature requests |
+| **Technical Demand** | Kanban board for technical demands |
+| **Projects & Consulting** | Kanban board for projects and consulting |
+| **Implementation** | Kanban board for implementations |
+| **Merchants** | Merchant cards with full data (integration, countries, providers, payment methods, billing, business type) + demands + goals |
+| **About (Sobre)** | Editable merchant profile with multi-select dropdowns |
+| **Manage Tickets** | Create tickets with type, title, description, and priority |
+| **NPS** | Build custom NPS survey forms (score 0-10, text, checkbox, select fields), send to merchants, view responses with average scores |
+
+### Merchant Sidebar
+
+| Section | Description |
+|---------|-------------|
+| **Home** | Dynamic hero banner (pulls website, countries, providers, integration from About) + 7 status stat cards |
+| **Feature Requests** | Kanban board |
+| **Technical Demand** | Kanban board |
+| **Projects & Consulting** | Kanban board |
+| **Implementation** | Kanban board |
+| **About (Sobre)** | Edit merchant info: name, website, business, channels, payment methods, providers, countries, KAM, TAM, integration type, billing types |
+| **Create Ticket** | Submit tickets directly to the correct Kanban board |
+| **NPS** | View and respond to NPS surveys sent by admin |
 
 ### Kanban Board Columns (standardized across all boards)
 - Novo → Em Andamento → Aguardando Tech → Aguardando Merchant → Aguardando Provider → Concluído → Standby
@@ -68,19 +81,54 @@ Fields are pre-filled on the login screen. Use the **Administrator / Merchant** 
 - **Text fields:** Name, Website, Business
 - **Single-select dropdowns:** KAM, TAM (with "add new" option)
 - **Multi-select with tags:** Channels, Payment Methods, Providers, Countries, Integration, Billing Types
-- Each multi-select allows adding new options and removing existing ones
 - Changes persist immediately and reflect across both Admin and Merchant views
 - Hero banner on Merchant home dynamically pulls: website, countries, providers, integration
+
+### NPS Survey System
+- **Admin:** Create custom NPS forms with dynamic fields (Score 0-10, Free text, Checkbox, Dropdown select)
+- **Admin:** Set form title, merchant email, add/remove fields
+- **Admin:** Send forms to merchants (simulated email + appears in merchant panel)
+- **Admin:** View responses with average NPS score
+- **Merchant:** View received NPS forms, respond with score and fields
+- **Persistence:** All NPS data saved in localStorage
+
+### Merchant Management
+- **Create/Edit/Delete** merchants from multiple locations: Merchants Overview table, Merchants panel, Overview dashboard
+- **Edit modal** pre-populates with existing merchant data
+- **Merchant filter dropdown** on all admin panels to switch context
+- **Full merchant data** displayed on cards: integration type, countries, providers, payment methods, billing types, business type, website
 
 ### Shared Data
 - Admin and Merchant views share the same board data — tickets created by either side appear on both
 - About/Sobre edits are reflected everywhere instantly
+- NPS forms created by admin appear in merchant's NPS panel
+
+### Goals (Metas)
+- **General Goals** — 3 fixed goals visible across all TAMs with status dropdown
+- **Specific Goals per TAM** — filterable table with % achieved (10-100% dropdown) and deadline calendar
+- **Canvas charts** (no libraries) — status bars + % achieved bars with green average line
 
 ## Structure
 
 ```
 gestao-merchants/
 └── index.html    # Complete app (HTML + CSS + JS)
+```
+
+## Data Persistence
+
+All data is stored in `localStorage` under key `yuno_gm_data`:
+
+```json
+{
+  "merchants": [],
+  "demands": {},
+  "planos": {},
+  "metas": {},
+  "metasGerais": [],
+  "boards": {},
+  "npsForms": []
+}
 ```
 
 ## Languages
@@ -90,6 +138,6 @@ Switch between PT / EN / ES using the language buttons on the login screen. Tran
 ## Roadmap
 
 - [ ] Backend (API + database)
-- [ ] NPS section content
 - [ ] Real authentication
 - [ ] Multi-tenant (multiple merchants)
+- [ ] Email integration for NPS delivery

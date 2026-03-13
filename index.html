@@ -465,6 +465,21 @@ thead th.drag-right{box-shadow:inset -2px 0 0 #3B39F5}
 .sobre-add-select{width:100%;padding:7px 10px;border:1.5px dashed #D1D5DB;border-radius:7px;font-size:12.5px;color:#9CA3AF;background:white;cursor:pointer;outline:none;font-family:inherit;transition:border-color .15s}
 .sobre-add-select:focus{border-color:#3B39F5}
 
+/* NPS */
+.nps-form-card{background:white;border:1px solid #E5E7EB;border-radius:12px;padding:18px;transition:box-shadow .15s}
+.nps-form-card:hover{box-shadow:0 2px 8px rgba(71,71,229,.08);border-color:#C7D2FE}
+.nps-field-item{background:#F9FAFB;border:1px solid #E5E7EB;border-radius:8px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.nps-field-item .nps-fl{flex:1;min-width:0}
+.nps-field-rm{background:none;border:none;cursor:pointer;color:#9CA3AF;padding:4px}
+.nps-field-rm:hover{color:#EF4444}
+.nps-score-row{display:flex;gap:4px;margin:8px 0}
+.nps-score-btn{width:36px;height:36px;border-radius:8px;border:1.5px solid #E5E7EB;background:white;cursor:pointer;font-size:13px;font-weight:600;color:#374151;transition:all .15s}
+.nps-score-btn:hover{border-color:#3B39F5;color:#3B39F5}
+.nps-score-btn.selected{background:#3B39F5;color:white;border-color:#3B39F5}
+.nps-score-btn.det{background:#EF4444;color:white;border-color:#EF4444}
+.nps-score-btn.pas{background:#F59E0B;color:white;border-color:#F59E0B}
+.nps-score-btn.pro{background:#22C55E;color:white;border-color:#22C55E}
+
 /* Slide-out detail panel */
 .kb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:200;opacity:0;transition:opacity .2s;pointer-events:none}
 .kb-overlay.open{opacity:1;pointer-events:auto}
@@ -574,17 +589,26 @@ thead th.drag-right{box-shadow:inset -2px 0 0 #3B39F5}
           <div class="nav-section">
             <div class="nav-section-title" data-i18n="nav.overview">Visão Geral</div>
             <div class="nav-item active" onclick="navTo('overview',this)">
-              <span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="6" height="6" rx="1"/><rect x="10" y="2" width="6" height="6" rx="1"/><rect x="2" y="10" width="6" height="6" rx="1"/><rect x="10" y="10" width="6" height="6" rx="1"/></svg></span> <span data-i18n="nav.merchants">Merchants</span>
+              <span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="6" height="6" rx="1"/><rect x="10" y="2" width="6" height="6" rx="1"/><rect x="2" y="10" width="6" height="6" rx="1"/><rect x="10" y="10" width="6" height="6" rx="1"/></svg></span> Visão Geral Merchants
             </div>
+            <div class="nav-item" onclick="navTo('mv-home',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5L9 3l6 5.5V16H12v-4.5H6V16H3z"/></svg></span> <span data-i18n="nav.home">Início</span></div>
           </div>
           <div class="nav-section">
             <div class="nav-section-title" data-i18n="nav.areas">Áreas</div>
-            <div class="nav-item" onclick="navTo('implementacao',this)">
-              <span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6.5,4.5 2,9 6.5,13.5"/><polyline points="11.5,4.5 16,9 11.5,13.5"/><line x1="10.5" y1="2.5" x2="7.5" y2="15.5"/></svg></span> <span data-i18n="nav.impl">Implementação</span>
-            </div>
+            <div class="nav-item" onclick="navTo('visaogeral',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h5v5H2zM11 4h5v5h-5zM2 12h5v5H2zM11 12h5v5h-5z"/></svg></span> Visão Geral</div>
+            <div class="nav-item" onclick="navTo('mv-board-fr',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="5" height="12" rx="1"/><rect x="9" y="3" width="5" height="8" rx="1"/></svg></span> <span data-i18n="nav.board_fr">Feature Requests</span></div>
+            <div class="nav-item" onclick="navTo('mv-board-dt',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="2" width="12" height="14" rx="1.5"/><path d="M7 2.5V2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v.5"/><line x1="6" y1="8" x2="12" y2="8"/><line x1="6" y1="11" x2="12" y2="11"/></svg></span> <span data-i18n="nav.board_dt">Demanda Técnica</span></div>
+            <div class="nav-item" onclick="navTo('mv-board-pc',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3.5h4A3.5 3.5 0 0 1 10.5 7v8.5H3z"/><path d="M15 3.5h-4A3.5 3.5 0 0 0 7.5 7v8.5H15z"/></svg></span> <span data-i18n="nav.board_pc">Projetos e Consultorias</span></div>
+            <div class="nav-item" onclick="navTo('mv-impl',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="4" height="12" rx="1"/><rect x="7" y="3" width="4" height="9" rx="1"/><rect x="12" y="3" width="4" height="6" rx="1"/></svg></span> <span data-i18n="nav.impl">Implementação</span></div>
             <div class="nav-item" onclick="navTo('tam',this)">
-              <span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="2" width="12" height="14" rx="1.5"/><line x1="6" y1="7" x2="12" y2="7"/><line x1="6" y1="10" x2="12" y2="10"/><line x1="6" y1="13" x2="9" y2="13"/></svg></span> <span data-i18n="nav.tam">TAM</span>
+              <span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.5 16v-1a3.5 3.5 0 0 0-3.5-3.5h-3A3.5 3.5 0 0 0 2.5 15v1"/><circle cx="7" cy="6" r="3"/><path d="M15.5 16v-1a3.5 3.5 0 0 0-2.5-3.35"/><path d="M12.5 3.15a3 3 0 0 1 0 5.7"/></svg></span> Merchants
             </div>
+          </div>
+          <div class="sidebar-divider"></div>
+          <div class="nav-section">
+            <div class="nav-item" onclick="navTo('mv-sobre',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="2" width="12" height="14" rx="1.5"/><line x1="7" y1="7" x2="11" y2="7"/><line x1="7" y1="10" x2="11" y2="10"/></svg></span> <span data-i18n="nav.sobre">Sobre</span></div>
+            <div class="nav-item" onclick="navTo('mv-ticket',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="2" width="12" height="14" rx="1.5"/><line x1="6" y1="7" x2="12" y2="7"/><line x1="6" y1="10" x2="12" y2="10"/><line x1="6" y1="13" x2="9" y2="13"/></svg></span> Gerir Tickets</div>
+            <div class="nav-item" onclick="navTo('mv-nps',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="7"/><path d="M9 5v4l3 2"/></svg></span> <span data-i18n="nav.nps">NPS</span></div>
           </div>
           <div class="sidebar-divider"></div>
           <div class="nav-section">
@@ -660,7 +684,7 @@ thead th.drag-right{box-shadow:inset -2px 0 0 #3B39F5}
           <div class="page-header">
             <div style="display:flex;align-items:center;justify-content:space-between">
               <div>
-                <div class="page-title">Merchants</div>
+                <div class="page-title">Visão Geral Merchants</div>
                 <div class="page-desc">Gerencie todos os clientes da Yuno</div>
               </div>
               <button class="btn-primary" onclick="openModal()">+ Novo Merchant</button>
@@ -742,8 +766,8 @@ thead th.drag-right{box-shadow:inset -2px 0 0 #3B39F5}
           <div class="page-header">
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
               <div>
-                <div class="page-title">TAM</div>
-                <div class="page-desc" id="tam-top-desc">Selecione uma área</div>
+                <div class="page-title">Merchants</div>
+                <div class="page-desc" id="tam-top-desc">Gerencie merchants, demandas e metas</div>
               </div>
               <div id="tam-top-actions"><button class="btn-primary" style="font-size:12px;padding:6px 14px" onclick="openModal()">+ Novo Merchant</button></div>
             </div>
@@ -812,6 +836,45 @@ thead th.drag-right{box-shadow:inset -2px 0 0 #3B39F5}
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        <!-- PANEL: VISÃO GERAL -->
+        <div id="panel-visaogeral" class="hidden">
+          <div class="page-header">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+              <div>
+                <div class="page-title">Visão Geral</div>
+                <div class="page-desc" id="vg-desc">Visão consolidada de todos os merchants por área</div>
+              </div>
+              <div style="display:flex;gap:8px;align-items:center">
+                <select id="vg-filter-merchant" onchange="renderVisaoGeral()" style="font-size:12px;padding:6px 12px;border:1.5px solid #E5E7EB;border-radius:7px;background:white;color:#374151;outline:none;cursor:pointer;font-family:inherit">
+                  <option value="__all__">Todos os Merchants</option>
+                </select>
+                <button class="btn-primary" style="font-size:12px;padding:6px 14px" onclick="openModal()">+ Novo Merchant</button>
+              </div>
+            </div>
+            <div style="display:flex;gap:0;margin-top:16px;background:#F3F4F6;border-radius:9px;padding:3px;width:fit-content;flex-wrap:wrap">
+              <button class="tam-seg active" id="vg-seg-dt" onclick="switchVg('dt')">
+                <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="2" width="12" height="14" rx="1.5"/><path d="M7 2.5V2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v.5"/><line x1="6" y1="8" x2="12" y2="8"/><line x1="6" y1="11" x2="12" y2="11"/></svg>
+                Demandas Técnicas
+              </button>
+              <button class="tam-seg" id="vg-seg-fr" onclick="switchVg('fr')">
+                <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="5" height="12" rx="1"/><rect x="9" y="3" width="5" height="8" rx="1"/></svg>
+                Feature Requests
+              </button>
+              <button class="tam-seg" id="vg-seg-pc" onclick="switchVg('pc')">
+                <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3.5h4A3.5 3.5 0 0 1 10.5 7v8.5H3z"/><path d="M15 3.5h-4A3.5 3.5 0 0 0 7.5 7v8.5H15z"/></svg>
+                Projetos e Consultorias
+              </button>
+              <button class="tam-seg" id="vg-seg-impl" onclick="switchVg('impl')">
+                <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="4" height="12" rx="1"/><rect x="7" y="3" width="4" height="9" rx="1"/><rect x="12" y="3" width="4" height="6" rx="1"/></svg>
+                Implementação
+              </button>
+            </div>
+          </div>
+          <div id="vg-content" style="padding:0 24px 24px">
+            <div id="vg-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px"></div>
           </div>
         </div>
 
@@ -1103,7 +1166,7 @@ const translations = {
     'col.metodos':'Métodos de Pagamento','col.provedores':'Provedores','col.kam':'KAM Responsável',
     'col.integracao':'Integração','col.cobranca':'Cobrança','col.website':'Website','col.acoes':'Ações',
     'tam.desc':'Acompanhe demandas técnicas por merchant','tam.demands':'Demandas Técnicas','tam.goals':'Metas',
-    'tam.newmer':'+ Novo Merchant','tam.view':'Ver TAM','tam.newdem':'+ Demanda','tam.delete':'Excluir',
+    'tam.newmer':'+ Novo Merchant','tam.view':'Ver Detalhes','tam.newdem':'+ Demanda','tam.delete':'Excluir',
     'tam.nodem':'Sem demandas','tam.notam':'Sem TAM','tam.open':'aberta','tam.opens':'abertas','tam.plan':'plano','tam.plans':'planos','tam.improve':'de melhoria',
     'dem.total':'total','dem.new':'+ Nova','dem.all':'Todas','dem.progress':'Em andamento',
     'dem.waiting':'Aguardando tech','dem.standby':'Standby','dem.done':'Feito',
@@ -1124,7 +1187,7 @@ const translations = {
     'col.metodos':'Payment Methods','col.provedores':'Providers','col.kam':'KAM Manager',
     'col.integracao':'Integration','col.cobranca':'Billing','col.website':'Website','col.acoes':'Actions',
     'tam.desc':'Track technical demands per merchant','tam.demands':'Technical Demands','tam.goals':'Goals',
-    'tam.newmer':'+ New Merchant','tam.view':'View TAM','tam.newdem':'+ Demand','tam.delete':'Delete',
+    'tam.newmer':'+ New Merchant','tam.view':'View Details','tam.newdem':'+ Demand','tam.delete':'Delete',
     'tam.nodem':'No demands','tam.notam':'No TAM','tam.open':'open','tam.opens':'open','tam.plan':'plan','tam.plans':'plans','tam.improve':'improvement',
     'dem.total':'total','dem.new':'+ New','dem.all':'All','dem.progress':'In progress',
     'dem.waiting':'Waiting tech','dem.standby':'Standby','dem.done':'Done',
@@ -1145,7 +1208,7 @@ const translations = {
     'col.metodos':'Métodos de Pago','col.provedores':'Proveedores','col.kam':'KAM Responsable',
     'col.integracao':'Integración','col.cobranca':'Facturación','col.website':'Sitio web','col.acoes':'Acciones',
     'tam.desc':'Seguimiento de demandas técnicas por merchant','tam.demands':'Demandas Técnicas','tam.goals':'Metas',
-    'tam.newmer':'+ Nuevo Merchant','tam.view':'Ver TAM','tam.newdem':'+ Demanda','tam.delete':'Eliminar',
+    'tam.newmer':'+ Nuevo Merchant','tam.view':'Ver Detalhes','tam.newdem':'+ Demanda','tam.delete':'Eliminar',
     'tam.nodem':'Sin demandas','tam.notam':'Sin TAM','tam.open':'abierta','tam.opens':'abiertas','tam.plan':'plan','tam.plans':'planes','tam.improve':'de mejora',
     'dem.total':'total','dem.new':'+ Nueva','dem.all':'Todas','dem.progress':'En progreso',
     'dem.waiting':'Esperando tech','dem.standby':'Standby','dem.done':'Hecho',
@@ -1265,18 +1328,19 @@ function showApp() {
 function navTo(view, el) {
   document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
   if (el) el.classList.add('active');
-  const map = { overview:'Merchants', implementacao:'Implementação', tam:'TAM — Demandas Técnicas', 'mv-home':'Início', 'mv-tam':'Minhas Demandas', 'mv-impl':'Implementação', 'mv-board-fr':'Feature Requests', 'mv-board-dt':'Demanda Técnica', 'mv-board-pc':'Projetos e Consultorias', 'mv-sobre':'Sobre', 'mv-ticket':'Criar Ticket', 'mv-nps':'NPS' };
+  const map = { overview:'Visão Geral Merchants', implementacao:'Implementação', tam:'Merchants', visaogeral:'Visão Geral', 'mv-home':'Início', 'mv-tam':'Minhas Demandas', 'mv-impl':'Implementação', 'mv-board-fr':'Feature Requests', 'mv-board-dt':'Demanda Técnica', 'mv-board-pc':'Projetos e Consultorias', 'mv-sobre':'Sobre', 'mv-ticket':'Criar Ticket', 'mv-nps':'NPS' };
   setTitle(map[view]||view);
   if (view==='overview') showPanel('overview');
   else if (view==='implementacao') showPanel('implementacao');
   else if (view==='tam') showPanel('tam');
+  else if (view==='visaogeral') { showPanel('visaogeral'); renderVisaoGeral(); }
   else if (view.startsWith('mv-')) { renderMerchantView(view.replace('mv-','')); showPanel('mv'); }
 }
 
 function setTitle(t) { document.getElementById('topbar-title').textContent = t; }
 
 function showPanel(name) {
-  ['overview','merchant','implementacao','tam','mv'].forEach(p => {
+  ['overview','merchant','implementacao','tam','visaogeral','mv'].forEach(p => {
     document.getElementById('panel-'+p)?.classList.add('hidden');
   });
   document.getElementById('panel-'+name)?.classList.remove('hidden');
@@ -1303,7 +1367,7 @@ function switchTamTop(type) {
 function renderTamGlobal() {
   const container = document.getElementById('tam-global-list');
   if (!container) return;
-  const statusMap = { done:['s-done','Feito'], progress:['s-prog','Em andamento'], standby:['s-sb','Standby'], waiting:['s-wait','Aguardando'] };
+  const statusMap = { done:['s-done','Feito'], progress:['s-prog','Em andamento'], standby:['s-sb','Standby'], waiting:['s-wait','Aguardando'], merchant:['s-merchant','Aguardando Merchant'], provider:['s-provider','Aguardando Provider'], novo:['s-novo','Novo'] };
   container.innerHTML = merchants.map(m => {
     const dl = demands[m.id] || [];
     const pl = planos[m.id] || [];
@@ -1313,22 +1377,33 @@ function renderTamGlobal() {
       const [cls,lbl] = statusMap[s]||['',''];
       return `<span class="sbadge ${cls}" style="font-size:11px;padding:2px 8px">${n} ${lbl}</span>`;
     }).join('');
+    const infoTags = [
+      ...(m.integracao||[]).map(i => `<span class="tag ti" style="font-size:10.5px">${i}</span>`),
+      ...(m.countries||[]).map(c => `<span class="tag tg" style="font-size:10.5px">${c}</span>`),
+      ...(m.provedores||[]).map(p => `<span class="tag ${tagColor[p]||'tb'}" style="font-size:10.5px">${p}</span>`),
+      ...(m.metodos||[]).map(mt => `<span class="tag ${tagColor[mt]||'tgr'}" style="font-size:10.5px">${mt}</span>`),
+    ].join('');
+    const cobrTags = (m.cobranca||[]).map(c => `<span class="tag ${tagColor[c]||'tk'}" style="font-size:10.5px">${c}</span>`).join('');
     return `<div style="background:white;border:1px solid #E5E7EB;border-radius:10px;padding:16px 18px;cursor:pointer;transition:box-shadow .15s" onmouseenter="this.style.boxShadow='0 2px 8px rgba(71,71,229,.1)';this.style.borderColor='#C7D2FE'" onmouseleave="this.style.boxShadow='';this.style.borderColor='#E5E7EB'">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
         <div style="display:flex;align-items:center;gap:10px">
           <div class="m-avatar">${m.name.substring(0,2).toUpperCase()}</div>
           <div>
             <div style="font-size:13.5px;font-weight:600;color:#111827">${m.name}</div>
-            <div style="font-size:11.5px;color:#9CA3AF">${m.tam||'Sem TAM'} · ${m.kam||''}</div>
+            <div style="font-size:11.5px;color:#9CA3AF">${m.tam||'Sem TAM'} · ${m.kam||''} ${m.website?'· <a href="https://'+m.website+'" target="_blank" style="color:#3B39F5;font-size:11px" onclick="event.stopPropagation()">'+m.website+'</a>':''}</div>
           </div>
         </div>
         <span style="font-size:12px;color:${open>0?'#EF4444':'#22C55E'};font-weight:600">${open} ${open!==1?t('tam.opens'):t('tam.open')}</span>
       </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">${badges||`<span style="font-size:12px;color:#9CA3AF">${t('tam.nodem')}</span>`}</div>
-      ${pl.length>0?`<div style="font-size:12px;color:#6B7280;margin-bottom:12px">${pl.length} ${pl.length!==1?t('tam.plans'):t('tam.plan')} ${t('tam.improve')}</div>`:''}
-      <div style="display:flex;gap:8px">
+      ${m.negocio ? `<div style="font-size:11.5px;color:#6B7280;margin-bottom:6px">📋 ${m.negocio}</div>` : ''}
+      ${infoTags ? `<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px">${infoTags}</div>` : ''}
+      ${cobrTags ? `<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px">${cobrTags}</div>` : ''}
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">${badges||`<span style="font-size:12px;color:#9CA3AF">${t('tam.nodem')}</span>`}</div>
+      ${pl.length>0?`<div style="font-size:12px;color:#6B7280;margin-bottom:10px">${pl.length} ${pl.length!==1?t('tam.plans'):t('tam.plan')} ${t('tam.improve')}</div>`:''}
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button class="btn-primary" style="flex:1;font-size:12px;padding:6px 10px;justify-content:center" onclick="openMerchantToTam('${m.id}')">${t('tam.view')}</button>
         <button class="btn-outline" style="font-size:12px;padding:6px 10px" onclick="openNovaDemandaModal('${m.id}')">${t('tam.newdem')}</button>
+        <button class="btn-outline" style="font-size:12px;padding:6px 10px" onclick="editMerchantModal('${m.id}')">Editar</button>
         <button onclick="deleteMerchant('${m.id}')" style="background:none;border:1px solid #FECACA;border-radius:6px;padding:6px 10px;cursor:pointer;color:#EF4444;font-size:12px" onmouseenter="this.style.background='#FEF2F2'" onmouseleave="this.style.background='none'">${t('tam.delete')}</button>
       </div>
     </div>`;
@@ -1337,11 +1412,6 @@ function renderTamGlobal() {
 
 function openMerchantToTam(id) {
   openMerchant(id);
-  // After render, click the TAM tab
-  setTimeout(() => {
-    const tamBtn = [...document.querySelectorAll('.tab-btn')].find(b => b.textContent.trim().startsWith('TAM'));
-    if (tamBtn) tamBtn.click();
-  }, 50);
 }
 
 function goBack() {
@@ -1976,18 +2046,340 @@ function filterDemands(status, el, mid) {
   });
 }
 
+// ===== NPS =====
+let npsEditId = null;
+
+function buildNpsView(mid, isAdmin) {
+  const merchantForms = npsForms.filter(f => f.merchantId === mid);
+  if (isAdmin) {
+    // Admin: list forms + create new
+    const formsList = merchantForms.length === 0
+      ? `<div class="placeholder" style="padding:32px 0"><h3>Nenhum formulário NPS</h3><p>Crie um formulário para enviar ao merchant.</p></div>`
+      : merchantForms.map(f => {
+        const responded = f.responses?.length || 0;
+        const avgScore = responded > 0 ? (f.responses.reduce((s,r)=>s+(r.score||0),0)/responded).toFixed(1) : '—';
+        return `<div class="nps-form-card" style="margin-bottom:12px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <div>
+              <div style="font-size:14px;font-weight:600;color:#111827">${f.title}</div>
+              <div style="font-size:11.5px;color:#9CA3AF">Criado em ${new Date(f.createdAt).toLocaleDateString('pt-BR')} · ${f.email||'Sem e-mail'}</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:12px;font-weight:600;color:#3B39F5;background:#EEEFFE;padding:3px 10px;border-radius:20px">${responded} resposta${responded!==1?'s':''}</span>
+              <span style="font-size:12px;font-weight:600;color:${avgScore==='—'?'#9CA3AF':parseFloat(avgScore)>=9?'#22C55E':parseFloat(avgScore)>=7?'#F59E0B':'#EF4444'};background:${avgScore==='—'?'#F9FAFB':parseFloat(avgScore)>=9?'#F0FDF4':parseFloat(avgScore)>=7?'#FFFBEB':'#FEF2F2'};padding:3px 10px;border-radius:20px">NPS: ${avgScore}</span>
+            </div>
+          </div>
+          <div style="font-size:12px;color:#6B7280;margin-bottom:10px">${f.fields.length} campo${f.fields.length!==1?'s':''}: ${f.fields.map(fd=>fd.label).join(', ')}</div>
+          ${f.responses?.length ? `<div style="margin-bottom:10px">${f.responses.map(r => `<div style="background:#F9FAFB;border:1px solid #E5E7EB;border-radius:8px;padding:10px 12px;margin-bottom:6px;font-size:12px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-weight:600">Score: ${r.score}/10</span><span style="color:#9CA3AF">${new Date(r.date).toLocaleDateString('pt-BR')}</span></div>
+            ${Object.entries(r.answers||{}).map(([k,v])=>`<div style="color:#6B7280"><span style="font-weight:500">${k}:</span> ${v}</div>`).join('')}
+          </div>`).join('')}</div>` : ''}
+          <div style="display:flex;gap:8px">
+            <button class="btn-outline" style="font-size:12px;padding:5px 10px" onclick="sendNpsToMerchant('${f.id}','${mid}')">Enviar ao Merchant</button>
+            <button onclick="deleteNpsForm('${f.id}')" style="background:none;border:1px solid #FECACA;border-radius:6px;padding:5px 10px;cursor:pointer;color:#EF4444;font-size:12px" onmouseenter="this.style.background='#FEF2F2'" onmouseleave="this.style.background='none'">Excluir</button>
+          </div>
+        </div>`;
+      }).join('');
+
+    return `<div class="m-hero"><div class="m-hero-name">NPS — ${merchants.find(x=>x.id===mid)?.name||mid}</div></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <h3 style="margin:0;font-size:15px;color:#111827">Formulários NPS</h3>
+        <button class="btn-primary" style="font-size:12px;padding:6px 14px" onclick="openNpsBuilder('${mid}')">+ Novo Formulário</button>
+      </div>
+      <div id="nps-forms-list">${formsList}</div>
+      <div id="nps-builder" class="hidden" style="background:white;border:1px solid #E5E7EB;border-radius:12px;padding:20px;margin-top:16px">
+        <h3 style="margin:0 0 16px;font-size:15px;color:#111827">Criar Formulário NPS</h3>
+        <div class="ticket-field"><label>Título do Formulário</label><input type="text" id="nps-title" placeholder="Ex: Pesquisa de Satisfação Q1 2026"></div>
+        <div class="ticket-field"><label>E-mail do Merchant</label><input type="email" id="nps-email" placeholder="email@merchant.com" value="${merchants.find(x=>x.id===mid)?.email||''}"></div>
+        <div style="margin-bottom:12px">
+          <label style="font-size:12px;font-weight:600;color:#374151;display:block;margin-bottom:8px">Campos do Formulário</label>
+          <div id="nps-fields-list"></div>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button class="btn-outline" style="font-size:12px;padding:5px 10px" onclick="addNpsField('score')">+ Score (0-10)</button>
+            <button class="btn-outline" style="font-size:12px;padding:5px 10px" onclick="addNpsField('text')">+ Texto</button>
+            <button class="btn-outline" style="font-size:12px;padding:5px 10px" onclick="addNpsField('checkbox')">+ Checkbox</button>
+            <button class="btn-outline" style="font-size:12px;padding:5px 10px" onclick="addNpsField('select')">+ Seleção</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:16px">
+          <button class="btn-primary" style="font-size:12px;padding:8px 16px" onclick="saveNpsForm('${mid}')">Criar Formulário</button>
+          <button class="btn-outline" style="font-size:12px;padding:8px 16px" onclick="document.getElementById('nps-builder').classList.add('hidden')">Cancelar</button>
+        </div>
+      </div>`;
+  } else {
+    // Merchant: see sent forms and respond
+    const pendingForms = merchantForms.filter(f => f.sentToMerchant);
+    if (pendingForms.length === 0) {
+      return `<div class="m-hero"><div class="m-hero-name">NPS</div></div>
+        <div class="placeholder" style="padding:40px 0"><div class="ph-icon"><svg width="36" height="36" viewBox="0 0 18 18" fill="none" stroke="#D1D5DB" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="7"/><path d="M9 5v4l3 2"/></svg></div>
+        <h3>Nenhum formulário NPS pendente</h3><p>Quando a Yuno enviar um formulário de satisfação, ele aparecerá aqui.</p></div>`;
+    }
+    return `<div class="m-hero"><div class="m-hero-name">NPS</div></div>` +
+      pendingForms.map(f => {
+        const already = f.responses?.some(r => r.from === 'merchant');
+        if (already) {
+          const resp = f.responses.find(r => r.from === 'merchant');
+          return `<div class="nps-form-card" style="margin-bottom:12px">
+            <div style="font-size:14px;font-weight:600;color:#111827;margin-bottom:6px">${f.title}</div>
+            <div style="font-size:12px;color:#22C55E;font-weight:600;margin-bottom:8px">✓ Respondido em ${new Date(resp.date).toLocaleDateString('pt-BR')}</div>
+            <div style="font-size:12px;color:#6B7280">Score: ${resp.score}/10</div>
+          </div>`;
+        }
+        return `<div class="nps-form-card" style="margin-bottom:12px" id="nps-respond-${f.id}">
+          <div style="font-size:14px;font-weight:600;color:#111827;margin-bottom:4px">${f.title}</div>
+          <div style="font-size:11.5px;color:#9CA3AF;margin-bottom:12px">Enviado em ${new Date(f.sentAt||f.createdAt).toLocaleDateString('pt-BR')}</div>
+          ${f.fields.map((fd,i) => {
+            if (fd.type === 'score') return `<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:#374151;display:block;margin-bottom:6px">${fd.label}</label>
+              <div class="nps-score-row">${[0,1,2,3,4,5,6,7,8,9,10].map(n => `<button class="nps-score-btn" onclick="this.parentNode.querySelectorAll('.nps-score-btn').forEach(b=>b.className='nps-score-btn');this.classList.add('selected',${n<=6?`'det'`:n<=8?`'pas'`:`'pro'`});this.parentNode.dataset.val='${n}'">${n}</button>`).join('')}</div></div>`;
+            if (fd.type === 'text') return `<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:#374151;display:block;margin-bottom:6px">${fd.label}</label><textarea id="nps-r-${f.id}-${i}" rows="2" style="width:100%;border:1px solid #E5E7EB;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;resize:vertical" placeholder="Sua resposta..."></textarea></div>`;
+            if (fd.type === 'checkbox') return `<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:#374151;display:flex;align-items:center;gap:8px"><input type="checkbox" id="nps-r-${f.id}-${i}"> ${fd.label}</label></div>`;
+            if (fd.type === 'select') return `<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:#374151;display:block;margin-bottom:6px">${fd.label}</label><select id="nps-r-${f.id}-${i}" style="width:100%;padding:8px 10px;border:1px solid #E5E7EB;border-radius:8px;font-size:13px;font-family:inherit">${(fd.options||[]).map(o=>`<option>${o}</option>`).join('')}</select></div>`;
+            return '';
+          }).join('')}
+          <button class="btn-primary" style="font-size:12px;padding:8px 16px" onclick="submitNpsResponse('${f.id}','${mid}')">Enviar Resposta</button>
+        </div>`;
+      }).join('');
+  }
+}
+
+let npsFields = [];
+
+function openNpsBuilder(mid) {
+  npsFields = [{type:'score', label:'De 0 a 10, qual a probabilidade de recomendar a Yuno?'}];
+  document.getElementById('nps-builder').classList.remove('hidden');
+  renderNpsFields();
+}
+
+function addNpsField(type) {
+  const labels = {score:'Score NPS (0-10)',text:'Comentário',checkbox:'Opção de marcação',select:'Seleção'};
+  const label = prompt('Nome do campo:', labels[type]||'Campo');
+  if (!label) return;
+  const field = {type, label};
+  if (type === 'select') {
+    const opts = prompt('Opções separadas por vírgula:', 'Muito satisfeito, Satisfeito, Neutro, Insatisfeito');
+    field.options = opts ? opts.split(',').map(s=>s.trim()).filter(Boolean) : [];
+  }
+  npsFields.push(field);
+  renderNpsFields();
+}
+
+function renderNpsFields() {
+  const container = document.getElementById('nps-fields-list');
+  if (!container) return;
+  const typeIcons = {score:'🎯',text:'📝',checkbox:'☑️',select:'📋'};
+  container.innerHTML = npsFields.map((f,i) => `<div class="nps-field-item">
+    <span style="font-size:14px">${typeIcons[f.type]||'📄'}</span>
+    <div class="nps-fl">
+      <div style="font-size:12.5px;font-weight:600;color:#374151">${f.label}</div>
+      <div style="font-size:11px;color:#9CA3AF">${f.type==='score'?'Score 0-10':f.type==='text'?'Texto livre':f.type==='checkbox'?'Checkbox':f.type==='select'?'Seleção: '+(f.options||[]).join(', '):f.type}</div>
+    </div>
+    <button class="nps-field-rm" onclick="npsFields.splice(${i},1);renderNpsFields()"><svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="3,5 15,5"/><path d="M6 5V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M14 5l-1 10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1L4 5"/></svg></button>
+  </div>`).join('');
+}
+
+function saveNpsForm(mid) {
+  const title = document.getElementById('nps-title')?.value.trim();
+  if (!title) { document.getElementById('nps-title')?.focus(); return; }
+  const email = document.getElementById('nps-email')?.value.trim();
+  if (npsFields.length === 0) { alert('Adicione pelo menos um campo.'); return; }
+  const form = {
+    id: 'nps_' + Date.now(),
+    merchantId: mid,
+    title,
+    email,
+    fields: [...npsFields],
+    responses: [],
+    sentToMerchant: false,
+    createdAt: new Date().toISOString()
+  };
+  npsForms.push(form);
+  persist();
+  renderMerchantView('nps');
+}
+
+function deleteNpsForm(id) {
+  const idx = npsForms.findIndex(f => f.id === id);
+  if (idx < 0) return;
+  if (!confirm('Excluir este formulário NPS?')) return;
+  npsForms.splice(idx, 1);
+  persist();
+  renderMerchantView('nps');
+}
+
+function sendNpsToMerchant(formId, mid) {
+  const f = npsForms.find(x => x.id === formId);
+  if (!f) return;
+  f.sentToMerchant = true;
+  f.sentAt = new Date().toISOString();
+  persist();
+  // Simulated email
+  const mObj = merchants.find(x => x.id === mid);
+  alert(`Formulário "${f.title}" enviado ao merchant ${mObj?.name||mid}!\n\nE-mail: ${f.email||'(não configurado)'}\n\nO formulário aparecerá no painel NPS do merchant.`);
+  renderMerchantView('nps');
+}
+
+function submitNpsResponse(formId, mid) {
+  const f = npsForms.find(x => x.id === formId);
+  if (!f) return;
+  const answers = {};
+  let score = 0;
+  f.fields.forEach((fd, i) => {
+    if (fd.type === 'score') {
+      const scoreRow = document.querySelector(`#nps-respond-${formId} .nps-score-row`);
+      score = parseInt(scoreRow?.dataset.val || '0');
+      answers[fd.label] = score;
+    } else if (fd.type === 'text') {
+      answers[fd.label] = document.getElementById(`nps-r-${formId}-${i}`)?.value || '';
+    } else if (fd.type === 'checkbox') {
+      answers[fd.label] = document.getElementById(`nps-r-${formId}-${i}`)?.checked ? 'Sim' : 'Não';
+    } else if (fd.type === 'select') {
+      answers[fd.label] = document.getElementById(`nps-r-${formId}-${i}`)?.value || '';
+    }
+  });
+  f.responses = f.responses || [];
+  f.responses.push({ from:'merchant', score, answers, date: new Date().toISOString() });
+  persist();
+  alert('Resposta enviada com sucesso! Obrigada pelo feedback.');
+  renderMerchantView('nps');
+}
+
+// ===== VISÃO GERAL =====
+let currentVgTab = 'dt';
+
+function switchVg(tab) {
+  currentVgTab = tab;
+  ['dt','fr','pc','impl'].forEach(t => {
+    document.getElementById('vg-seg-'+t)?.classList.toggle('active', t===tab);
+  });
+  const labels = {dt:'Demandas Técnicas',fr:'Feature Requests',pc:'Projetos e Consultorias',impl:'Implementação'};
+  document.getElementById('vg-desc').textContent = 'Visão consolidada — ' + (labels[tab]||tab);
+  renderVisaoGeral();
+}
+
+function renderVisaoGeral() {
+  const container = document.getElementById('vg-list');
+  if (!container) return;
+  const tab = currentVgTab;
+
+  // Populate filter dropdown
+  const filterSel = document.getElementById('vg-filter-merchant');
+  if (filterSel) {
+    const curVal = filterSel.value;
+    filterSel.innerHTML = `<option value="__all__">Todos os Merchants</option>` + merchants.map(m => `<option value="${m.id}"${m.id===curVal?' selected':''}>${m.name}</option>`).join('');
+    if (curVal && curVal !== '__all__') filterSel.value = curVal;
+  }
+  const filterMid = filterSel?.value || '__all__';
+  const filtered = filterMid === '__all__' ? merchants : merchants.filter(m => m.id === filterMid);
+
+  if (tab === 'dt') {
+    const statusMap = { done:['s-done','Concluído'], progress:['s-prog','Em Andamento'], standby:['s-sb','Standby'], waiting:['s-wait','Aguardando Tech'], merchant:['s-merchant','Aguardando Merchant'], provider:['s-provider','Aguardando Provider'], novo:['s-novo','Novo'] };
+    container.innerHTML = filtered.map(m => {
+      const dl = demands[m.id] || [];
+      const open = dl.filter(d=>d.status!=='done').length;
+      const demCounts = dl.reduce((a,d) => { a[d.status]=(a[d.status]||0)+1; return a; }, {});
+      const badges = Object.entries(demCounts).map(([s,n]) => {
+        const [cls,lbl] = statusMap[s]||['',s];
+        return `<span class="sbadge ${cls}" style="font-size:11px;padding:2px 8px">${n} ${lbl}</span>`;
+      }).join('');
+      return buildVgCard(m, dl.length, open, badges, 'dt');
+    }).join('');
+  } else {
+    const colStatusMap = {
+      'novo':'s-novo','em andamento':'s-prog','aguardando tech':'s-wait',
+      'aguardando merchant':'s-merchant','aguardando provider':'s-provider',
+      'concluído':'s-done','standby':'s-sb'
+    };
+    container.innerHTML = filtered.map(m => {
+      const bd = getBoardData(m.id, tab);
+      const allCards = bd.cards || [];
+      const colMap = {};
+      bd.columns.forEach(c => colMap[c.id] = c.name);
+      const doneIds = bd.columns.filter(c => c.name.toLowerCase().includes('conclu')).map(c => c.id);
+      const open = allCards.filter(c => !doneIds.includes(c.columnId)).length;
+      const colCounts = {};
+      allCards.forEach(c => {
+        const colName = colMap[c.columnId] || c.columnId;
+        colCounts[colName] = (colCounts[colName]||0) + 1;
+      });
+      const badges = Object.entries(colCounts).map(([colName, n]) => {
+        const cls = colStatusMap[colName.toLowerCase()] || '';
+        return `<span class="sbadge ${cls}" style="font-size:11px;padding:2px 8px">${n} ${colName}</span>`;
+      }).join('');
+      return buildVgCard(m, allCards.length, open, badges, tab);
+    }).join('');
+  }
+}
+
+function buildVgCard(m, total, open, badges, tab) {
+  const labels = {dt:'Demandas Técnicas',fr:'Feature Requests',pc:'Projetos e Consultorias',impl:'Implementação'};
+  const navMap = {dt:'mv-board-dt',fr:'mv-board-fr',pc:'mv-board-pc',impl:'mv-impl'};
+  const infoTags = [
+    ...(m.integracao||[]).map(i => `<span class="tag ti" style="font-size:10.5px">${i}</span>`),
+    ...(m.countries||[]).map(c => `<span class="tag tg" style="font-size:10.5px">${c}</span>`),
+    ...(m.provedores||[]).map(p => `<span class="tag ${tagColor[p]||'tb'}" style="font-size:10.5px">${p}</span>`),
+  ].join('');
+  return `<div style="background:white;border:1px solid #E5E7EB;border-radius:10px;padding:16px 18px;transition:box-shadow .15s" onmouseenter="this.style.boxShadow='0 2px 8px rgba(71,71,229,.1)';this.style.borderColor='#C7D2FE'" onmouseleave="this.style.boxShadow='';this.style.borderColor='#E5E7EB'">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="m-avatar">${m.name.substring(0,2).toUpperCase()}</div>
+        <div>
+          <div style="font-size:13.5px;font-weight:600;color:#111827">${m.name}</div>
+          <div style="font-size:11.5px;color:#9CA3AF">${m.tam||'Sem TAM'} · ${m.kam||''} ${m.negocio?'· '+m.negocio:''}</div>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <span style="font-size:12px;color:${open>0?'#EF4444':'#22C55E'};font-weight:600">${open} abertas</span>
+        <div style="font-size:11px;color:#9CA3AF">${total} total</div>
+      </div>
+    </div>
+    ${infoTags ? `<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px">${infoTags}</div>` : ''}
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">${badges||'<span style="font-size:12px;color:#9CA3AF">Nenhum item</span>'}</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn-primary" style="flex:1;font-size:12px;padding:6px 10px;justify-content:center" onclick="adminSelectedMid='${m.id}';navTo('${navMap[tab]}',document.querySelector('#nav-admin .nav-item'))">Ver ${labels[tab]}</button>
+      <button class="btn-outline" style="font-size:12px;padding:6px 10px" onclick="editMerchantModal('${m.id}')">Editar</button>
+      <button onclick="deleteMerchantGlobal('${m.id}')" style="background:none;border:1px solid #FECACA;border-radius:6px;padding:6px 10px;cursor:pointer;color:#EF4444;font-size:12px" onmouseenter="this.style.background='#FEF2F2'" onmouseleave="this.style.background='none'">Excluir</button>
+    </div>
+  </div>`;
+}
+
 // ===== MERCHANT VIEW =====
+let adminSelectedMid = 'q2ingressos';
+let currentMvSection = 'home';
+
+function getMid() {
+  return (currentUser && currentUser.type==='admin') ? adminSelectedMid : (currentUser?.merchantId || 'q2ingressos');
+}
+
+function buildMerchantFilter(section) {
+  if (!currentUser || currentUser.type!=='admin') return '';
+  return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:10px 16px;background:white;border:1px solid #E5E7EB;border-radius:10px">
+    <span style="font-size:12px;font-weight:600;color:#9CA3AF;text-transform:uppercase;letter-spacing:.05em">Merchant:</span>
+    <select onchange="changeAdminMerchant(this.value)" style="flex:1;max-width:300px;padding:8px 12px;border:1.5px solid #E5E7EB;border-radius:7px;font-size:13.5px;color:#111827;outline:none;font-family:inherit;cursor:pointer;background:white">
+      ${merchants.map(m => `<option value="${m.id}"${m.id===adminSelectedMid?' selected':''}>${m.name}</option>`).join('')}
+    </select>
+  </div>`;
+}
+
+function changeAdminMerchant(mid) {
+  adminSelectedMid = mid;
+  renderMerchantView(currentMvSection);
+}
+
 function renderMerchantView(section='home') {
-  tamCtx = {mid: 'q2ingressos', isMerchant: true};
-  const mObj = merchants.find(x => x.id==='q2ingressos');
-  const dl = demands['q2ingressos']||[];
+  currentMvSection = section;
+  const mid = getMid();
+  const isAdmin = currentUser && currentUser.type==='admin';
+  tamCtx = {mid, isMerchant: !isAdmin};
+  const mObj = merchants.find(x => x.id===mid);
+  const dl = demands[mid]||[];
   const open = dl.filter(d=>d.status!=='done').length;
+  const filter = buildMerchantFilter(section);
   let body = '';
   if (section==='home' || section==='tam') {
-    body = `
+    body = filter + `
       <div class="m-hero">
-        <div class="m-hero-label">Bem-vinda de volta, Débora</div>
-        <div class="m-hero-name">${mObj?mObj.name:'Q2 Ingressos'}</div>
+        <div class="m-hero-label">${isAdmin ? mObj?.name||mid : 'Bem-vinda de volta, Débora'}</div>
+        <div class="m-hero-name">${mObj?mObj.name:mid}</div>
         <div class="m-hero-meta">${mObj?mObj.website:''} &nbsp;·&nbsp; ${mObj&&mObj.countries.length?mObj.countries.join(', '):''} &nbsp;·&nbsp; ${mObj&&mObj.provedores.length?'Provedores: '+mObj.provedores.join(', '):''} &nbsp;·&nbsp; ${mObj&&mObj.integracao.length?'Integração: '+mObj.integracao.join(', '):''}</div>
       </div>
       <div class="stats-row" style="grid-template-columns:repeat(auto-fill,minmax(130px,1fr))">
@@ -1999,16 +2391,16 @@ function renderMerchantView(section='home') {
         <div class="stat-card"><div class="stat-label">Concluído</div><div class="stat-value">${dl.filter(d=>d.status==='done').length}</div></div>
         <div class="stat-card"><div class="stat-label">Standby</div><div class="stat-value">${dl.filter(d=>d.status==='standby').length}</div></div>
       </div>
-      ${buildTam('q2ingressos', dl, true)}`;
+      ${buildTam(mid, dl, true)}`;
   } else if (section==='impl') {
-    body = `<div id="kb-root" data-mid="q2ingressos" data-board="impl"></div>`;
+    body = filter + `<div id="kb-root" data-mid="${mid}" data-board="impl"></div>`;
     document.getElementById('panel-mv').innerHTML = body;
-    renderKanban('q2ingressos', 'impl');
+    renderKanban(mid, 'impl');
     return;
   } else if (section==='ticket') {
-    body = `<div class="m-hero"><div class="m-hero-name">Q2 Ingressos</div></div>
+    body = filter + `<div class="m-hero"><div class="m-hero-name">${mObj?mObj.name:mid}</div></div>
     <div class="ticket-form">
-      <h3>Criar Ticket</h3>
+      <h3>${isAdmin?'Gerir Tickets':'Criar Ticket'}</h3>
       <div class="ticket-field">
         <label>Tipo</label>
         <select id="ticket-tipo">
@@ -2038,14 +2430,14 @@ function renderMerchantView(section='home') {
       <div class="ticket-success" id="ticket-success">Ticket criado com sucesso!</div>
     </div>`;
   } else if (section==='sobre') {
-    body = `<div class="m-hero"><div class="m-hero-name">${mObj?mObj.name:'Q2 Ingressos'}</div></div>` + buildSobreForm('q2ingressos');
+    body = filter + `<div class="m-hero"><div class="m-hero-name">${mObj?mObj.name:mid}</div></div>` + buildSobreForm(mid);
   } else if (section==='nps') {
-    body = `<div class="m-hero"><div class="m-hero-name">${mObj?mObj.name:'Q2 Ingressos'}</div></div><div class="placeholder"><div class="ph-icon"><svg width="36" height="36" viewBox="0 0 18 18" fill="none" stroke="#D1D5DB" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="7"/><path d="M9 5v4l3 2"/></svg></div><h3>NPS</h3><p>Acompanhe a satisfação e o Net Promoter Score.</p></div>`;
+    body = filter + buildNpsView(mid, isAdmin);
   } else if (section==='board-fr' || section==='board-dt' || section==='board-pc') {
     const boardKey = section.replace('board-','');
-    body = `<div id="kb-root" data-mid="q2ingressos" data-board="${boardKey}"></div>`;
+    body = filter + `<div id="kb-root" data-mid="${mid}" data-board="${boardKey}"></div>`;
     document.getElementById('panel-mv').innerHTML = body;
-    renderKanban('q2ingressos', boardKey);
+    renderKanban(mid, boardKey);
     return;
   }
   document.getElementById('panel-mv').innerHTML = body;
@@ -2057,7 +2449,7 @@ function submitTicket() {
   const desc = document.getElementById('ticket-desc').value.trim();
   const prio = document.getElementById('ticket-prio').value;
   if (!titulo) { document.getElementById('ticket-titulo').focus(); return; }
-  const mid = 'q2ingressos';
+  const mid = getMid();
   const board = getBoardData(mid, tipo);
   const firstCol = board.columns[0];
   if (!firstCol) return;
@@ -2372,6 +2764,35 @@ function deleteMerchant(id) {
   persist();
   renderTable();
   renderTamGlobal();
+  if (document.getElementById('vg-list')) renderVisaoGeral();
+}
+
+function deleteMerchantGlobal(id) {
+  deleteMerchant(id);
+}
+
+function editMerchantModal(id) {
+  const m = merchants.find(x => x.id===id);
+  if (!m) return;
+  merchantModalCtx = {isNew: false, id};
+  document.getElementById('merchant-modal-title').textContent = 'Editar Merchant';
+  document.getElementById('nm-name').value = m.name||'';
+  document.getElementById('nm-website').value = m.website||'';
+  document.getElementById('nm-negocio').value = m.negocio||'';
+  document.getElementById('nm-orgid').value = m.orgId||'';
+  document.getElementById('nm-paises').value = (m.countries||[]).join(', ');
+  document.getElementById('nm-metodos').value = (m.metodos||[]).join(', ');
+  document.getElementById('nm-provedores').value = (m.provedores||[]).join(', ');
+  if (document.getElementById('nm-email')) document.getElementById('nm-email').value = m.email||'';
+  if (document.getElementById('nm-notas')) document.getElementById('nm-notas').value = m.notas||'';
+  if (document.getElementById('nm-senha')) document.getElementById('nm-senha').value = '';
+  populateSelect('nm-kam','kams',m.kam||'');
+  populateSelect('nm-tam','tams',m.tam||'');
+  populateSelect('nm-impl','implementations',m.implementation||'');
+  populateSelect('nm-canal','canais',(m.canal||[])[0]||'');
+  populateSelect('nm-integracao','integracoes',(m.integracao||[])[0]||'');
+  populateSelect('nm-cobranca','cobrancas',(m.cobranca||[])[0]||'');
+  document.getElementById('modal-overlay').classList.remove('hidden');
 }
 
 function deleteDemanda(mid, id) {
@@ -2422,6 +2843,8 @@ function saveMerchant() {
   }
   closeModal();
   renderTable();
+  renderTamGlobal();
+  if (document.getElementById('vg-list')) renderVisaoGeral();
   persist();
 }
 
@@ -2665,11 +3088,12 @@ function saveDemandaModal() {
 // ===== PLANOS DATA + MODAL =====
 const planos = {};
 const boards = {};
+const npsForms = [];
 let planModalCtx = {mid: null, id: null, isNew: true};
 
 // ===== PERSISTÊNCIA =====
 function persist() {
-  try { localStorage.setItem('yuno_gm_data', JSON.stringify({merchants, demands, planos, metas, metasGerais, boards})); } catch(e) {}
+  try { localStorage.setItem('yuno_gm_data', JSON.stringify({merchants, demands, planos, metas, metasGerais, boards, npsForms})); } catch(e) {}
 }
 (function restoreData() {
   try {
@@ -2697,6 +3121,10 @@ function persist() {
     }
     if (data.boards) {
       Object.keys(data.boards).forEach(k => { boards[k] = data.boards[k]; });
+    }
+    if (data.npsForms?.length) {
+      npsForms.length = 0;
+      data.npsForms.forEach(f => npsForms.push(f));
     }
   } catch(e) {}
 })();
