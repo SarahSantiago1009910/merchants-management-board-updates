@@ -100,6 +100,31 @@ module.exports = async function handler(req, res) {
         created_at TIMESTAMPTZ DEFAULT NOW()
       )`;
 
+    await sql`
+      CREATE TABLE IF NOT EXISTS access_codes (
+        id SERIAL PRIMARY KEY,
+        code VARCHAR(6) UNIQUE NOT NULL,
+        type VARCHAR(20) NOT NULL,
+        expires_at TIMESTAMPTZ NOT NULL,
+        used BOOLEAN DEFAULT FALSE,
+        used_by_email VARCHAR(255),
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      )`;
+
+    await sql`
+      CREATE TABLE IF NOT EXISTS password_resets (
+        id SERIAL PRIMARY KEY,
+        user_id INT REFERENCES users(id) ON DELETE CASCADE,
+        token VARCHAR(128) UNIQUE NOT NULL,
+        expires_at TIMESTAMPTZ NOT NULL,
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      )`;
+
+    // Adicionar coluna phone se não existir
+    try {
+      await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS phone VARCHAR(50) DEFAULT ''`;
+    } catch(e) {}
+
     // Seed users (if empty)
     const existingUsers = await sql`SELECT COUNT(*) as cnt FROM users`;
     if (parseInt(existingUsers[0].cnt) === 0) {

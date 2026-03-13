@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;color:#111827;background:#f5f6fa;-webkit-font-smoothing:antialiased}
@@ -515,6 +516,155 @@ thead th.drag-right{box-shadow:inset -2px 0 0 #3B39F5}
 .kb-detail-footer{padding:14px 20px;border-top:1px solid #E5E7EB;display:flex;justify-content:flex-end}
 .kb-delete-btn{padding:7px 14px;background:#FEF2F2;color:#EF4444;border:1px solid #FECACA;border-radius:7px;font-size:12.5px;font-weight:500;cursor:pointer;transition:all .12s}
 .kb-delete-btn:hover{background:#FEE2E2;border-color:#EF4444}
+
+/* ===== HAMBURGER ===== */
+.hamburger{display:none;width:36px;height:36px;border:none;background:none;cursor:pointer;padding:6px;color:#374151;flex-shrink:0}
+.hamburger svg{width:24px;height:24px}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:99}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media(max-width:1024px){
+  /* Sidebar as slide-out drawer */
+  .sidebar{position:fixed;left:0;top:0;height:100vh;z-index:100;transform:translateX(-100%);transition:transform .25s ease;box-shadow:4px 0 20px rgba(0,0,0,.12)}
+  .sidebar.open{transform:translateX(0)}
+  .sidebar-overlay.open{display:block}
+  .hamburger{display:flex;align-items:center;justify-content:center}
+
+  /* Stats grid */
+  .stats-row{grid-template-columns:repeat(2,1fr);gap:8px}
+
+  /* Filter panel */
+  .filter-overlay{padding:0}
+  .filter-panel{width:100%;height:100vh}
+  .fp-categories{width:180px}
+
+  /* Modal */
+  .modal{width:95vw;max-width:600px;max-height:90vh}
+  .modal-grid{grid-template-columns:1fr}
+
+  /* KB detail slide-out */
+  .kb-detail{width:min(420px,90vw)}
+
+  /* Kanban columns */
+  .kb-col{width:260px;min-width:260px}
+  .kb-new-col{min-width:240px;width:240px}
+
+  /* Sobre form */
+  .sobre-form{grid-template-columns:1fr}
+
+  /* Metas grid */
+  .mf-grid{grid-template-columns:1fr}
+}
+
+@media(max-width:768px){
+  /* Login page stacked */
+  .login-page{flex-direction:column}
+  .login-left{padding:32px 24px;flex:none}
+  .login-left h1{font-size:24px}
+  .login-left p{font-size:13px}
+  .login-right{width:100%;padding:24px}
+
+  /* Stats single col on small */
+  .stats-row{grid-template-columns:1fr 1fr;gap:8px}
+  .stat-card{padding:14px 16px}
+  .stat-value{font-size:20px}
+
+  /* Content padding */
+  .content{padding:14px}
+
+  /* Topbar */
+  .topbar{padding:0 12px;gap:6px}
+  .topbar-title{font-size:13px}
+
+  /* Tables scroll horizontal */
+  .table-toolbar{flex-direction:column;align-items:stretch;gap:6px}
+  .search-box{max-width:100%}
+
+  /* Filter panel full screen */
+  .filter-panel{flex-direction:column;height:100vh}
+  .fp-categories{width:100%;border-right:none;border-bottom:1.5px solid #E5E7EB;padding:0;display:flex;overflow-x:auto;flex-shrink:0}
+  .fp-cat-item{white-space:nowrap;border-left:none;border-bottom:3px solid transparent;padding:10px 16px}
+  .fp-cat-item.active{border-left-color:transparent;border-bottom-color:#3B39F5}
+
+  /* Merchant detail header */
+  .mdh{flex-direction:column;gap:12px;padding:16px}
+  .mdh-actions{width:100%;justify-content:flex-end}
+
+  /* Page header */
+  .page-title{font-size:17px}
+
+  /* Tabs scroll */
+  .tabs{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tab-btn{padding:10px 12px;font-size:12.5px}
+
+  /* Info grid */
+  .info-grid{grid-template-columns:1fr}
+
+  /* Demand cards */
+  .dc-hdr{padding:12px 14px;gap:8px;flex-wrap:wrap}
+  .dc-status{min-width:0}
+  .dc-meta{flex-wrap:wrap;gap:8px}
+
+  /* KB detail full width */
+  .kb-detail{width:100vw}
+
+  /* Modal full-ish */
+  .modal{width:96vw;margin:8px;max-height:92vh}
+
+  /* Sobre form */
+  .sobre-form{gap:10px}
+
+  /* NPS score buttons smaller */
+  .nps-score-btn{width:30px;height:30px;font-size:11.5px}
+
+  /* Plan cards */
+  .plan-meta{flex-direction:column;gap:4px;align-items:flex-start}
+
+  /* Notification panel full width */
+  #notif-panel{width:min(340px,calc(100vw - 24px))!important;right:-12px!important}
+
+  /* Canvas charts */
+  canvas{max-width:100%!important;height:auto!important}
+
+  /* Metas table */
+  .metas-wrap{margin:0 -14px;border-radius:0;border-left:none;border-right:none}
+}
+
+@media(max-width:480px){
+  /* Login */
+  .login-left{padding:24px 20px}
+  .login-left h1{font-size:20px}
+  .login-right{padding:20px 16px}
+  .login-card h2{font-size:19px}
+
+  /* Stats stacked */
+  .stats-row{grid-template-columns:1fr}
+
+  /* Very small topbar */
+  .topbar{height:48px}
+
+  /* Kanban narrower */
+  .kb-col{width:240px;min-width:240px}
+  .kb-new-col{min-width:220px;width:220px}
+
+  /* Chips wrap */
+  .chips{gap:4px}
+  .chip{padding:4px 10px;font-size:11px}
+
+  /* Hero */
+  .m-hero{padding:16px;border-radius:10px}
+  .m-hero-name{font-size:18px}
+
+  /* Demand detail */
+  .demand-detail{padding:0 12px 14px}
+
+  /* Sec header */
+  .sec-hdr{flex-wrap:wrap}
+
+  /* Buttons */
+  .btn-primary{padding:8px 12px;font-size:12px}
+  .btn-outline{padding:6px 12px;font-size:12px}
+}
 </style>
 </head>
 <body>
@@ -554,18 +704,122 @@ thead th.drag-right{box-shadow:inset -2px 0 0 #3B39F5}
         </div>
         <div class="form-field">
           <label data-i18n="login.email">E-mail</label>
-          <input type="email" id="login-email" value="sarah@y.uno">
+          <input type="email" id="login-email" placeholder="seu@email.com">
         </div>
         <div class="form-field">
           <label data-i18n="login.pass">Senha</label>
           <div style="position:relative">
-            <input type="password" id="login-pass" value="yuno123" style="padding-right:40px;width:100%;box-sizing:border-box">
+            <input type="password" id="login-pass" placeholder="Sua senha" style="padding-right:40px;width:100%;box-sizing:border-box">
             <button type="button" onclick="toggleSenha()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#9CA3AF;padding:0;display:flex;align-items:center" title="Ver senha">
               <svg id="eye-icon" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 9s3-5 8-5 8 5 8 5-3 5-8 5-8-5-8-5z"/><circle cx="9" cy="9" r="2.5"/></svg>
             </button>
           </div>
         </div>
+        <div class="cf-turnstile" id="login-captcha" data-sitekey="0x4AAAAAACqPrmZ_YJrdlJQd" data-theme="light" data-size="normal" style="margin-bottom:8px"></div>
+        <div id="login-error" style="display:none;color:#EF4444;font-size:13px;text-align:center;margin-bottom:12px;padding:8px 12px;background:#FEF2F2;border-radius:8px"></div>
         <button class="btn-login" onclick="doLogin()" data-i18n="login.btn">Entrar</button>
+        <div style="display:flex;justify-content:space-between;margin-top:16px;font-size:13px">
+          <a href="#" onclick="showView('forgot');return false" style="color:#3B39F5;font-weight:500">Esqueci minha senha</a>
+          <a href="#" onclick="showView('register');return false" style="color:#3B39F5;font-weight:500">Criar conta</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CRIAR CONTA ===== -->
+<div id="view-register" class="hidden">
+  <div class="login-bg" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px">
+    <div class="login-card" style="background:white;border-radius:16px;padding:36px;width:100%;max-width:420px;box-shadow:0 8px 32px rgba(0,0,0,.08)">
+      <div class="login-card-logo" style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <svg width="28" height="28" viewBox="0 0 36 36" fill="#3B39F5"><circle cx="3" cy="3" r="2.8"/><circle cx="10" cy="3" r="2.8"/><circle cx="17" cy="3" r="2.4"/><circle cx="24" cy="3" r="1.8"/><circle cx="31" cy="3" r="1.2"/><circle cx="3" cy="10" r="2.8"/><circle cx="10" cy="10" r="2.4"/><circle cx="17" cy="10" r="1.8"/><circle cx="24" cy="10" r="1.2"/><circle cx="31" cy="10" r="0.8"/><circle cx="3" cy="17" r="2.4"/><circle cx="10" cy="17" r="1.8"/><circle cx="17" cy="17" r="1.2"/><circle cx="24" cy="17" r="0.8"/><circle cx="31" cy="17" r="0.5"/><circle cx="3" cy="24" r="1.8"/><circle cx="10" cy="24" r="1.2"/><circle cx="17" cy="24" r="0.8"/><circle cx="24" cy="24" r="0.5"/><circle cx="31" cy="24" r="0.3"/><circle cx="3" cy="31" r="1.2"/><circle cx="10" cy="31" r="0.8"/><circle cx="17" cy="31" r="0.5"/><circle cx="24" cy="31" r="0.3"/><circle cx="31" cy="31" r="0.2"/></svg>
+        <span style="font-size:18px;font-weight:800;color:#111827;letter-spacing:-0.5px">yuno</span>
+      </div>
+      <h2 style="font-size:20px;font-weight:700;color:#111827;margin-bottom:4px">Criar Conta</h2>
+      <p style="color:#6B7280;font-size:13.5px;margin-bottom:24px">Preencha os dados e use seu código de acesso</p>
+      <div class="form-field" style="margin-bottom:14px">
+        <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:4px">Nome completo</label>
+        <input type="text" id="reg-name" placeholder="Seu nome" style="width:100%;padding:10px 14px;border:1px solid #E5E7EB;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box">
+      </div>
+      <div class="form-field" style="margin-bottom:14px">
+        <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:4px">E-mail</label>
+        <input type="email" id="reg-email" placeholder="seu@email.com" style="width:100%;padding:10px 14px;border:1px solid #E5E7EB;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box">
+      </div>
+      <div class="form-field" style="margin-bottom:14px">
+        <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:4px">Senha</label>
+        <input type="password" id="reg-pass" placeholder="Mínimo 4 caracteres" style="width:100%;padding:10px 14px;border:1px solid #E5E7EB;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box">
+      </div>
+      <div class="form-field" style="margin-bottom:14px">
+        <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:4px">Telefone <span style="color:#9CA3AF">(opcional)</span></label>
+        <input type="tel" id="reg-phone" placeholder="+55 11 99999-0000" style="width:100%;padding:10px 14px;border:1px solid #E5E7EB;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box">
+      </div>
+      <div class="form-field" style="margin-bottom:14px">
+        <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:4px">Tipo de conta</label>
+        <select id="reg-type" style="width:100%;padding:10px 14px;border:1px solid #E5E7EB;border-radius:8px;font-size:14px;outline:none;background:white;box-sizing:border-box">
+          <option value="admin">Administrador</option>
+          <option value="merchant">Merchant</option>
+        </select>
+      </div>
+      <div class="form-field" style="margin-bottom:14px">
+        <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:4px">Código de acesso</label>
+        <input type="text" id="reg-code" placeholder="Código de 6 dígitos" maxlength="6" style="width:100%;padding:10px 14px;border:1px solid #E5E7EB;border-radius:8px;font-size:14px;outline:none;letter-spacing:4px;text-align:center;font-weight:700;box-sizing:border-box">
+      </div>
+      <div class="cf-turnstile" id="register-captcha" data-sitekey="0x4AAAAAACqPrmZ_YJrdlJQd" data-theme="light" style="margin-bottom:8px"></div>
+      <div id="reg-error" style="display:none;color:#EF4444;font-size:13px;text-align:center;margin-bottom:12px;padding:8px 12px;background:#FEF2F2;border-radius:8px"></div>
+      <button onclick="doRegister()" style="width:100%;padding:12px;background:#3B39F5;color:white;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer">Criar conta</button>
+      <div style="text-align:center;margin-top:16px">
+        <a href="#" onclick="showView('login');return false" style="color:#3B39F5;font-size:13px;font-weight:500">Voltar ao login</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ESQUECI SENHA ===== -->
+<div id="view-forgot" class="hidden">
+  <div class="login-bg" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px">
+    <div class="login-card" style="background:white;border-radius:16px;padding:36px;width:100%;max-width:420px;box-shadow:0 8px 32px rgba(0,0,0,.08)">
+      <div class="login-card-logo" style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <svg width="28" height="28" viewBox="0 0 36 36" fill="#3B39F5"><circle cx="3" cy="3" r="2.8"/><circle cx="10" cy="3" r="2.8"/><circle cx="17" cy="3" r="2.4"/><circle cx="24" cy="3" r="1.8"/><circle cx="31" cy="3" r="1.2"/><circle cx="3" cy="10" r="2.8"/><circle cx="10" cy="10" r="2.4"/><circle cx="17" cy="10" r="1.8"/><circle cx="24" cy="10" r="1.2"/><circle cx="31" cy="10" r="0.8"/><circle cx="3" cy="17" r="2.4"/><circle cx="10" cy="17" r="1.8"/><circle cx="17" cy="17" r="1.2"/><circle cx="24" cy="17" r="0.8"/><circle cx="31" cy="17" r="0.5"/><circle cx="3" cy="24" r="1.8"/><circle cx="10" cy="24" r="1.2"/><circle cx="17" cy="24" r="0.8"/><circle cx="24" cy="24" r="0.5"/><circle cx="31" cy="24" r="0.3"/><circle cx="3" cy="31" r="1.2"/><circle cx="10" cy="31" r="0.8"/><circle cx="17" cy="31" r="0.5"/><circle cx="24" cy="31" r="0.3"/><circle cx="31" cy="31" r="0.2"/></svg>
+        <span style="font-size:18px;font-weight:800;color:#111827;letter-spacing:-0.5px">yuno</span>
+      </div>
+      <h2 style="font-size:20px;font-weight:700;color:#111827;margin-bottom:4px">Esqueci minha senha</h2>
+      <p style="color:#6B7280;font-size:13.5px;margin-bottom:24px">Digite seu email para receber o link de redefinição</p>
+      <div class="form-field" style="margin-bottom:14px">
+        <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:4px">E-mail</label>
+        <input type="email" id="forgot-email" placeholder="seu@email.com" style="width:100%;padding:10px 14px;border:1px solid #E5E7EB;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box">
+      </div>
+      <div class="cf-turnstile" id="forgot-captcha" data-sitekey="0x4AAAAAACqPrmZ_YJrdlJQd" data-theme="light" style="margin-bottom:8px"></div>
+      <div id="forgot-msg" style="display:none;font-size:13px;text-align:center;margin-bottom:12px;padding:8px 12px;border-radius:8px"></div>
+      <button onclick="doForgotPassword()" style="width:100%;padding:12px;background:#3B39F5;color:white;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer">Enviar link</button>
+      <div style="text-align:center;margin-top:16px">
+        <a href="#" onclick="showView('login');return false" style="color:#3B39F5;font-size:13px;font-weight:500">Voltar ao login</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== RESETAR SENHA ===== -->
+<div id="view-reset" class="hidden">
+  <div class="login-bg" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px">
+    <div class="login-card" style="background:white;border-radius:16px;padding:36px;width:100%;max-width:420px;box-shadow:0 8px 32px rgba(0,0,0,.08)">
+      <div class="login-card-logo" style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <svg width="28" height="28" viewBox="0 0 36 36" fill="#3B39F5"><circle cx="3" cy="3" r="2.8"/><circle cx="10" cy="3" r="2.8"/><circle cx="17" cy="3" r="2.4"/><circle cx="24" cy="3" r="1.8"/><circle cx="31" cy="3" r="1.2"/><circle cx="3" cy="10" r="2.8"/><circle cx="10" cy="10" r="2.4"/><circle cx="17" cy="10" r="1.8"/><circle cx="24" cy="10" r="1.2"/><circle cx="31" cy="10" r="0.8"/><circle cx="3" cy="17" r="2.4"/><circle cx="10" cy="17" r="1.8"/><circle cx="17" cy="17" r="1.2"/><circle cx="24" cy="17" r="0.8"/><circle cx="31" cy="17" r="0.5"/><circle cx="3" cy="24" r="1.8"/><circle cx="10" cy="24" r="1.2"/><circle cx="17" cy="24" r="0.8"/><circle cx="24" cy="24" r="0.5"/><circle cx="31" cy="24" r="0.3"/><circle cx="3" cy="31" r="1.2"/><circle cx="10" cy="31" r="0.8"/><circle cx="17" cy="31" r="0.5"/><circle cx="24" cy="31" r="0.3"/><circle cx="31" cy="31" r="0.2"/></svg>
+        <span style="font-size:18px;font-weight:800;color:#111827;letter-spacing:-0.5px">yuno</span>
+      </div>
+      <h2 style="font-size:20px;font-weight:700;color:#111827;margin-bottom:4px">Nova senha</h2>
+      <p style="color:#6B7280;font-size:13.5px;margin-bottom:24px">Digite sua nova senha</p>
+      <div class="form-field" style="margin-bottom:14px">
+        <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:4px">Nova senha</label>
+        <input type="password" id="reset-pass" placeholder="Mínimo 4 caracteres" style="width:100%;padding:10px 14px;border:1px solid #E5E7EB;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box">
+      </div>
+      <div class="form-field" style="margin-bottom:14px">
+        <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:4px">Confirmar senha</label>
+        <input type="password" id="reset-pass-confirm" placeholder="Repita a senha" style="width:100%;padding:10px 14px;border:1px solid #E5E7EB;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box">
+      </div>
+      <div id="reset-msg" style="display:none;font-size:13px;text-align:center;margin-bottom:12px;padding:8px 12px;border-radius:8px"></div>
+      <button onclick="doResetPassword()" style="width:100%;padding:12px;background:#3B39F5;color:white;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer">Redefinir senha</button>
+      <div style="text-align:center;margin-top:16px">
+        <a href="#" onclick="showView('login');return false" style="color:#3B39F5;font-size:13px;font-weight:500">Voltar ao login</a>
       </div>
     </div>
   </div>
@@ -613,6 +867,8 @@ thead th.drag-right{box-shadow:inset -2px 0 0 #3B39F5}
           <div class="sidebar-divider"></div>
           <div class="nav-section">
             <div class="nav-section-title" data-i18n="nav.config">Configurações</div>
+            <div class="nav-item" onclick="navTo('access-codes',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="10" height="8" rx="1.5"/><path d="M6 8V5a3 3 0 0 1 6 0v3"/><circle cx="9" cy="12.5" r="1"/></svg></span> Gerar Código</div>
+            <div class="nav-item" onclick="navTo('config',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="2.5"/><path d="M9 1.5v2M9 14.5v2M1.5 9h2M14.5 9h2M3.4 3.4l1.4 1.4M13.2 13.2l1.4 1.4M3.4 14.6l1.4-1.4M13.2 4.8l1.4-1.4"/></svg></span> Configurações</div>
             <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.5 16v-1a3.5 3.5 0 0 0-3.5-3.5h-3A3.5 3.5 0 0 0 2.5 15v1"/><circle cx="7" cy="6" r="3"/><path d="M15.5 16v-1a3.5 3.5 0 0 0-2.5-3.35"/><path d="M12.5 3.15a3 3 0 0 1 0 5.7"/></svg></span> <span data-i18n="nav.team">Equipe Yuno</span></div>
             <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2a5 5 0 0 1 5 5v3.5l1.5 2h-13L4 10.5V7a5 5 0 0 1 5-5z"/><path d="M7 14.5a2 2 0 0 0 4 0"/></svg></span> <span data-i18n="nav.notif">Notificações</span></div>
             <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 10.5a4 4 0 0 0 5.3.4l2-2a4 4 0 0 0-5.7-5.7l-1.1 1.1"/><path d="M10.5 7.5a4 4 0 0 0-5.3-.4l-2 2a4 4 0 0 0 5.7 5.7l1.1-1.1"/></svg></span> <span data-i18n="nav.webhooks">Webhooks / Email</span></div>
@@ -630,6 +886,7 @@ thead th.drag-right{box-shadow:inset -2px 0 0 #3B39F5}
             <div class="nav-item" onclick="navTo('mv-ticket',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="7"/><line x1="9" y1="6" x2="9" y2="12"/><line x1="6" y1="9" x2="12" y2="9"/></svg></span> <span data-i18n="nav.ticket">Criar Ticket</span></div>
             <div class="nav-item" onclick="navTo('mv-nps',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="7"/><path d="M9 5v4l3 2"/></svg></span> <span data-i18n="nav.nps">NPS</span></div>
             <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3.5h4A3.5 3.5 0 0 1 10.5 7v8.5H3z"/><path d="M15 3.5h-4A3.5 3.5 0 0 0 7.5 7v8.5H15z"/></svg></span> <span data-i18n="nav.docs">Documentação</span></div>
+            <div class="nav-item" onclick="navTo('config',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="2.5"/><path d="M9 1.5v2M9 14.5v2M1.5 9h2M14.5 9h2M3.4 3.4l1.4 1.4M13.2 13.2l1.4 1.4M3.4 14.6l1.4-1.4M13.2 4.8l1.4-1.4"/></svg></span> Configurações</div>
           </div>
         </div>
       </nav>
@@ -642,10 +899,12 @@ thead th.drag-right{box-shadow:inset -2px 0 0 #3B39F5}
         <button class="logout-btn" onclick="doLogout()" data-i18n="nav.logout">Sair</button>
       </div>
     </aside>
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
     <!-- MAIN -->
     <div class="main">
       <div class="topbar">
+        <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
         <span class="topbar-title" id="topbar-title">Merchants</span>
         <div class="topbar-actions">
           <div style="display:flex;gap:2px;background:#F3F4F6;border-radius:7px;padding:2px;margin-right:6px">
@@ -664,8 +923,9 @@ thead th.drag-right{box-shadow:inset -2px 0 0 #3B39F5}
                 <span id="notif-panel-count" style="font-size:12px;color:#9CA3AF"></span>
               </div>
               <div id="notif-list" style="max-height:360px;overflow-y:auto"></div>
-              <div style="padding:10px 16px;border-top:1px solid #F3F4F6;background:#FAFAFA">
+              <div style="padding:10px 16px;border-top:1px solid #F3F4F6;background:#FAFAFA;display:flex;justify-content:space-between">
                 <button onclick="refreshNotifs()" style="font-size:12px;color:#3B39F5;background:none;border:none;cursor:pointer;font-weight:500">↻ Atualizar</button>
+                <button onclick="clearNotifications()" style="font-size:12px;color:#EF4444;background:none;border:none;cursor:pointer;font-weight:500">Limpar</button>
               </div>
             </div>
           </div>
@@ -880,6 +1140,76 @@ thead th.drag-right{box-shadow:inset -2px 0 0 #3B39F5}
 
         <!-- PANEL: MERCHANT VIEW -->
         <div id="panel-mv" class="hidden"></div>
+
+        <!-- Painel Gerar Código de Acesso (admin) -->
+        <div id="panel-access-codes" class="hidden">
+          <div style="max-width:600px;margin:0 auto">
+            <div style="background:white;border-radius:12px;border:1px solid #E5E7EB;padding:28px;margin-bottom:20px">
+              <h3 style="font-size:16px;font-weight:700;color:#111827;margin-bottom:4px">Gerar Código de Acesso</h3>
+              <p style="color:#6B7280;font-size:13px;margin-bottom:20px">Gere um código para novos usuários criarem conta. Válido por 10 minutos.</p>
+              <div style="display:flex;gap:12px;align-items:end;margin-bottom:24px">
+                <div style="flex:1">
+                  <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:4px">Tipo de conta</label>
+                  <select id="ac-type" style="width:100%;padding:10px 14px;border:1px solid #E5E7EB;border-radius:8px;font-size:14px;background:white">
+                    <option value="admin">Administrador</option>
+                    <option value="merchant">Merchant</option>
+                  </select>
+                </div>
+                <button onclick="generateAccessCode()" style="padding:10px 24px;background:#3B39F5;color:white;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap">Gerar Código</button>
+              </div>
+              <!-- Código gerado -->
+              <div id="ac-generated" style="display:none;text-align:center;padding:24px;background:#F0F0FF;border-radius:12px;border:2px dashed #3B39F5;margin-bottom:20px">
+                <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#6B7280;font-weight:600;margin-bottom:8px">Código de Acesso</div>
+                <div id="ac-code-display" style="font-size:42px;font-weight:800;color:#3B39F5;letter-spacing:8px;font-family:monospace;margin-bottom:8px"></div>
+                <div style="display:flex;align-items:center;justify-content:center;gap:6px;color:#6B7280;font-size:13px">
+                  <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="9" r="7"/><path d="M9 5v4l3 2"/></svg>
+                  <span>Expira em <span id="ac-timer" style="font-weight:600;color:#3B39F5">10:00</span></span>
+                </div>
+                <div id="ac-type-badge" style="margin-top:8px;display:inline-block;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:600"></div>
+              </div>
+            </div>
+            <!-- Lista de códigos ativos -->
+            <div style="background:white;border-radius:12px;border:1px solid #E5E7EB;padding:28px">
+              <h3 style="font-size:16px;font-weight:700;color:#111827;margin-bottom:16px">Códigos Ativos</h3>
+              <div id="ac-list" style="color:#6B7280;font-size:13px">Carregando...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Painel Configurações da Conta -->
+        <div id="panel-config" class="hidden">
+          <div style="max-width:600px;margin:0 auto">
+            <div style="background:white;border-radius:12px;border:1px solid #E5E7EB;padding:28px">
+              <h3 style="font-size:16px;font-weight:700;color:#111827;margin-bottom:4px">Configurações da Conta</h3>
+              <p style="color:#6B7280;font-size:13px;margin-bottom:24px">Atualize seus dados pessoais</p>
+              <div class="form-field" style="margin-bottom:14px">
+                <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:4px">Nome</label>
+                <input type="text" id="cfg-name" style="width:100%;padding:10px 14px;border:1px solid #E5E7EB;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box">
+              </div>
+              <div class="form-field" style="margin-bottom:14px">
+                <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:4px">E-mail</label>
+                <input type="email" id="cfg-email" readonly style="width:100%;padding:10px 14px;border:1px solid #E5E7EB;border-radius:8px;font-size:14px;outline:none;background:#F9FAFB;color:#6B7280;box-sizing:border-box">
+              </div>
+              <div class="form-field" style="margin-bottom:14px">
+                <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:4px">Telefone</label>
+                <input type="tel" id="cfg-phone" placeholder="+55 11 99999-0000" style="width:100%;padding:10px 14px;border:1px solid #E5E7EB;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box">
+              </div>
+              <div style="border-top:1px solid #E5E7EB;padding-top:20px;margin-top:20px">
+                <h4 style="font-size:14px;font-weight:600;color:#111827;margin-bottom:14px">Alterar Senha</h4>
+                <div class="form-field" style="margin-bottom:14px">
+                  <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:4px">Senha atual</label>
+                  <input type="password" id="cfg-current-pass" placeholder="Digite sua senha atual" style="width:100%;padding:10px 14px;border:1px solid #E5E7EB;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box">
+                </div>
+                <div class="form-field" style="margin-bottom:14px">
+                  <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:4px">Nova senha <span style="color:#9CA3AF">(deixe vazio para não alterar)</span></label>
+                  <input type="password" id="cfg-new-pass" placeholder="Nova senha" style="width:100%;padding:10px 14px;border:1px solid #E5E7EB;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box">
+                </div>
+              </div>
+              <div id="cfg-msg" style="display:none;font-size:13px;text-align:center;margin-bottom:12px;padding:8px 12px;border-radius:8px"></div>
+              <button onclick="saveAccountConfig()" style="width:100%;padding:12px;background:#3B39F5;color:white;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px">Salvar alterações</button>
+            </div>
+          </div>
+        </div>
 
       </div>
 
@@ -1276,43 +1606,64 @@ function setLoginRole(role) {
   document.getElementById('login-subtitle').textContent = isAdm
     ? 'Acesse como administrador Yuno'
     : 'Acesse como merchant';
-  document.getElementById('login-email').value = isAdm ? 'sarah@y.uno' : 'debora@q2ingressos.com.br';
-  document.getElementById('login-pass').value = isAdm ? 'yuno123' : 'q2123';
+  // Limpar campos ao trocar role
+  document.getElementById('login-email').value = '';
+  document.getElementById('login-pass').value = '';
+  document.getElementById('login-error').style.display = 'none';
 }
 
 async function doLogin() {
-  const e = document.getElementById('login-email').value;
-  const p = document.getElementById('login-pass').value;
+  const e = document.getElementById('login-email').value.trim();
+  const p = document.getElementById('login-pass').value.trim();
+  const errEl = document.getElementById('login-error');
+  errEl.style.display = 'none';
+
+  if (!e || !p) { errEl.textContent = 'Preencha email e senha'; errEl.style.display = 'block'; return; }
+
+  // Captura token do Turnstile (se disponível)
+  let captchaToken = '';
+  try { captchaToken = turnstile.getResponse(document.querySelector('#login-captcha .cf-turnstile iframe')?.closest('[data-sitekey]')) || ''; } catch(ex) {}
+  if (typeof turnstile !== 'undefined') { try { captchaToken = turnstile.getResponse(document.getElementById('login-captcha')); } catch(ex) {} }
+
   try {
-    const res = await fetch(API_BASE+'/auth', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email:e, password:p})});
+    const res = await fetch(API_BASE+'/auth', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email:e, password:p, captchaToken})});
     if (res.ok) {
       const data = await res.json();
       currentUser = data.user;
+      localStorage.setItem('yuno_gm_session', JSON.stringify(currentUser));
       await loadData();
       showApp();
       return;
     }
-  } catch(err) {}
-  // Fallback local
-  if (e==='sarah@y.uno' && p==='yuno123') {
-    currentUser = { type:'admin', name:'Sarah', initial:'S' };
-    showApp();
-  } else if (e==='debora@q2ingressos.com.br' && p==='q2123') {
-    currentUser = { type:'merchant', name:'Débora', initial:'D', merchantId:'q2ingressos' };
-    showApp();
-  } else {
-    alert('Credenciais inválidas.\n\nAdmin: sarah@y.uno / yuno123\nMerchant: debora@q2ingressos.com.br / q2123');
+    const err = await res.json().catch(()=>({}));
+    errEl.textContent = err.error === 'Captcha inválido' ? 'Captcha inválido. Tente novamente.' : 'Email ou senha inválidos';
+    errEl.style.display = 'block';
+  } catch(err) {
+    errEl.textContent = 'Erro de conexão. Tente novamente.';
+    errEl.style.display = 'block';
   }
+  // Reset captcha
+  try { if (typeof turnstile !== 'undefined') turnstile.reset(document.getElementById('login-captcha')); } catch(ex) {}
+}
+
+function toggleSidebar() {
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
+}
+function closeSidebar() {
+  document.querySelector('.sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
 }
 
 function doLogout() {
-  document.getElementById('view-login').classList.remove('hidden');
-  document.getElementById('view-app').classList.add('hidden');
+  closeSidebar();
+  currentUser = null;
+  localStorage.removeItem('yuno_gm_session');
+  showView('login');
 }
 
 function showApp() {
-  document.getElementById('view-login').classList.add('hidden');
-  document.getElementById('view-app').classList.remove('hidden');
+  showView('app');
   applyTranslations();
   const u = currentUser;
   ['s-avatar','t-avatar'].forEach(id => document.getElementById(id).textContent = u.initial);
@@ -1337,25 +1688,30 @@ function showApp() {
 
 // ===== NAVIGATION =====
 function navTo(view, el) {
+  closeSidebar();
   document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
   if (el) el.classList.add('active');
-  const map = { overview:'Visão Geral Merchants', implementacao:'Implementação', tam:'Merchants', visaogeral:'Visão Geral', 'mv-home':'Início', 'mv-tam':'Minhas Demandas', 'mv-impl':'Implementação', 'mv-board-fr':'Feature Requests', 'mv-board-dt':'Demanda Técnica', 'mv-board-pc':'Projetos e Consultorias', 'mv-sobre':'Sobre', 'mv-ticket':'Criar Ticket', 'mv-nps':'NPS' };
+  const map = { overview:'Visão Geral Merchants', implementacao:'Implementação', tam:'Merchants', visaogeral:'Visão Geral', 'mv-home':'Início', 'mv-tam':'Minhas Demandas', 'mv-impl':'Implementação', 'mv-board-fr':'Feature Requests', 'mv-board-dt':'Demanda Técnica', 'mv-board-pc':'Projetos e Consultorias', 'mv-sobre':'Sobre', 'mv-ticket':'Criar Ticket', 'mv-nps':'NPS', 'access-codes':'Gerar Código de Acesso', 'config':'Configurações da Conta' };
   setTitle(map[view]||view);
   if (view==='overview') showPanel('overview');
   else if (view==='implementacao') showPanel('implementacao');
   else if (view==='tam') showPanel('tam');
   else if (view==='visaogeral') { showPanel('visaogeral'); renderVisaoGeral(); }
+  else if (view==='access-codes') showPanel('access-codes');
+  else if (view==='config') showPanel('config');
   else if (view.startsWith('mv-')) { renderMerchantView(view.replace('mv-','')); showPanel('mv'); }
 }
 
 function setTitle(t) { document.getElementById('topbar-title').textContent = t; }
 
 function showPanel(name) {
-  ['overview','merchant','implementacao','tam','visaogeral','mv'].forEach(p => {
+  ['overview','merchant','implementacao','tam','visaogeral','mv','access-codes','config'].forEach(p => {
     document.getElementById('panel-'+p)?.classList.add('hidden');
   });
   document.getElementById('panel-'+name)?.classList.remove('hidden');
   if (name === 'tam') { switchTamTop('dem'); }
+  if (name === 'access-codes') { loadAccessCodes(); }
+  if (name === 'config') { loadAccountConfig(); }
 }
 
 function switchTamTop(type) {
@@ -3085,11 +3441,21 @@ function saveDemandaModal() {
   if (!title) { document.getElementById('dm-title').focus(); return; }
   if (!demands[mid]) demands[mid] = [];
   const today = new Date().toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', year:'2-digit'});
+  const statusLabels = {done:'Concluído', progress:'Em Andamento', standby:'Standby', waiting:'Aguardando Tech', merchant:'Aguardando Merchant', provider:'Aguardando Provider', novo:'Novo'};
+  const mName = merchants.find(m => m.id === mid)?.name || mid;
   if (isNew) {
     demands[mid].push({id: Date.now(), title, desc, status, prioridade, inicio: today, prazo, updates: [{date: today, text: updateText || 'Demanda criada.'}]});
+    addNotification({ type:'demand-new', title:'Nova demanda criada', subtitle:`${mName} · ${title} → ${statusLabels[status]||status}`, icon:'📋', color:'#3B39F5', navigate:{panel:'merchant', mid, tab:'Demandas Técnicas'} });
   } else {
     const d = demands[mid].find(d => d.id == id);
-    if (d) { d.title = title; d.desc = desc; d.status = status; d.prioridade = prioridade; d.prazo = prazo; if (updateText) d.updates.push({date: today, text: updateText}); }
+    if (d) {
+      const oldStatus = d.status;
+      d.title = title; d.desc = desc; d.status = status; d.prioridade = prioridade; d.prazo = prazo;
+      if (updateText) d.updates.push({date: today, text: updateText});
+      if (oldStatus !== status) {
+        addNotification({ type:'demand-status', title:'Status de demanda atualizado', subtitle:`${mName} · ${title}: ${statusLabels[oldStatus]||oldStatus} → ${statusLabels[status]||status}`, icon:'🔄', color:'#F59E0B', navigate:{panel:'merchant', mid, tab:'Demandas Técnicas'} });
+      }
+    }
   }
   closeDemandaModal();
   reRenderTam();
@@ -3202,6 +3568,23 @@ async function loadData() {
 
 // Load data on page load
 loadData();
+setTimeout(refreshNotifBadge, 500);
+
+// Reload data from API when tab becomes visible again (cross-device sync)
+document.addEventListener('visibilitychange', async () => {
+  if (document.visibilityState === 'visible' && _useApi && currentUser) {
+    try {
+      const res = await fetch(API_BASE+'/sync');
+      if (res.ok) {
+        const data = await res.json();
+        applyData(data);
+        try { localStorage.setItem('yuno_gm_data', JSON.stringify({merchants, demands, planos, metas, metasGerais, boards, npsForms})); } catch(e) {}
+        // Re-render current view
+        if (currentUser.type === 'admin') renderTable();
+      }
+    } catch(e) {}
+  }
+});
 
 function renderPlanos(mid) {
   const pl = planos[mid] || [];
@@ -3277,8 +3660,18 @@ function savePlanoModal() {
     propositor: document.getElementById('pm-propositor').value,
     impacto: document.getElementById('pm-impacto').value.trim()
   };
-  if (isNew) { planos[mid].push(data); }
-  else { const idx = planos[mid].findIndex(p => p.id == id); if (idx >= 0) planos[mid][idx] = data; }
+  const mName = merchants.find(m => m.id === mid)?.name || mid;
+  if (isNew) {
+    planos[mid].push(data);
+    addNotification({ type:'plano-new', title:'Novo plano criado', subtitle:`${mName} · ${title}`, icon:'📑', color:'#7C3AED', navigate:{panel:'merchant', mid, tab:'Planos'} });
+  } else {
+    const idx = planos[mid].findIndex(p => p.id == id);
+    const oldStatus = idx >= 0 ? planos[mid][idx].status : null;
+    if (idx >= 0) planos[mid][idx] = data;
+    if (oldStatus && oldStatus !== data.status) {
+      addNotification({ type:'plano-status', title:'Status de plano atualizado', subtitle:`${mName} · ${title}: ${oldStatus} → ${data.status}`, icon:'📑', color:'#7C3AED', navigate:{panel:'merchant', mid, tab:'Planos'} });
+    }
+  }
   persist();
   closePlanoModal();
   renderPlanos(mid);
@@ -3328,6 +3721,44 @@ function formatFollowupDate(dateStr) {
 }
 
 // ===== NOTIFICATIONS =====
+let notifications = [];
+try { notifications = JSON.parse(localStorage.getItem('yuno_gm_notifs') || '[]'); } catch(e) { notifications = []; }
+
+function saveNotifs() {
+  try { localStorage.setItem('yuno_gm_notifs', JSON.stringify(notifications.slice(0, 50))); } catch(e) {}
+}
+
+function addNotification(n) {
+  // n = { type, title, subtitle, icon, color, navigate: { panel, mid, boardKey, cardId, tab } }
+  n.id = Date.now() + '_' + Math.random().toString(36).slice(2,6);
+  n.time = new Date().toISOString();
+  n.read = false;
+  notifications.unshift(n);
+  if (notifications.length > 50) notifications.length = 50;
+  saveNotifs();
+  refreshNotifBadge();
+}
+
+function clearNotifications() {
+  notifications = [];
+  saveNotifs();
+  refreshNotifs();
+}
+
+function refreshNotifBadge() {
+  const badge = document.getElementById('notif-badge');
+  if (!badge) return;
+  const unread = notifications.filter(n => !n.read).length;
+  const followups = getAllFollowups().filter(i => i.diff <= 3).length;
+  const total = unread + followups;
+  if (total > 0) {
+    badge.textContent = total > 9 ? '9+' : total;
+    badge.classList.remove('hidden');
+  } else {
+    badge.classList.add('hidden');
+  }
+}
+
 function getAllFollowups() {
   const items = [];
   const today = new Date(); today.setHours(0,0,0,0);
@@ -3345,41 +3776,120 @@ function getAllFollowups() {
   return items;
 }
 
+function navigateToNotif(nav) {
+  document.getElementById('notif-panel')?.classList.add('hidden');
+  if (!nav) return;
+  if (nav.panel === 'merchant' && nav.mid) {
+    openMerchant(nav.mid);
+    if (nav.tab) {
+      setTimeout(() => {
+        const tabBtns = document.querySelectorAll('#panel-merchant .tab-btn');
+        tabBtns.forEach(btn => { if (btn.textContent.trim() === nav.tab) btn.click(); });
+      }, 100);
+    }
+  } else if (nav.panel === 'kanban' && nav.mid && nav.boardKey) {
+    openMerchant(nav.mid);
+    setTimeout(() => {
+      // Click the board tab
+      const tabMap = {'fr':'Feature Requests','dt':'Demanda Técnica','pc':'Projetos e Consultorias','impl':'Implementação'};
+      const tabLabel = tabMap[nav.boardKey] || nav.boardKey;
+      const tabBtns = document.querySelectorAll('#panel-merchant .tab-btn');
+      tabBtns.forEach(btn => { if (btn.textContent.trim() === tabLabel) btn.click(); });
+      if (nav.cardId) {
+        setTimeout(() => openKanbanCardDetail(nav.mid, nav.boardKey, nav.cardId), 200);
+      }
+    }, 100);
+  } else if (nav.panel === 'tam' && nav.mid) {
+    openMerchantToTam(nav.mid);
+  } else if (nav.panel === 'metas') {
+    // Navigate to metas panel
+    const metaNav = document.querySelector('#nav-admin .nav-item[onclick*="tam"]');
+    if (metaNav) metaNav.click();
+    setTimeout(() => {
+      const metSeg = document.getElementById('tam-top-seg-met');
+      if (metSeg) metSeg.click();
+    }, 100);
+  } else if (nav.panel === 'visaogeral') {
+    const vgNav = document.querySelector('#nav-admin .nav-item[onclick*="visaogeral"]');
+    if (vgNav) vgNav.click();
+  }
+}
+
 function refreshNotifs() {
-  const items = getAllFollowups();
+  const followups = getAllFollowups();
   const badge = document.getElementById('notif-badge');
   const countEl = document.getElementById('notif-panel-count');
   const list = document.getElementById('notif-list');
   if (!badge) return;
 
-  const urgent = items.filter(i => i.diff <= 3);
-  if (urgent.length > 0) {
-    badge.textContent = urgent.length > 9 ? '9+' : urgent.length;
-    badge.classList.remove('hidden');
-  } else {
-    badge.classList.add('hidden');
-  }
-  if (countEl) countEl.textContent = `${items.length} follow-up${items.length!==1?'s':''}`;
+  refreshNotifBadge();
+  // Mark all as read when panel is opened
+  notifications.forEach(n => { n.read = true; });
+  saveNotifs();
+
+  const total = notifications.length + followups.length;
+  if (countEl) countEl.textContent = `${total} notificaç${total!==1?'ões':'ão'}`;
   if (!list) return;
 
-  if (items.length === 0) {
-    list.innerHTML = `<div style="padding:24px;text-align:center;color:#9CA3AF;font-size:13px">Nenhum follow-up agendado</div>`;
+  if (total === 0) {
+    list.innerHTML = `<div style="padding:24px;text-align:center;color:#9CA3AF;font-size:13px">Nenhuma notificação</div>`;
+    refreshNotifBadge();
     return;
   }
 
-  list.innerHTML = items.map(item => {
+  let html = '';
+
+  // Status change notifications first
+  notifications.forEach(n => {
+    const timeAgo = getTimeAgo(n.time);
+    const iconBg = n.color || '#3B39F5';
+    html += `<div onclick="navigateToNotif(${esc(JSON.stringify(n.navigate||{}))})" style="padding:12px 16px;border-bottom:1px solid #F9FAFB;cursor:pointer;transition:background .1s" onmouseenter="this.style.background='#F9FAFB'" onmouseleave="this.style.background=''">
+      <div style="display:flex;align-items:flex-start;gap:10px">
+        <div style="width:28px;height:28px;border-radius:50%;background:${iconBg}15;color:${iconBg};display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">${n.icon||'●'}</div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">
+            <span style="font-size:12px;font-weight:600;color:#374151">${esc(n.title)}</span>
+            <span style="font-size:10px;color:#9CA3AF;flex-shrink:0;margin-left:8px">${timeAgo}</span>
+          </div>
+          <div style="font-size:12.5px;color:#6B7280;line-height:1.4">${esc(n.subtitle||'')}</div>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  // Follow-ups
+  followups.forEach(item => {
     const {merchantName, demand: d, diff} = item;
     const urgency = diff < 0 ? 'color:#EF4444' : diff === 0 ? 'color:#F59E0B' : diff <= 3 ? 'color:#F59E0B' : 'color:#9CA3AF';
     const label = diff < 0 ? `${Math.abs(diff)}d atraso` : diff === 0 ? 'Hoje' : diff === 1 ? 'Amanhã' : `em ${diff}d`;
-    return `<div onclick="openMerchantToTam('${item.mid}')" style="padding:12px 16px;border-bottom:1px solid #F9FAFB;cursor:pointer;transition:background .1s" onmouseenter="this.style.background='#F9FAFB'" onmouseleave="this.style.background=''">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-        <span style="font-size:12px;font-weight:500;color:#374151">${merchantName}</span>
-        <span style="font-size:11px;font-weight:600;${urgency}">${label}</span>
+    html += `<div onclick="openMerchantToTam('${item.mid}')" style="padding:12px 16px;border-bottom:1px solid #F9FAFB;cursor:pointer;transition:background .1s" onmouseenter="this.style.background='#F9FAFB'" onmouseleave="this.style.background=''">
+      <div style="display:flex;align-items:flex-start;gap:10px">
+        <div style="width:28px;height:28px;border-radius:50%;background:#F59E0B15;color:#F59E0B;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">⏰</div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">
+            <span style="font-size:12px;font-weight:600;color:#374151">${merchantName}</span>
+            <span style="font-size:11px;font-weight:600;${urgency}">${label}</span>
+          </div>
+          <div style="font-size:12.5px;color:#6B7280">${d.title}</div>
+          ${d.followup?.note ? `<div style="font-size:11.5px;color:#9CA3AF;margin-top:2px">${d.followup.note}</div>` : ''}
+        </div>
       </div>
-      <div style="font-size:13px;color:#111827;font-weight:500;margin-bottom:2px">${d.title}</div>
-      ${d.followup?.note ? `<div style="font-size:12px;color:#6B7280">${d.followup.note}</div>` : ''}
     </div>`;
-  }).join('');
+  });
+
+  list.innerHTML = html;
+  refreshNotifBadge();
+}
+
+function getTimeAgo(isoStr) {
+  const diff = Date.now() - new Date(isoStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'agora';
+  if (mins < 60) return `${mins}min`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h`;
+  const days = Math.floor(hrs / 24);
+  return `${days}d`;
 }
 
 function toggleNotifPanel() {
@@ -3434,7 +3944,14 @@ function renderMetasGerais() {
 
 function setMetaGeralStatus(id, status) {
   const mg = metasGerais.find(m => m.id === id);
-  if (mg) { mg.status = status; persist(); renderMetasGerais(); }
+  if (mg) {
+    const oldStatus = mg.status;
+    mg.status = status;
+    if (oldStatus !== status) {
+      addNotification({ type:'meta-status', title:'Status de meta geral atualizado', subtitle:`"${mg.text?.substring(0,50)||mg.title?.substring(0,50)||id}": ${oldStatus} → ${status}`, icon:'🎯', color:'#16A34A', navigate:{panel:'metas'} });
+    }
+    persist(); renderMetasGerais();
+  }
 }
 
 // ===== METAS ESPECÍFICAS POR TAM =====
@@ -4015,6 +4532,9 @@ function kanbanDrop(e, mid, boardKey, targetColId) {
     const board = getBoardData(mid, boardKey);
     const card = board.cards.find(c => c.id === kbDragCardId);
     if (!card) return;
+    const oldColObj = board.columns.find(c => c.id === card.columnId);
+    const newColObj = board.columns.find(c => c.id === targetColId);
+    const movedToDiffCol = card.columnId !== targetColId;
     card.columnId = targetColId;
     card.updatedAt = new Date().toISOString();
     // Calcular posição de inserção por Y
@@ -4031,6 +4551,10 @@ function kanbanDrop(e, mid, boardKey, targetColId) {
     // Reatribuir orders
     colCards.splice(insertIdx, 0, card);
     colCards.forEach((c, i) => { c.order = i; });
+    if (movedToDiffCol) {
+      const mName = merchants.find(m => m.id === mid)?.name || mid;
+      addNotification({ type:'card-move', title:'Card movido no board', subtitle:`${mName} · "${card.title}": ${oldColObj?.name||'?'} → ${newColObj?.name||'?'}`, icon:'↗', color:'#6366F1', navigate:{panel:'kanban', mid, boardKey, cardId:card.id} });
+    }
     persist();
     renderKanban(mid, boardKey);
   }
@@ -4232,10 +4756,15 @@ function moveKanbanCard(mid, boardKey, cardId, newColId) {
   const board = getBoardData(mid, boardKey);
   const card = board.cards.find(c => c.id === cardId);
   if (!card || card.columnId === newColId) return;
+  const oldCol = board.columns.find(c => c.id === card.columnId);
+  const newCol = board.columns.find(c => c.id === newColId);
   card.columnId = newColId;
   card.updatedAt = new Date().toISOString();
   const colCards = board.cards.filter(c => c.columnId === newColId && c.id !== card.id);
   card.order = colCards.length ? Math.max(...colCards.map(c => c.order||0)) + 1 : 0;
+  const mName = merchants.find(m => m.id === mid)?.name || mid;
+  const boardLabels = {fr:'Feature Requests', dt:'Demanda Técnica', pc:'Projetos e Consultorias', impl:'Implementação'};
+  addNotification({ type:'card-move', title:'Card movido no board', subtitle:`${mName} · "${card.title}": ${oldCol?.name||'?'} → ${newCol?.name||'?'}`, icon:'↗', color:'#6366F1', navigate:{panel:'kanban', mid, boardKey, cardId} });
   persist();
   renderKanban(mid, boardKey);
 }
@@ -4255,6 +4784,281 @@ function addKanbanComment(mid, boardKey, cardId) {
   openKanbanCardDetail(mid, boardKey, cardId);
   renderKanban(mid, boardKey);
 }
+
+// ===== VIEW SWITCHING (login/register/forgot/reset) =====
+function showView(name) {
+  ['view-login','view-register','view-forgot','view-reset','view-app'].forEach(id => {
+    document.getElementById(id)?.classList.add('hidden');
+  });
+  document.getElementById('view-'+name)?.classList.remove('hidden');
+}
+
+// ===== REGISTRO =====
+async function doRegister() {
+  const errEl = document.getElementById('reg-error');
+  errEl.style.display = 'none';
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const password = document.getElementById('reg-pass').value.trim();
+  const phone = document.getElementById('reg-phone').value.trim();
+  const type = document.getElementById('reg-type').value;
+  const code = document.getElementById('reg-code').value.trim();
+
+  if (!name || !email || !password || !code) {
+    errEl.textContent = 'Preencha todos os campos obrigatórios';
+    errEl.style.display = 'block'; return;
+  }
+  if (password.length < 4) {
+    errEl.textContent = 'Senha deve ter no mínimo 4 caracteres';
+    errEl.style.display = 'block'; return;
+  }
+
+  let captchaToken = '';
+  try { if (typeof turnstile !== 'undefined') captchaToken = turnstile.getResponse(document.getElementById('register-captcha')) || ''; } catch(ex) {}
+
+  try {
+    const res = await fetch(API_BASE+'/auth?action=register', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({name, email, password, phone, type, code, captchaToken})
+    });
+    const data = await res.json();
+    if (res.ok) {
+      currentUser = data.user;
+      localStorage.setItem('yuno_gm_session', JSON.stringify(currentUser));
+      await loadData();
+      showApp();
+    } else {
+      errEl.textContent = data.error || 'Erro ao criar conta';
+      errEl.style.display = 'block';
+    }
+  } catch(err) {
+    errEl.textContent = 'Erro de conexão. Tente novamente.';
+    errEl.style.display = 'block';
+  }
+}
+
+// ===== ESQUECI SENHA =====
+async function doForgotPassword() {
+  const msgEl = document.getElementById('forgot-msg');
+  msgEl.style.display = 'none';
+  const email = document.getElementById('forgot-email').value.trim();
+
+  if (!email) {
+    msgEl.textContent = 'Digite seu email';
+    msgEl.style.cssText = 'display:block;color:#EF4444;background:#FEF2F2;font-size:13px;text-align:center;margin-bottom:12px;padding:8px 12px;border-radius:8px';
+    return;
+  }
+
+  let captchaToken = '';
+  try { if (typeof turnstile !== 'undefined') captchaToken = turnstile.getResponse(document.getElementById('forgot-captcha')) || ''; } catch(ex) {}
+
+  try {
+    const res = await fetch(API_BASE+'/auth?action=forgot', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({email, captchaToken})
+    });
+    msgEl.textContent = 'Se o email estiver cadastrado, você receberá um link de redefinição.';
+    msgEl.style.cssText = 'display:block;color:#059669;background:#ECFDF5;font-size:13px;text-align:center;margin-bottom:12px;padding:8px 12px;border-radius:8px';
+  } catch(err) {
+    msgEl.textContent = 'Erro de conexão. Tente novamente.';
+    msgEl.style.cssText = 'display:block;color:#EF4444;background:#FEF2F2;font-size:13px;text-align:center;margin-bottom:12px;padding:8px 12px;border-radius:8px';
+  }
+}
+
+// ===== RESETAR SENHA =====
+let resetToken = '';
+async function doResetPassword() {
+  const msgEl = document.getElementById('reset-msg');
+  msgEl.style.display = 'none';
+  const pass = document.getElementById('reset-pass').value.trim();
+  const confirm = document.getElementById('reset-pass-confirm').value.trim();
+
+  if (!pass || pass.length < 4) {
+    msgEl.textContent = 'Senha deve ter no mínimo 4 caracteres';
+    msgEl.style.cssText = 'display:block;color:#EF4444;background:#FEF2F2;font-size:13px;text-align:center;margin-bottom:12px;padding:8px 12px;border-radius:8px';
+    return;
+  }
+  if (pass !== confirm) {
+    msgEl.textContent = 'As senhas não coincidem';
+    msgEl.style.cssText = 'display:block;color:#EF4444;background:#FEF2F2;font-size:13px;text-align:center;margin-bottom:12px;padding:8px 12px;border-radius:8px';
+    return;
+  }
+
+  try {
+    const res = await fetch(API_BASE+'/auth?action=reset', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({token: resetToken, newPassword: pass})
+    });
+    const data = await res.json();
+    if (res.ok) {
+      msgEl.textContent = 'Senha alterada com sucesso! Redirecionando...';
+      msgEl.style.cssText = 'display:block;color:#059669;background:#ECFDF5;font-size:13px;text-align:center;margin-bottom:12px;padding:8px 12px;border-radius:8px';
+      setTimeout(() => showView('login'), 2000);
+    } else {
+      msgEl.textContent = data.error || 'Token inválido ou expirado';
+      msgEl.style.cssText = 'display:block;color:#EF4444;background:#FEF2F2;font-size:13px;text-align:center;margin-bottom:12px;padding:8px 12px;border-radius:8px';
+    }
+  } catch(err) {
+    msgEl.textContent = 'Erro de conexão. Tente novamente.';
+    msgEl.style.cssText = 'display:block;color:#EF4444;background:#FEF2F2;font-size:13px;text-align:center;margin-bottom:12px;padding:8px 12px;border-radius:8px';
+  }
+}
+
+// ===== GERAR CÓDIGO DE ACESSO =====
+let acTimerInterval = null;
+async function generateAccessCode() {
+  const type = document.getElementById('ac-type').value;
+  try {
+    const res = await fetch(API_BASE+'/access-codes', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({type})
+    });
+    const data = await res.json();
+    if (res.ok) {
+      const el = document.getElementById('ac-generated');
+      el.style.display = 'block';
+      document.getElementById('ac-code-display').textContent = data.code;
+      const badge = document.getElementById('ac-type-badge');
+      badge.textContent = type === 'admin' ? 'Admin' : 'Merchant';
+      badge.style.cssText = type === 'admin'
+        ? 'margin-top:8px;display:inline-block;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:600;background:#EEF2FF;color:#3B39F5'
+        : 'margin-top:8px;display:inline-block;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:600;background:#ECFDF5;color:#059669';
+
+      // Timer de 10 min
+      if (acTimerInterval) clearInterval(acTimerInterval);
+      const expiresAt = new Date(data.expires_at).getTime();
+      acTimerInterval = setInterval(() => {
+        const remaining = Math.max(0, expiresAt - Date.now());
+        const min = Math.floor(remaining / 60000);
+        const sec = Math.floor((remaining % 60000) / 1000);
+        document.getElementById('ac-timer').textContent = `${min}:${String(sec).padStart(2, '0')}`;
+        if (remaining <= 0) {
+          clearInterval(acTimerInterval);
+          el.style.opacity = '0.5';
+          document.getElementById('ac-timer').textContent = 'Expirado';
+        }
+      }, 1000);
+
+      loadAccessCodes();
+    }
+  } catch(err) {}
+}
+
+async function loadAccessCodes() {
+  try {
+    const res = await fetch(API_BASE+'/access-codes');
+    const data = await res.json();
+    const list = document.getElementById('ac-list');
+    if (!data.codes || data.codes.length === 0) {
+      list.innerHTML = '<div style="text-align:center;color:#9CA3AF;padding:20px">Nenhum código ativo</div>';
+      return;
+    }
+    list.innerHTML = data.codes.map(c => {
+      const exp = new Date(c.expires_at);
+      const remaining = Math.max(0, exp.getTime() - Date.now());
+      const min = Math.floor(remaining / 60000);
+      const typeColor = c.type === 'admin' ? 'background:#EEF2FF;color:#3B39F5' : 'background:#ECFDF5;color:#059669';
+      return `<div style="display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid #F3F4F6;border-radius:8px;margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="font-family:monospace;font-size:18px;font-weight:700;letter-spacing:3px;color:#111827">${c.code}</span>
+          <span style="padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600;${typeColor}">${c.type}</span>
+        </div>
+        <span style="font-size:12px;color:#9CA3AF">${min > 0 ? min + ' min restante' + (min > 1 ? 's' : '') : 'Expirando...'}</span>
+      </div>`;
+    }).join('');
+  } catch(err) {
+    document.getElementById('ac-list').innerHTML = '<div style="color:#EF4444;text-align:center;padding:12px">Erro ao carregar códigos</div>';
+  }
+}
+
+// ===== CONFIGURAÇÕES DA CONTA =====
+function loadAccountConfig() {
+  if (!currentUser) return;
+  document.getElementById('cfg-name').value = currentUser.name || '';
+  document.getElementById('cfg-email').value = currentUser.email || '';
+  document.getElementById('cfg-phone').value = currentUser.phone || '';
+  document.getElementById('cfg-current-pass').value = '';
+  document.getElementById('cfg-new-pass').value = '';
+  document.getElementById('cfg-msg').style.display = 'none';
+}
+
+async function saveAccountConfig() {
+  const msgEl = document.getElementById('cfg-msg');
+  msgEl.style.display = 'none';
+  const name = document.getElementById('cfg-name').value.trim();
+  const phone = document.getElementById('cfg-phone').value.trim();
+  const currentPassword = document.getElementById('cfg-current-pass').value.trim();
+  const newPassword = document.getElementById('cfg-new-pass').value.trim();
+
+  if (!currentPassword) {
+    msgEl.textContent = 'Digite sua senha atual para confirmar alterações';
+    msgEl.style.cssText = 'display:block;color:#EF4444;background:#FEF2F2;font-size:13px;text-align:center;margin-bottom:12px;padding:8px 12px;border-radius:8px';
+    return;
+  }
+
+  try {
+    const res = await fetch(API_BASE+'/account', {
+      method: 'PUT',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        email: currentUser.email,
+        name: name || currentUser.name,
+        phone,
+        currentPassword,
+        ...(newPassword ? {newPassword} : {})
+      })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      currentUser = data.user;
+      localStorage.setItem('yuno_gm_session', JSON.stringify(currentUser));
+      // Atualizar UI
+      ['s-avatar','t-avatar'].forEach(id => document.getElementById(id).textContent = currentUser.initial);
+      document.getElementById('s-name').textContent = currentUser.name;
+      document.getElementById('t-name').textContent = currentUser.name;
+      document.getElementById('cfg-current-pass').value = '';
+      document.getElementById('cfg-new-pass').value = '';
+      msgEl.textContent = 'Alterações salvas com sucesso!';
+      msgEl.style.cssText = 'display:block;color:#059669;background:#ECFDF5;font-size:13px;text-align:center;margin-bottom:12px;padding:8px 12px;border-radius:8px';
+    } else {
+      msgEl.textContent = data.error || 'Erro ao salvar';
+      msgEl.style.cssText = 'display:block;color:#EF4444;background:#FEF2F2;font-size:13px;text-align:center;margin-bottom:12px;padding:8px 12px;border-radius:8px';
+    }
+  } catch(err) {
+    msgEl.textContent = 'Erro de conexão. Tente novamente.';
+    msgEl.style.cssText = 'display:block;color:#EF4444;background:#FEF2F2;font-size:13px;text-align:center;margin-bottom:12px;padding:8px 12px;border-radius:8px';
+  }
+}
+
+// ===== AUTO-LOGIN (sessão persistente) + detectar ?reset=TOKEN =====
+(function initSession() {
+  // Detectar token de reset na URL
+  const params = new URLSearchParams(window.location.search);
+  const resetTokenParam = params.get('reset');
+  if (resetTokenParam) {
+    resetToken = resetTokenParam;
+    // Limpar URL sem recarregar
+    window.history.replaceState({}, document.title, window.location.pathname);
+    showView('reset');
+    return;
+  }
+
+  // Auto-login via sessão salva
+  const saved = localStorage.getItem('yuno_gm_session');
+  if (saved) {
+    try {
+      currentUser = JSON.parse(saved);
+      loadData().then(() => showApp());
+      return;
+    } catch(e) {
+      localStorage.removeItem('yuno_gm_session');
+    }
+  }
+})();
 
 // ===== KEYBOARD =====
 document.addEventListener('keydown', e => {
