@@ -245,8 +245,8 @@ thead th.drag-right{box-shadow:inset -2px 0 0 #3B39F5}
 .mdh-actions{display:flex;gap:8px}
 
 /* ===== TABS ===== */
-.tabs{display:flex;background:white;border:1px solid #E5E7EB;border-radius:10px;margin-bottom:16px;overflow:hidden}
-.tab-btn{flex:1;padding:12px 16px;font-size:13.5px;font-weight:500;color:#6B7280;cursor:pointer;background:none;border:none;border-bottom:2px solid transparent;transition:all .15s;text-align:center}
+.tabs{display:flex;background:white;border:1px solid #E5E7EB;border-radius:10px;margin-bottom:16px;overflow-x:auto}
+.tab-btn{flex:0 0 auto;padding:12px 16px;font-size:13.5px;font-weight:500;color:#6B7280;cursor:pointer;background:none;border:none;border-bottom:2px solid transparent;transition:all .15s;text-align:center;white-space:nowrap}
 .tab-btn:hover{color:#111827;background:#F9FAFB}
 .tab-btn.active{color:#3B39F5;border-bottom-color:#3B39F5;background:#EEEFFE;font-weight:600}
 
@@ -348,6 +348,8 @@ thead th.drag-right{box-shadow:inset -2px 0 0 #3B39F5}
 .tam-seg{background:none;border:none;padding:7px 14px;border-radius:7px;font-size:13px;font-weight:500;color:#6B7280;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s}
 .tam-seg.active{background:white;color:#3B39F5;box-shadow:0 1px 4px rgba(0,0,0,.1)}
 .tam-seg:hover:not(.active){color:#374151}
+.dc-hdr .sbadge{flex-shrink:0}
+.dc-status{min-width:170px;justify-content:center;text-align:center}
 .dc-edit-btn{opacity:0;width:26px;height:26px;border:1px solid #E5E7EB;border-radius:6px;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#6B7280;transition:all .12s;flex-shrink:0}
 .demand-card:hover .dc-edit-btn{opacity:1}
 .dc-edit-btn:hover{background:#F3F4F6;color:#3B39F5}
@@ -427,6 +429,41 @@ thead th.drag-right{box-shadow:inset -2px 0 0 #3B39F5}
 .kb-inline-cancel{padding:5px 10px;background:none;border:1px solid #E5E7EB;border-radius:6px;font-size:12px;color:#6B7280;cursor:pointer}
 .kb-inline-cancel:hover{background:#F3F4F6}
 .kb-col.kb-dragover{background:#E8E7FE;border:1.5px dashed #3B39F5;border-radius:10px}
+
+/* Column drag */
+.kb-col-header[draggable="true"]{cursor:grab}
+.kb-col-header[draggable="true"]:active{cursor:grabbing}
+.kb-col.kb-col-dragging{opacity:.35;transition:opacity .15s}
+.kb-col-drop-indicator{width:4px;min-height:80px;background:#3B39F5;border-radius:3px;flex-shrink:0;align-self:stretch;transition:opacity .15s}
+
+/* Card drop indicator */
+.kb-card-drop-line{height:3px;background:#3B39F5;border-radius:2px;margin:2px 0;transition:opacity .15s}
+
+/* Ticket form */
+.ticket-form{background:white;border:1px solid #E5E7EB;border-radius:12px;padding:24px;max-width:560px}
+.ticket-form h3{font-size:17px;font-weight:700;color:#111827;margin-bottom:18px}
+.ticket-field{margin-bottom:16px}
+.ticket-field label{display:block;font-size:12.5px;font-weight:500;color:#374151;margin-bottom:6px}
+.ticket-field select,.ticket-field input,.ticket-field textarea{width:100%;padding:10px 14px;border:1.5px solid #E5E7EB;border-radius:8px;font-size:13.5px;color:#111827;outline:none;transition:border-color .15s;background:white;font-family:inherit}
+.ticket-field select:focus,.ticket-field input:focus,.ticket-field textarea:focus{border-color:#3B39F5}
+.ticket-field textarea{resize:vertical;min-height:80px}
+.ticket-submit{padding:10px 20px;background:#3B39F5;color:white;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s}
+.ticket-submit:hover{background:#2D2BC4}
+.ticket-success{display:none;padding:12px 16px;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;color:#15803D;font-size:13px;font-weight:500;margin-top:12px}
+
+/* Sobre form */
+.sobre-form{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:800px}
+.sobre-field{background:white;border:1px solid #E5E7EB;border-radius:10px;padding:14px 16px}
+.sobre-field.full{grid-column:1/-1}
+.sobre-field label{display:block;font-size:11.5px;font-weight:600;color:#9CA3AF;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.sobre-field input,.sobre-field select{width:100%;padding:8px 12px;border:1.5px solid #E5E7EB;border-radius:7px;font-size:13.5px;color:#111827;outline:none;transition:border-color .15s;background:white;font-family:inherit}
+.sobre-field input:focus,.sobre-field select:focus{border-color:#3B39F5}
+.sobre-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;min-height:24px}
+.sobre-tag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;background:#EEEFFE;color:#3B39F5;border-radius:20px;font-size:12px;font-weight:500;border:1px solid #C7D2FE}
+.sobre-tag button{background:none;border:none;color:#3B39F5;cursor:pointer;font-size:14px;line-height:1;padding:0;opacity:.7}
+.sobre-tag button:hover{opacity:1}
+.sobre-add-select{width:100%;padding:7px 10px;border:1.5px dashed #D1D5DB;border-radius:7px;font-size:12.5px;color:#9CA3AF;background:white;cursor:pointer;outline:none;font-family:inherit;transition:border-color .15s}
+.sobre-add-select:focus{border-color:#3B39F5}
 
 /* Slide-out detail panel */
 .kb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:200;opacity:0;transition:opacity .2s;pointer-events:none}
@@ -565,6 +602,8 @@ thead th.drag-right{box-shadow:inset -2px 0 0 #3B39F5}
             <div class="nav-item" onclick="navTo('mv-board-dt',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="2" width="12" height="14" rx="1.5"/><path d="M7 2.5V2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v.5"/><line x1="6" y1="8" x2="12" y2="8"/><line x1="6" y1="11" x2="12" y2="11"/></svg></span> <span data-i18n="nav.board_dt">Demanda Técnica</span></div>
             <div class="nav-item" onclick="navTo('mv-board-pc',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3.5h4A3.5 3.5 0 0 1 10.5 7v8.5H3z"/><path d="M15 3.5h-4A3.5 3.5 0 0 0 7.5 7v8.5H15z"/></svg></span> <span data-i18n="nav.board_pc">Projetos e Consultorias</span></div>
             <div class="nav-item" onclick="navTo('mv-impl',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="4" height="12" rx="1"/><rect x="7" y="3" width="4" height="9" rx="1"/><rect x="12" y="3" width="4" height="6" rx="1"/></svg></span> <span data-i18n="nav.impl">Implementação</span></div>
+            <div class="nav-item" onclick="navTo('mv-sobre',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="2" width="12" height="14" rx="1.5"/><line x1="7" y1="7" x2="11" y2="7"/><line x1="7" y1="10" x2="11" y2="10"/></svg></span> <span data-i18n="nav.sobre">Sobre</span></div>
+            <div class="nav-item" onclick="navTo('mv-ticket',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="7"/><line x1="9" y1="6" x2="9" y2="12"/><line x1="6" y1="9" x2="12" y2="9"/></svg></span> <span data-i18n="nav.ticket">Criar Ticket</span></div>
             <div class="nav-item" onclick="navTo('mv-nps',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="7"/><path d="M9 5v4l3 2"/></svg></span> <span data-i18n="nav.nps">NPS</span></div>
             <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3.5h4A3.5 3.5 0 0 1 10.5 7v8.5H3z"/><path d="M15 3.5h-4A3.5 3.5 0 0 0 7.5 7v8.5H15z"/></svg></span> <span data-i18n="nav.docs">Documentação</span></div>
           </div>
@@ -1055,7 +1094,7 @@ const translations = {
     'login.role.adm':'Administrador','login.role.mer':'Merchant','login.email':'E-mail','login.pass':'Senha','login.btn':'Entrar',
     'nav.overview':'Visão Geral','nav.merchants':'Merchants','nav.areas':'Áreas','nav.impl':'Implementação','nav.tam':'TAM',
     'nav.config':'Configurações','nav.team':'Equipe Yuno','nav.notif':'Notificações','nav.webhooks':'Webhooks / Email',
-    'nav.home':'Início','nav.board_fr':'Feature Requests','nav.board_dt':'Demanda Técnica','nav.board_pc':'Projetos e Consultorias','nav.nps':'NPS','nav.docs':'Documentação','nav.logout':'Sair',
+    'nav.home':'Início','nav.board_fr':'Feature Requests','nav.board_dt':'Demanda Técnica','nav.board_pc':'Projetos e Consultorias','nav.sobre':'Sobre','nav.ticket':'Criar Ticket','nav.nps':'NPS','nav.docs':'Documentação','nav.logout':'Sair',
     'merchants.title':'Merchants','merchants.desc':'Gerencie todos os clientes da Yuno','merchants.new':'+ Novo Merchant',
     'merchants.search':'Buscar merchant...','merchants.filters':'Filtros','merchants.sort':'Ordenar','merchants.columns':'Colunas',
     'merchants.edit':'Editar','merchants.delete':'Excluir','merchants.back':'← Voltar para Merchants',
@@ -1076,7 +1115,7 @@ const translations = {
     'login.role.adm':'Administrator','login.role.mer':'Merchant','login.email':'Email','login.pass':'Password','login.btn':'Sign In',
     'nav.overview':'Overview','nav.merchants':'Merchants','nav.areas':'Areas','nav.impl':'Implementation','nav.tam':'TAM',
     'nav.config':'Settings','nav.team':'Yuno Team','nav.notif':'Notifications','nav.webhooks':'Webhooks / Email',
-    'nav.home':'Home','nav.board_fr':'Feature Requests','nav.board_dt':'Technical Demand','nav.board_pc':'Projects & Consulting','nav.nps':'NPS','nav.docs':'Documentation','nav.logout':'Sign out',
+    'nav.home':'Home','nav.board_fr':'Feature Requests','nav.board_dt':'Technical Demand','nav.board_pc':'Projects & Consulting','nav.sobre':'About','nav.ticket':'Create Ticket','nav.nps':'NPS','nav.docs':'Documentation','nav.logout':'Sign out',
     'merchants.title':'Merchants','merchants.desc':'Manage all Yuno clients','merchants.new':'+ New Merchant',
     'merchants.search':'Search merchant...','merchants.filters':'Filters','merchants.sort':'Sort','merchants.columns':'Columns',
     'merchants.edit':'Edit','merchants.delete':'Delete','merchants.back':'← Back to Merchants',
@@ -1097,7 +1136,7 @@ const translations = {
     'login.role.adm':'Administrador','login.role.mer':'Merchant','login.email':'Correo electrónico','login.pass':'Contraseña','login.btn':'Entrar',
     'nav.overview':'Vista general','nav.merchants':'Merchants','nav.areas':'Áreas','nav.impl':'Implementación','nav.tam':'TAM',
     'nav.config':'Configuración','nav.team':'Equipo Yuno','nav.notif':'Notificaciones','nav.webhooks':'Webhooks / Email',
-    'nav.home':'Inicio','nav.board_fr':'Feature Requests','nav.board_dt':'Demanda Técnica','nav.board_pc':'Proyectos y Consultorías','nav.nps':'NPS','nav.docs':'Documentación','nav.logout':'Salir',
+    'nav.home':'Inicio','nav.board_fr':'Feature Requests','nav.board_dt':'Demanda Técnica','nav.board_pc':'Proyectos y Consultorías','nav.sobre':'Acerca de','nav.ticket':'Crear Ticket','nav.nps':'NPS','nav.docs':'Documentación','nav.logout':'Salir',
     'merchants.title':'Merchants','merchants.desc':'Gestiona todos los clientes de Yuno','merchants.new':'+ Nuevo Merchant',
     'merchants.search':'Buscar merchant...','merchants.filters':'Filtros','merchants.sort':'Ordenar','merchants.columns':'Columnas',
     'merchants.edit':'Editar','merchants.delete':'Eliminar','merchants.back':'← Volver a Merchants',
@@ -1226,7 +1265,7 @@ function showApp() {
 function navTo(view, el) {
   document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
   if (el) el.classList.add('active');
-  const map = { overview:'Merchants', implementacao:'Implementação', tam:'TAM — Demandas Técnicas', 'mv-home':'Início', 'mv-tam':'Minhas Demandas', 'mv-impl':'Implementação', 'mv-board-fr':'Feature Requests', 'mv-board-dt':'Demanda Técnica', 'mv-board-pc':'Projetos e Consultorias', 'mv-nps':'NPS' };
+  const map = { overview:'Merchants', implementacao:'Implementação', tam:'TAM — Demandas Técnicas', 'mv-home':'Início', 'mv-tam':'Minhas Demandas', 'mv-impl':'Implementação', 'mv-board-fr':'Feature Requests', 'mv-board-dt':'Demanda Técnica', 'mv-board-pc':'Projetos e Consultorias', 'mv-sobre':'Sobre', 'mv-ticket':'Criar Ticket', 'mv-nps':'NPS' };
   setTitle(map[view]||view);
   if (view==='overview') showPanel('overview');
   else if (view==='implementacao') showPanel('implementacao');
@@ -1644,14 +1683,64 @@ function buildMerchantDetail(id) {
         <button class="btn-primary" onclick="openNovaDemandaModal('${id}')">+ Nova Demanda</button>
       </div>
     </div>
+    <div class="stats-row" style="grid-template-columns:repeat(auto-fill,minmax(130px,1fr))">
+      <div class="stat-card hi"><div class="stat-label">Novo</div><div class="stat-value">${dl.filter(d=>d.status==='novo').length}</div></div>
+      <div class="stat-card"><div class="stat-label">Em Andamento</div><div class="stat-value">${dl.filter(d=>d.status==='progress').length}</div></div>
+      <div class="stat-card"><div class="stat-label">Aguardando Tech</div><div class="stat-value">${dl.filter(d=>d.status==='waiting').length}</div></div>
+      <div class="stat-card"><div class="stat-label">Aguardando Merchant</div><div class="stat-value">${dl.filter(d=>d.status==='merchant').length}</div></div>
+      <div class="stat-card"><div class="stat-label">Aguardando Provider</div><div class="stat-value">${dl.filter(d=>d.status==='provider').length}</div></div>
+      <div class="stat-card"><div class="stat-label">Concluído</div><div class="stat-value">${dl.filter(d=>d.status==='done').length}</div></div>
+      <div class="stat-card"><div class="stat-label">Standby</div><div class="stat-value">${dl.filter(d=>d.status==='standby').length}</div></div>
+    </div>
     <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('info',this,'${id}')"><svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="2" width="12" height="14" rx="1.5"/><path d="M7 2.5V2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v.5"/><line x1="6" y1="8" x2="12" y2="8"/><line x1="6" y1="11" x2="12" y2="11"/><line x1="6" y1="14" x2="9" y2="14"/></svg> Informações Gerais</button>
-      <button class="tab-btn" onclick="switchTab('impl',this,'${id}')"><svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6.5,4.5 2,9 6.5,13.5"/><polyline points="11.5,4.5 16,9 11.5,13.5"/><line x1="10.5" y1="2.5" x2="7.5" y2="15.5"/></svg> Implementação</button>
-      <button class="tab-btn" onclick="switchTab('tam',this,'${id}')"><svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="2" width="12" height="14" rx="1.5"/><line x1="6" y1="7" x2="12" y2="7"/><line x1="6" y1="10" x2="12" y2="10"/><line x1="6" y1="13" x2="9" y2="13"/></svg> TAM ${open>0?`<span style="background:#EF4444;color:white;border-radius:20px;padding:1px 6px;font-size:10px;margin-left:4px">${open}</span>`:''}</button>
+      <button class="tab-btn active" onclick="switchTab('info',this,'${id}')">Info</button>
+      <button class="tab-btn" onclick="switchTab('board-fr',this,'${id}')">Feature Requests</button>
+      <button class="tab-btn" onclick="switchTab('board-dt',this,'${id}')">Demanda Técnica</button>
+      <button class="tab-btn" onclick="switchTab('board-pc',this,'${id}')">Projetos e Consultorias</button>
+      <button class="tab-btn" onclick="switchTab('impl',this,'${id}')">Implementação</button>
+      <button class="tab-btn" onclick="switchTab('tam',this,'${id}')">TAM ${open>0?`<span style="background:#EF4444;color:white;border-radius:20px;padding:1px 6px;font-size:10px;margin-left:4px">${open}</span>`:''}</button>
+      <button class="tab-btn" onclick="switchTab('sobre',this,'${id}')">Sobre</button>
+      <button class="tab-btn" onclick="switchTab('ticket',this,'${id}')">Criar Ticket</button>
     </div>
     <div id="tc-info">${buildInfoGeral(m)}</div>
-    <div id="tc-impl" class="hidden"><div class="placeholder"><div class="ph-icon"><svg width="36" height="36" viewBox="0 0 18 18" fill="none" stroke="#D1D5DB" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="3"/><path d="M9 1v2M9 15v2M1 9h2M15 9h2M3.22 3.22l1.42 1.42M13.36 13.36l1.42 1.42M3.22 14.78l1.42-1.42M13.36 4.64l1.42-1.42"/></svg></div><h3>Implementação — ${m.name}</h3><p>Checklist de setup técnico, status de homologação e acompanhamento do go-live.</p></div></div>
+    <div id="tc-board-fr" class="hidden"><div id="kb-adm-fr"></div></div>
+    <div id="tc-board-dt" class="hidden"><div id="kb-adm-dt"></div></div>
+    <div id="tc-board-pc" class="hidden"><div id="kb-adm-pc"></div></div>
+    <div id="tc-impl" class="hidden"><div id="kb-adm-impl"></div></div>
     <div id="tc-tam" class="hidden">${buildTam(id, dl, false)}</div>
+    <div id="tc-sobre" class="hidden">${buildSobreForm(id)}</div>
+    <div id="tc-ticket" class="hidden">
+      <div class="ticket-form">
+        <h3>Criar Ticket — ${esc(m.name)}</h3>
+        <div class="ticket-field">
+          <label>Tipo</label>
+          <select id="adm-ticket-tipo">
+            <option value="dt">Demanda Técnica</option>
+            <option value="fr">Feature Request</option>
+            <option value="pc">Projetos e Consultorias</option>
+            <option value="impl">Implementação</option>
+          </select>
+        </div>
+        <div class="ticket-field">
+          <label>Título</label>
+          <input type="text" id="adm-ticket-titulo" placeholder="Título do ticket...">
+        </div>
+        <div class="ticket-field">
+          <label>Descrição</label>
+          <textarea id="adm-ticket-desc" placeholder="Descreva o contexto detalhado..." rows="4"></textarea>
+        </div>
+        <div class="ticket-field">
+          <label>Prioridade</label>
+          <select id="adm-ticket-prio">
+            <option value="alta">Alta</option>
+            <option value="media" selected>Média</option>
+            <option value="baixa">Baixa</option>
+          </select>
+        </div>
+        <button class="ticket-submit" onclick="submitTicketAdmin('${id}')">Enviar Ticket</button>
+        <div class="ticket-success" id="adm-ticket-success">Ticket criado com sucesso!</div>
+      </div>
+    </div>
   `;
 }
 
@@ -1722,7 +1811,7 @@ function buildTam(mid, dl, isMerchant) {
         ${prioBadge[d.prioridade||'media']}
         <button class="dc-edit-btn" onclick="event.stopPropagation();openEditDemandaModal('${mid}',${d.id})" title="Editar demanda"><svg width="13" height="13" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3l2 2-9 9H4v-2L13 3z"/></svg></button>
         <button class="dc-edit-btn" onclick="event.stopPropagation();deleteDemanda('${mid}',${d.id})" title="Excluir demanda" style="color:#EF4444;border-color:#FECACA" onmouseenter="this.style.background='#FEF2F2'" onmouseleave="this.style.background=''"><svg width="13" height="13" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,5 15,5"/><path d="M6 5V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M14 5l-1 10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1L4 5"/></svg></button>
-        <span class="sbadge ${cls}">${lbl}</span>
+        <span class="sbadge dc-status ${cls}">${lbl}</span>
         <span class="dc-chevron">▾</span>
       </div>
       <div class="demand-detail">
@@ -1764,12 +1853,55 @@ function buildTam(mid, dl, isMerchant) {
     </div>`;
   }).join('');
 
+  // Build board-based card lists for each kanban board type
+  const boardTabs = [
+    {key:'fr', label:'Feature Requests', icon:'<svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="5" height="12" rx="1"/><rect x="9" y="3" width="5" height="8" rx="1"/></svg>'},
+    {key:'pc', label:'Projetos e Consultorias', icon:'<svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3.5h4A3.5 3.5 0 0 1 10.5 7v8.5H3z"/><path d="M15 3.5h-4A3.5 3.5 0 0 0 7.5 7v8.5H15z"/></svg>'},
+    {key:'impl', label:'Implementação', icon:'<svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="4" height="12" rx="1"/><rect x="7" y="3" width="4" height="9" rx="1"/><rect x="12" y="3" width="4" height="6" rx="1"/></svg>'}
+  ];
+
+  function buildBoardSection(bkey, mid2) {
+    const bd = getBoardData(mid2, bkey);
+    const allCards = bd.cards || [];
+    const colMap = {};
+    bd.columns.forEach(c => colMap[c.id] = c.name);
+    if (allCards.length === 0) return '<div class="placeholder" style="padding:32px 0"><h3>Nenhum cartão</h3><p>Crie cartões no board Kanban correspondente.</p></div>';
+    const prB = {
+      alta: '<span style="display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:600;color:#EF4444;background:#FEF2F2;border:1px solid #FECACA;border-radius:20px;padding:1px 7px">● Alta</span>',
+      media: '<span style="display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:600;color:#D97706;background:#FFFBEB;border:1px solid #FDE68A;border-radius:20px;padding:1px 7px">● Média</span>',
+      baixa: '<span style="display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:600;color:#9CA3AF;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:20px;padding:1px 7px">● Baixa</span>'
+    };
+    return allCards.map(c => {
+      const colName = colMap[c.columnId] || c.columnId;
+      const colColor = colName.toLowerCase().includes('conclu') || colName.toLowerCase().includes('entreg') || colName.toLowerCase().includes('go-live')
+        ? 'color:#22C55E;background:#F0FDF4;border-color:#BBF7D0'
+        : colName.toLowerCase().includes('aguard')
+        ? 'color:#F59E0B;background:#FFFBEB;border-color:#FDE68A'
+        : 'color:#3B39F5;background:#EEEFFE;border-color:#C7D2FE';
+      return `<div class="demand-card" style="cursor:default">
+        <div class="dc-hdr" style="cursor:default">
+          <div class="dc-main">
+            <div class="dc-title">${c.title}</div>
+            ${c.desc ? `<div class="dc-desc">${c.desc}</div>` : ''}
+            <div class="dc-meta">
+              <span class="dc-meta-item">🕐 ${new Date(c.createdAt).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})}</span>
+              ${c.comments?.length ? `<span class="dc-meta-item">💬 ${c.comments.length}</span>` : ''}
+            </div>
+          </div>
+          ${prB[c.prioridade||'media']}
+          <span class="sbadge" style="display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid;${colColor}">● ${colName}</span>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
   return `
-    <div style="display:flex;align-items:center;gap:0;margin-bottom:18px;background:#F3F4F6;border-radius:9px;padding:3px;width:fit-content">
+    <div style="display:flex;align-items:center;gap:0;margin-bottom:18px;background:#F3F4F6;border-radius:9px;padding:3px;width:fit-content;flex-wrap:wrap">
       <button class="tam-seg active" id="seg-dem-${mid}" onclick="switchTamSeg('dem','${mid}')">
         <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="2" width="12" height="14" rx="1.5"/><line x1="6" y1="7" x2="12" y2="7"/><line x1="6" y1="10" x2="12" y2="10"/><line x1="6" y1="13" x2="9" y2="13"/></svg>
         ${t('tam.demands')}
       </button>
+      ${boardTabs.map(bt => `<button class="tam-seg" id="seg-${bt.key}-${mid}" onclick="switchTamSeg('${bt.key}','${mid}')">${bt.icon} ${bt.label}</button>`).join('')}
       <button class="tam-seg" id="seg-pla-${mid}" onclick="switchTamSeg('pla','${mid}')">
         <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="7"/><path d="M9 5v4l2.5 2.5"/></svg>
         ${t('tam.improve')}
@@ -1786,11 +1918,21 @@ function buildTam(mid, dl, isMerchant) {
         <div class="chip active" onclick="filterDemands('all',this,'${mid}')">${t('dem.all')} (${dl.length})</div>
         <div class="chip" onclick="filterDemands('progress',this,'${mid}')">${t('dem.progress')} (${cnt.progress||0})</div>
         <div class="chip" onclick="filterDemands('waiting',this,'${mid}')">${t('dem.waiting')} (${cnt.waiting||0})</div>
+        <div class="chip" onclick="filterDemands('merchant',this,'${mid}')">Aguardando merchant (${cnt.merchant||0})</div>
+        <div class="chip" onclick="filterDemands('provider',this,'${mid}')">Aguardando provedor (${cnt.provider||0})</div>
         <div class="chip" onclick="filterDemands('standby',this,'${mid}')">${t('dem.standby')} (${cnt.standby||0})</div>
         <div class="chip" onclick="filterDemands('done',this,'${mid}')">${t('dem.done')} (${cnt.done||0})</div>
       </div>
       <div class="demand-list">${cards}</div>
     </div>
+
+    ${boardTabs.map(bt => `<div id="tam-${bt.key}-${mid}" class="hidden">
+      <div class="sec-hdr">
+        <span class="sec-title">${bt.label}</span>
+        <span class="sec-count">${(getBoardData(mid, bt.key).cards||[]).length} total</span>
+      </div>
+      <div class="demand-list">${buildBoardSection(bt.key, mid)}</div>
+    </div>`).join('')}
 
     <div id="tam-pla-${mid}" class="hidden">
       <div class="sec-hdr">
@@ -1810,11 +1952,15 @@ function buildTam(mid, dl, isMerchant) {
 }
 
 function switchTab(tab, el, mid) {
-  ['info','impl','tam'].forEach(t => document.getElementById('tc-'+t)?.classList.add('hidden'));
+  ['info','impl','tam','board-fr','board-dt','board-pc','sobre','ticket'].forEach(t => document.getElementById('tc-'+t)?.classList.add('hidden'));
   document.getElementById('tc-'+tab)?.classList.remove('hidden');
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
   if (tab === 'tam') tamCtx = {mid, isMerchant: false};
+  if (tab === 'board-fr') renderKanban(mid, 'fr', 'kb-adm-fr');
+  if (tab === 'board-dt') renderKanban(mid, 'dt', 'kb-adm-dt');
+  if (tab === 'board-pc') renderKanban(mid, 'pc', 'kb-adm-pc');
+  if (tab === 'impl') renderKanban(mid, 'impl', 'kb-adm-impl');
 }
 
 function toggleDemand(mid, id) {
@@ -1824,14 +1970,16 @@ function toggleDemand(mid, id) {
 function filterDemands(status, el, mid) {
   document.querySelectorAll(`#chips-${mid} .chip`).forEach(c => c.classList.remove('active'));
   el.classList.add('active');
-  document.querySelectorAll('.demand-card').forEach(c => {
-    c.style.display = status==='all' || c.querySelector('.'+{'progress':'s-prog','waiting':'s-wait','standby':'s-sb','done':'s-done'}[status]) ? '' : 'none';
+  const classMap = {progress:'s-prog', waiting:'s-wait', standby:'s-sb', done:'s-done', merchant:'s-merchant', provider:'s-provider'};
+  document.querySelectorAll(`#tam-dem-${mid} .demand-card`).forEach(c => {
+    c.style.display = status==='all' || c.querySelector('.'+(classMap[status]||'')) ? '' : 'none';
   });
 }
 
 // ===== MERCHANT VIEW =====
 function renderMerchantView(section='home') {
   tamCtx = {mid: 'q2ingressos', isMerchant: true};
+  const mObj = merchants.find(x => x.id==='q2ingressos');
   const dl = demands['q2ingressos']||[];
   const open = dl.filter(d=>d.status!=='done').length;
   let body = '';
@@ -1839,14 +1987,17 @@ function renderMerchantView(section='home') {
     body = `
       <div class="m-hero">
         <div class="m-hero-label">Bem-vinda de volta, Débora</div>
-        <div class="m-hero-name">Q2 Ingressos</div>
-        <div class="m-hero-meta">q2ingressos.com.br &nbsp;·&nbsp; KAM: Felipe Geraldelli &nbsp;·&nbsp; Integração: Lite SDK</div>
+        <div class="m-hero-name">${mObj?mObj.name:'Q2 Ingressos'}</div>
+        <div class="m-hero-meta">${mObj?mObj.website:''} &nbsp;·&nbsp; ${mObj&&mObj.countries.length?mObj.countries.join(', '):''} &nbsp;·&nbsp; ${mObj&&mObj.provedores.length?'Provedores: '+mObj.provedores.join(', '):''} &nbsp;·&nbsp; ${mObj&&mObj.integracao.length?'Integração: '+mObj.integracao.join(', '):''}</div>
       </div>
-      <div class="stats-row">
-        <div class="stat-card hi"><div class="stat-label">Demandas Abertas</div><div class="stat-value">${open}</div><div class="stat-sub">de ${dl.length} no total</div></div>
-        <div class="stat-card"><div class="stat-label">Aguardando Tech Yuno</div><div class="stat-value">${dl.filter(d=>d.status==='waiting').length}</div></div>
-        <div class="stat-card"><div class="stat-label">Em andamento</div><div class="stat-value">${dl.filter(d=>d.status==='progress').length}</div></div>
-        <div class="stat-card"><div class="stat-label">Concluídas</div><div class="stat-value">${dl.filter(d=>d.status==='done').length}</div></div>
+      <div class="stats-row" style="grid-template-columns:repeat(auto-fill,minmax(130px,1fr))">
+        <div class="stat-card hi"><div class="stat-label">Novo</div><div class="stat-value">${dl.filter(d=>d.status==='novo').length}</div></div>
+        <div class="stat-card"><div class="stat-label">Em Andamento</div><div class="stat-value">${dl.filter(d=>d.status==='progress').length}</div></div>
+        <div class="stat-card"><div class="stat-label">Aguardando Tech</div><div class="stat-value">${dl.filter(d=>d.status==='waiting').length}</div></div>
+        <div class="stat-card"><div class="stat-label">Aguardando Merchant</div><div class="stat-value">${dl.filter(d=>d.status==='merchant').length}</div></div>
+        <div class="stat-card"><div class="stat-label">Aguardando Provider</div><div class="stat-value">${dl.filter(d=>d.status==='provider').length}</div></div>
+        <div class="stat-card"><div class="stat-label">Concluído</div><div class="stat-value">${dl.filter(d=>d.status==='done').length}</div></div>
+        <div class="stat-card"><div class="stat-label">Standby</div><div class="stat-value">${dl.filter(d=>d.status==='standby').length}</div></div>
       </div>
       ${buildTam('q2ingressos', dl, true)}`;
   } else if (section==='impl') {
@@ -1854,8 +2005,42 @@ function renderMerchantView(section='home') {
     document.getElementById('panel-mv').innerHTML = body;
     renderKanban('q2ingressos', 'impl');
     return;
+  } else if (section==='ticket') {
+    body = `<div class="m-hero"><div class="m-hero-name">Q2 Ingressos</div></div>
+    <div class="ticket-form">
+      <h3>Criar Ticket</h3>
+      <div class="ticket-field">
+        <label>Tipo</label>
+        <select id="ticket-tipo">
+          <option value="dt">Demanda Técnica</option>
+          <option value="fr">Feature Request</option>
+          <option value="pc">Projetos e Consultorias</option>
+          <option value="impl">Implementação</option>
+        </select>
+      </div>
+      <div class="ticket-field">
+        <label>Título</label>
+        <input type="text" id="ticket-titulo" placeholder="Título do ticket...">
+      </div>
+      <div class="ticket-field">
+        <label>Descrição</label>
+        <textarea id="ticket-desc" placeholder="Descreva o contexto detalhado..." rows="4"></textarea>
+      </div>
+      <div class="ticket-field">
+        <label>Prioridade</label>
+        <select id="ticket-prio">
+          <option value="alta">Alta</option>
+          <option value="media" selected>Média</option>
+          <option value="baixa">Baixa</option>
+        </select>
+      </div>
+      <button class="ticket-submit" onclick="submitTicket()">Enviar Ticket</button>
+      <div class="ticket-success" id="ticket-success">Ticket criado com sucesso!</div>
+    </div>`;
+  } else if (section==='sobre') {
+    body = `<div class="m-hero"><div class="m-hero-name">${mObj?mObj.name:'Q2 Ingressos'}</div></div>` + buildSobreForm('q2ingressos');
   } else if (section==='nps') {
-    body = `<div class="m-hero"><div class="m-hero-name">Q2 Ingressos</div></div><div class="placeholder"><div class="ph-icon"><svg width="36" height="36" viewBox="0 0 18 18" fill="none" stroke="#D1D5DB" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="7"/><path d="M9 5v4l3 2"/></svg></div><h3>NPS</h3><p>Acompanhe a satisfação e o Net Promoter Score.</p></div>`;
+    body = `<div class="m-hero"><div class="m-hero-name">${mObj?mObj.name:'Q2 Ingressos'}</div></div><div class="placeholder"><div class="ph-icon"><svg width="36" height="36" viewBox="0 0 18 18" fill="none" stroke="#D1D5DB" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="7"/><path d="M9 5v4l3 2"/></svg></div><h3>NPS</h3><p>Acompanhe a satisfação e o Net Promoter Score.</p></div>`;
   } else if (section==='board-fr' || section==='board-dt' || section==='board-pc') {
     const boardKey = section.replace('board-','');
     body = `<div id="kb-root" data-mid="q2ingressos" data-board="${boardKey}"></div>`;
@@ -1864,6 +2049,220 @@ function renderMerchantView(section='home') {
     return;
   }
   document.getElementById('panel-mv').innerHTML = body;
+}
+
+function submitTicket() {
+  const tipo = document.getElementById('ticket-tipo').value;
+  const titulo = document.getElementById('ticket-titulo').value.trim();
+  const desc = document.getElementById('ticket-desc').value.trim();
+  const prio = document.getElementById('ticket-prio').value;
+  if (!titulo) { document.getElementById('ticket-titulo').focus(); return; }
+  const mid = 'q2ingressos';
+  const board = getBoardData(mid, tipo);
+  const firstCol = board.columns[0];
+  if (!firstCol) return;
+  const colCards = board.cards.filter(c => c.columnId === firstCol.id);
+  board.cards.push({
+    id: kbId(),
+    columnId: firstCol.id,
+    title: titulo,
+    desc: desc,
+    prioridade: prio,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    awaitingMerchant: false,
+    comments: [],
+    order: colCards.length ? Math.max(...colCards.map(c => c.order||0)) + 1 : 0
+  });
+  persist();
+  document.getElementById('ticket-titulo').value = '';
+  document.getElementById('ticket-desc').value = '';
+  document.getElementById('ticket-prio').value = 'media';
+  const msg = document.getElementById('ticket-success');
+  const boardNames = {dt:'Demanda Técnica',fr:'Feature Requests',pc:'Projetos e Consultorias',impl:'Implementação'};
+  msg.textContent = `Ticket criado com sucesso no board "${boardNames[tipo]||tipo}" na coluna "${firstCol.name}"!`;
+  msg.style.display = 'block';
+  setTimeout(() => { msg.style.display = 'none'; }, 4000);
+}
+
+function submitTicketAdmin(mid) {
+  const tipo = document.getElementById('adm-ticket-tipo').value;
+  const titulo = document.getElementById('adm-ticket-titulo').value.trim();
+  const desc = document.getElementById('adm-ticket-desc').value.trim();
+  const prio = document.getElementById('adm-ticket-prio').value;
+  if (!titulo) { document.getElementById('adm-ticket-titulo').focus(); return; }
+  const board = getBoardData(mid, tipo);
+  const firstCol = board.columns[0];
+  if (!firstCol) return;
+  const colCards = board.cards.filter(c => c.columnId === firstCol.id);
+  board.cards.push({
+    id: kbId(),
+    columnId: firstCol.id,
+    title: titulo,
+    desc: desc,
+    prioridade: prio,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    awaitingMerchant: false,
+    comments: [],
+    order: colCards.length ? Math.max(...colCards.map(c => c.order||0)) + 1 : 0
+  });
+  persist();
+  document.getElementById('adm-ticket-titulo').value = '';
+  document.getElementById('adm-ticket-desc').value = '';
+  document.getElementById('adm-ticket-prio').value = 'media';
+  const msg = document.getElementById('adm-ticket-success');
+  const boardNames = {dt:'Demanda Técnica',fr:'Feature Requests',pc:'Projetos e Consultorias',impl:'Implementação'};
+  msg.textContent = `Ticket criado no board "${boardNames[tipo]||tipo}" na coluna "${firstCol.name}"!`;
+  msg.style.display = 'block';
+  setTimeout(() => { msg.style.display = 'none'; }, 4000);
+}
+
+// ===== SOBRE =====
+function buildSobreForm(mid) {
+  const m = merchants.find(x => x.id === mid);
+  if (!m) return '<p>Merchant não encontrado.</p>';
+
+  const multiFields = [
+    {label:'Canal de Comunicação', field:'canal', listKey:'canais'},
+    {label:'Métodos de Pagamento', field:'metodos', listKey:'metodos'},
+    {label:'Provedores', field:'provedores', listKey:'provedores'},
+    {label:'Países', field:'countries', listKey:'paises'},
+    {label:'Integração', field:'integracao', listKey:'integracoes'},
+    {label:'Tipos de Cobrança', field:'cobranca', listKey:'cobrancas'},
+  ];
+
+  const singleSelects = [
+    {label:'KAM Responsável', field:'kam', listKey:'kams'},
+    {label:'TAM Responsável', field:'tam', listKey:'tams'},
+  ];
+
+  let html = '<div class="sobre-form">';
+
+  // Nome
+  html += `<div class="sobre-field">
+    <label>Nome do Merchant</label>
+    <input type="text" value="${esc(m.name)}" onchange="updateSobreText('${mid}','name',this.value)">
+  </div>`;
+
+  // Website
+  html += `<div class="sobre-field">
+    <label>Website</label>
+    <input type="text" value="${esc(m.website)}" onchange="updateSobreText('${mid}','website',this.value)">
+  </div>`;
+
+  // Negócio
+  html += `<div class="sobre-field">
+    <label>Negócio</label>
+    <input type="text" value="${esc(m.negocio)}" onchange="updateSobreText('${mid}','negocio',this.value)">
+  </div>`;
+
+  // Single selects (KAM, TAM)
+  singleSelects.forEach(sf => {
+    const opts = listOptions[sf.listKey] || [];
+    html += `<div class="sobre-field">
+      <label>${sf.label}</label>
+      <select onchange="updateSobreSelect('${mid}','${sf.field}','${sf.listKey}',this)">
+        <option value="">Selecionar...</option>
+        ${opts.map(o => `<option value="${esc(o)}"${o===m[sf.field]?' selected':''}>${esc(o)}</option>`).join('')}
+        <option value="__new__">+ Adicionar novo...</option>
+      </select>
+    </div>`;
+  });
+
+  // Multi-select fields
+  multiFields.forEach(mf => {
+    const values = m[mf.field] || [];
+    const opts = listOptions[mf.listKey] || [];
+    const available = opts.filter(o => !values.includes(o));
+    html += `<div class="sobre-field full">
+      <label>${mf.label}</label>
+      <div class="sobre-tags">
+        ${values.map(v => `<span class="sobre-tag">${esc(v)} <button onclick="removeSobreTag('${mid}','${mf.field}','${mf.listKey}',this)" data-val="${esc(v)}">×</button></span>`).join('')}
+      </div>
+      <select class="sobre-add-select" onchange="addSobreTag('${mid}','${mf.field}','${mf.listKey}',this)">
+        <option value="">+ Adicionar...</option>
+        ${available.map(o => `<option value="${esc(o)}">${esc(o)}</option>`).join('')}
+        <option value="__new__">+ Criar novo...</option>
+      </select>
+    </div>`;
+  });
+
+  html += '</div>';
+  return html;
+}
+
+function updateSobreText(mid, field, value) {
+  const m = merchants.find(x => x.id === mid);
+  if (!m) return;
+  m[field] = value.trim();
+  persist();
+}
+
+function updateSobreSelect(mid, field, listKey, sel) {
+  if (sel.value === '__new__') {
+    const nome = prompt('Adicionar novo:');
+    if (!nome || !nome.trim()) { sel.value = ''; return; }
+    const trimmed = nome.trim();
+    if (!listOptions[listKey]) listOptions[listKey] = [];
+    if (!listOptions[listKey].includes(trimmed)) listOptions[listKey].push(trimmed);
+    const m = merchants.find(x => x.id === mid);
+    if (m) { m[field] = trimmed; persist(); }
+    refreshSobre(mid);
+    return;
+  }
+  const m = merchants.find(x => x.id === mid);
+  if (m) { m[field] = sel.value; persist(); }
+}
+
+function addSobreTag(mid, field, listKey, sel) {
+  if (sel.value === '__new__') {
+    const nome = prompt('Criar novo:');
+    if (!nome || !nome.trim()) { sel.value = ''; return; }
+    const trimmed = nome.trim();
+    if (!listOptions[listKey]) listOptions[listKey] = [];
+    if (!listOptions[listKey].includes(trimmed)) listOptions[listKey].push(trimmed);
+    const m = merchants.find(x => x.id === mid);
+    if (m) {
+      if (!m[field]) m[field] = [];
+      if (!m[field].includes(trimmed)) m[field].push(trimmed);
+      persist();
+    }
+    refreshSobre(mid);
+    return;
+  }
+  if (!sel.value) return;
+  const m = merchants.find(x => x.id === mid);
+  if (m) {
+    if (!m[field]) m[field] = [];
+    if (!m[field].includes(sel.value)) m[field].push(sel.value);
+    persist();
+  }
+  refreshSobre(mid);
+}
+
+function removeSobreTag(mid, field, listKey, btn) {
+  const val = btn.getAttribute('data-val');
+  const m = merchants.find(x => x.id === mid);
+  if (m && m[field]) {
+    m[field] = m[field].filter(v => v !== val);
+    persist();
+  }
+  refreshSobre(mid);
+}
+
+function refreshSobre(mid) {
+  // Re-render sobre em qualquer contexto ativo
+  const tcSobre = document.getElementById('tc-sobre');
+  if (tcSobre && !tcSobre.classList.contains('hidden')) {
+    tcSobre.innerHTML = buildSobreForm(mid);
+    return;
+  }
+  // Merchant view
+  const mv = document.getElementById('panel-mv');
+  if (mv && mv.innerHTML.includes('sobre-form')) {
+    renderMerchantView('sobre');
+  }
 }
 
 // ===== TOGGLE SENHA =====
@@ -2170,7 +2569,7 @@ function reRenderTam() {
 
 // ===== TAM SEGMENT TOGGLE =====
 function switchTamSeg(type, mid) {
-  ['dem','pla'].forEach(t => {
+  ['dem','pla','fr','pc','impl'].forEach(t => {
     document.getElementById(`seg-${t}-${mid}`)?.classList.toggle('active', t===type);
     document.getElementById(`tam-${t}-${mid}`)?.classList.toggle('hidden', t!==type);
   });
@@ -2937,35 +3336,20 @@ function editMetaCell(mid, rowId, colId, el, colLabel, containerId) {
 applyTranslations();
 
 // ===== KANBAN =====
+const kbStandardColumns = [
+  {id:'novo', name:'Novo'},
+  {id:'andamento', name:'Em Andamento'},
+  {id:'await_tech', name:'Aguardando Tech'},
+  {id:'await_merchant', name:'Aguardando Merchant'},
+  {id:'await_provider', name:'Aguardando Provider'},
+  {id:'done', name:'Concluído'},
+  {id:'standby', name:'Standby'}
+];
 const kbDefaultColumns = {
-  fr: [
-    {id:'backlog', name:'Backlog'},
-    {id:'analise', name:'Em análise'},
-    {id:'aprovado', name:'Aprovado'},
-    {id:'dev', name:'Em desenvolvimento'},
-    {id:'done', name:'Concluído'}
-  ],
-  dt: [
-    {id:'novo', name:'Novo'},
-    {id:'andamento', name:'Em andamento'},
-    {id:'await_merchant', name:'Aguardando Merchant'},
-    {id:'await_tech', name:'Aguardando Tech'},
-    {id:'done', name:'Concluído'}
-  ],
-  pc: [
-    {id:'ideia', name:'Ideia'},
-    {id:'analise', name:'Em análise'},
-    {id:'proposta', name:'Proposta enviada'},
-    {id:'execucao', name:'Em execução'},
-    {id:'entregue', name:'Entregue'}
-  ],
-  impl: [
-    {id:'setup', name:'Setup Técnico'},
-    {id:'config', name:'Configuração'},
-    {id:'testes', name:'Testes'},
-    {id:'homolog', name:'Homologação'},
-    {id:'golive', name:'Go-live'}
-  ]
+  fr: kbStandardColumns.map(c => ({...c})),
+  dt: kbStandardColumns.map(c => ({...c})),
+  pc: kbStandardColumns.map(c => ({...c})),
+  impl: kbStandardColumns.map(c => ({...c}))
 };
 
 let kbNextId = Date.now();
@@ -2985,9 +3369,11 @@ function getBoardData(mid, boardKey) {
 
 let kbDragCardId = null;
 let kbDragSourceColId = null;
+let kbDragType = null; // 'card' ou 'col'
+let kbDragColId = null;
 
-function renderKanban(mid, boardKey) {
-  const root = document.getElementById('kb-root');
+function renderKanban(mid, boardKey, rootId) {
+  const root = document.getElementById(rootId || 'kb-root');
   if (!root) return;
   const board = getBoardData(mid, boardKey);
   let html = '<div class="kb-board">';
@@ -3001,12 +3387,12 @@ function renderKanban(mid, boardKey) {
 }
 
 function renderKanbanColumn(col, cards, boardKey, mid) {
-  let html = `<div class="kb-col" data-colid="${col.id}" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'${mid}','${boardKey}','${col.id}')" ondragleave="kanbanDragLeave(event)">`;
-  html += `<div class="kb-col-header">
+  let html = `<div class="kb-col" data-colid="${col.id}" ondragover="kanbanDragOver(event,'${mid}','${boardKey}','${col.id}')" ondrop="kanbanDrop(event,'${mid}','${boardKey}','${col.id}')" ondragleave="kanbanDragLeave(event)">`;
+  html += `<div class="kb-col-header" draggable="true" ondragstart="kanbanColDragStart(event,'${col.id}','${mid}','${boardKey}')" ondragend="kanbanColDragEnd(event)">
     <span>${esc(col.name)}</span>
     <span class="kb-col-count">${cards.length}</span>
-    <button class="kb-col-menu" title="Renomear" onclick="renameKanbanColumn('${mid}','${boardKey}','${col.id}')">✏</button>
-    <button class="kb-col-menu" title="Excluir coluna" onclick="deleteKanbanColumn('${mid}','${boardKey}','${col.id}')" style="color:#EF4444">✕</button>
+    <button class="kb-col-menu" title="Renomear" onclick="event.stopPropagation();renameKanbanColumn('${mid}','${boardKey}','${col.id}')">✏</button>
+    <button class="kb-col-menu" title="Excluir coluna" onclick="event.stopPropagation();deleteKanbanColumn('${mid}','${boardKey}','${col.id}')" style="color:#EF4444">✕</button>
   </div>`;
   html += '<div class="kb-col-cards">';
   cards.forEach(card => {
@@ -3037,8 +3423,9 @@ function renderKanbanCard(card, mid, boardKey) {
   return html;
 }
 
-// Drag and Drop
+// Drag and Drop — Cards
 function kanbanDragStart(e, cardId, colId) {
+  kbDragType = 'card';
   kbDragCardId = cardId;
   kbDragSourceColId = colId;
   e.target.classList.add('kb-dragging');
@@ -3048,37 +3435,103 @@ function kanbanDragStart(e, cardId, colId) {
 
 function kanbanDragEnd(e) {
   e.target.classList.remove('kb-dragging');
-  document.querySelectorAll('.kb-col').forEach(c => c.classList.remove('kb-dragover'));
+  document.querySelectorAll('.kb-col').forEach(c => { c.classList.remove('kb-dragover'); c.classList.remove('kb-col-dragging'); });
+  document.querySelectorAll('.kb-card-drop-line').forEach(l => l.remove());
+  kbDragType = null;
   kbDragCardId = null;
   kbDragSourceColId = null;
 }
 
-function kanbanDragOver(e) {
+// Drag and Drop — Columns
+function kanbanColDragStart(e, colId, mid, boardKey) {
+  e.stopPropagation();
+  kbDragType = 'col';
+  kbDragColId = colId;
+  const colEl = e.target.closest('.kb-col');
+  if (colEl) colEl.classList.add('kb-col-dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', colId);
+}
+
+function kanbanColDragEnd(e) {
+  document.querySelectorAll('.kb-col').forEach(c => { c.classList.remove('kb-col-dragging'); c.classList.remove('kb-dragover'); });
+  kbDragType = null;
+  kbDragColId = null;
+}
+
+function kanbanDragOver(e, mid, boardKey, colId) {
   e.preventDefault();
   e.dataTransfer.dropEffect = 'move';
-  e.currentTarget.classList.add('kb-dragover');
+  if (kbDragType === 'card') {
+    e.currentTarget.classList.add('kb-dragover');
+    // Indicador de posição entre cards
+    document.querySelectorAll('.kb-card-drop-line').forEach(l => l.remove());
+    const cardsContainer = e.currentTarget.querySelector('.kb-col-cards');
+    if (cardsContainer) {
+      const cardEls = [...cardsContainer.querySelectorAll('.kb-card:not(.kb-dragging)')];
+      let insertBefore = null;
+      for (const cardEl of cardEls) {
+        const rect = cardEl.getBoundingClientRect();
+        if (e.clientY < rect.top + rect.height / 2) { insertBefore = cardEl; break; }
+      }
+      const line = document.createElement('div');
+      line.className = 'kb-card-drop-line';
+      if (insertBefore) cardsContainer.insertBefore(line, insertBefore);
+      else cardsContainer.appendChild(line);
+    }
+  } else if (kbDragType === 'col') {
+    if (colId !== kbDragColId) e.currentTarget.classList.add('kb-dragover');
+  }
 }
 
 function kanbanDragLeave(e) {
   if (!e.currentTarget.contains(e.relatedTarget)) {
     e.currentTarget.classList.remove('kb-dragover');
+    e.currentTarget.querySelectorAll('.kb-card-drop-line').forEach(l => l.remove());
   }
 }
 
 function kanbanDrop(e, mid, boardKey, targetColId) {
   e.preventDefault();
   e.currentTarget.classList.remove('kb-dragover');
-  if (!kbDragCardId) return;
-  const board = getBoardData(mid, boardKey);
-  const card = board.cards.find(c => c.id === kbDragCardId);
-  if (!card) return;
-  card.columnId = targetColId;
-  card.updatedAt = new Date().toISOString();
-  // Set order to end of target column
-  const colCards = board.cards.filter(c => c.columnId === targetColId && c.id !== card.id);
-  card.order = colCards.length ? Math.max(...colCards.map(c => c.order||0)) + 1 : 0;
-  persist();
-  renderKanban(mid, boardKey);
+  document.querySelectorAll('.kb-card-drop-line').forEach(l => l.remove());
+
+  if (kbDragType === 'col' && kbDragColId) {
+    // Reordenar colunas
+    const board = getBoardData(mid, boardKey);
+    const fromIdx = board.columns.findIndex(c => c.id === kbDragColId);
+    const toIdx = board.columns.findIndex(c => c.id === targetColId);
+    if (fromIdx === -1 || toIdx === -1 || fromIdx === toIdx) return;
+    const [col] = board.columns.splice(fromIdx, 1);
+    board.columns.splice(toIdx, 0, col);
+    persist();
+    renderKanban(mid, boardKey);
+    return;
+  }
+
+  if (kbDragType === 'card' && kbDragCardId) {
+    const board = getBoardData(mid, boardKey);
+    const card = board.cards.find(c => c.id === kbDragCardId);
+    if (!card) return;
+    card.columnId = targetColId;
+    card.updatedAt = new Date().toISOString();
+    // Calcular posição de inserção por Y
+    const cardsContainer = e.currentTarget.querySelector('.kb-col-cards');
+    const colCards = board.cards.filter(c => c.columnId === targetColId && c.id !== card.id).sort((a,b) => (a.order||0) - (b.order||0));
+    let insertIdx = colCards.length;
+    if (cardsContainer) {
+      const cardEls = [...cardsContainer.querySelectorAll('.kb-card:not(.kb-dragging)')];
+      for (let i = 0; i < cardEls.length; i++) {
+        const rect = cardEls[i].getBoundingClientRect();
+        if (e.clientY < rect.top + rect.height / 2) { insertIdx = i; break; }
+      }
+    }
+    // Reatribuir orders
+    colCards.splice(insertIdx, 0, card);
+    colCards.forEach((c, i) => { c.order = i; });
+    persist();
+    renderKanban(mid, boardKey);
+  }
 }
 
 // CRUD Cards
