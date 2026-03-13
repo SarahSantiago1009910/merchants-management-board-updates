@@ -1,0 +1,3308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yuno · Gestão de Merchants</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;color:#111827;background:#f5f6fa;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit}
+a{text-decoration:none;color:inherit}
+.hidden{display:none!important}
+
+/* ===== LOGO ===== */
+.yuno-logo{display:flex;align-items:center;gap:8px}
+.yuno-logo-text{font-size:18px;font-weight:800;color:#3B39F5;letter-spacing:-0.5px}
+.yuno-logo-text.white{color:white}
+.yuno-logo-text.dark{color:#111827}
+
+/* ===== LOGIN ===== */
+.login-page{min-height:100vh;display:flex}
+.login-left{flex:1;background:#3B39F5;display:flex;flex-direction:column;justify-content:center;padding:64px;color:white}
+.login-left-logo{display:flex;align-items:center;gap:10px;margin-bottom:52px}
+.login-left h1{font-size:34px;font-weight:800;line-height:1.2;margin-bottom:16px}
+.login-left p{font-size:15px;opacity:0.72;line-height:1.7;max-width:380px}
+.login-right{width:480px;display:flex;align-items:center;justify-content:center;padding:48px;background:white}
+.login-card{width:100%;max-width:360px}
+.login-card-logo{display:flex;align-items:center;gap:8px;margin-bottom:32px}
+.login-card h2{font-size:23px;font-weight:700;color:#111827;margin-bottom:6px}
+.login-subtitle{font-size:13.5px;color:#6B7280;margin-bottom:28px}
+.form-field{margin-bottom:16px}
+.form-field label{display:block;font-size:12.5px;font-weight:500;color:#374151;margin-bottom:6px}
+.form-field input{width:100%;padding:10px 14px;border:1.5px solid #E5E7EB;border-radius:8px;font-size:14px;color:#111827;outline:none;transition:border-color .15s;background:white}
+.form-field input:focus{border-color:#3B39F5}
+.btn-login{width:100%;padding:11px;background:#3B39F5;color:white;border:none;border-radius:8px;font-size:14.5px;font-weight:600;cursor:pointer;transition:background .2s;margin-top:4px}
+.btn-login:hover{background:#2D2BC4}
+.login-hints{margin-top:24px;padding:14px 16px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:8px;font-size:12px;color:#6B7280;line-height:1.8}
+.login-hints strong{color:#374151;display:block;margin-bottom:4px}
+
+/* ===== APP ===== */
+.app{display:flex;height:100vh;overflow:hidden}
+
+/* ===== SIDEBAR ===== */
+.sidebar{width:260px;background:white;border-right:1px solid #E5E7EB;display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.sidebar-header{padding:18px 20px 14px;border-bottom:1px solid #F3F4F6}
+.sidebar-logo{display:flex;align-items:center;gap:8px}
+.sidebar-nav{flex:1;padding:8px 0}
+.nav-section{margin-bottom:2px}
+.nav-section-title{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#9CA3AF;padding:10px 20px 4px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;color:#374151;cursor:pointer;font-size:13.5px;font-weight:400;border-left:3px solid transparent;transition:all .12s;user-select:none}
+.nav-item:hover{background:#F9FAFB;color:#111827}
+.nav-item.active{background:#EEEFFE;color:#3B39F5;font-weight:500;border-left-color:#3B39F5}
+.nav-icon{width:18px;height:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nav-icon svg{width:18px;height:18px}
+.sidebar-divider{height:1px;background:#F3F4F6;margin:6px 0}
+.sidebar-footer{padding:14px 20px;border-top:1px solid #F3F4F6;display:flex;align-items:center;gap:10px}
+.s-avatar{width:30px;height:30px;border-radius:50%;background:#3B39F5;color:white;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.s-name{font-size:12.5px;font-weight:500;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.s-role{font-size:11px;color:#9CA3AF}
+.s-info{flex:1;min-width:0}
+.logout-btn{font-size:12px;color:#9CA3AF;cursor:pointer;background:none;border:none;padding:0;transition:color .12s}
+.logout-btn:hover{color:#EF4444}
+
+/* ===== MAIN ===== */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#F5F6FA}
+
+/* ===== TOPBAR ===== */
+.topbar{height:52px;background:white;border-bottom:1px solid #E5E7EB;display:flex;align-items:center;padding:0 24px;gap:10px;flex-shrink:0}
+.topbar-title{font-size:15px;font-weight:500;color:#111827;flex:1}
+.topbar-actions{display:flex;align-items:center;gap:8px}
+.toggle-wrap{display:flex;align-items:center;gap:8px;font-size:13px;color:#6B7280}
+.toggle{width:36px;height:20px;background:#E5E7EB;border-radius:20px;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.toggle.on{background:#3B39F5}
+.toggle::after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:white;top:3px;left:3px;transition:left .2s}
+.toggle.on::after{left:19px}
+.icon-btn{width:32px;height:32px;border:1px solid #E5E7EB;border-radius:7px;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:#6B7280;transition:all .12s}
+.icon-btn:hover{background:#F9FAFB;border-color:#D1D5DB;color:#374151}
+.topbar-user{display:flex;align-items:center;gap:6px;cursor:pointer;padding:4px 8px;border-radius:7px;transition:background .12s}
+.topbar-user:hover{background:#F3F4F6}
+.t-avatar{width:28px;height:28px;border-radius:50%;background:#3B39F5;color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.btn-primary{display:flex;align-items:center;gap:6px;padding:7px 14px;background:#3B39F5;color:white;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s}
+.btn-primary:hover{background:#2D2BC4}
+.btn-outline{padding:7px 14px;border:1.5px solid #E5E7EB;border-radius:7px;background:white;font-size:12.5px;font-weight:500;color:#374151;cursor:pointer;transition:all .12s}
+.btn-outline:hover{border-color:#3B39F5;color:#3B39F5}
+
+/* ===== CONTENT ===== */
+.content{flex:1;overflow-y:auto;padding:24px}
+
+/* ===== PAGE HEADER ===== */
+.page-header{margin-bottom:20px}
+.page-title{font-size:20px;font-weight:700;color:#111827}
+.page-desc{font-size:13px;color:#6B7280;margin-top:3px}
+
+/* ===== STATS ===== */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat-card{background:white;border:1px solid #E5E7EB;border-radius:10px;padding:18px 20px}
+.stat-label{font-size:12px;color:#6B7280;margin-bottom:6px}
+.stat-value{font-size:26px;font-weight:700;color:#111827}
+.stat-sub{font-size:11px;color:#9CA3AF;margin-top:4px}
+.stat-card.hi{border-color:#3B39F5;background:#EEEFFE}
+.stat-card.hi .stat-value{color:#3B39F5}
+
+/* ===== TABLE ===== */
+/* ===== TABLE ===== */
+.table-container{background:white;border-radius:10px;border:1px solid #E5E7EB;overflow:hidden}
+.table-toolbar{padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #E5E7EB;flex-wrap:wrap}
+.search-box{display:flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid #E5E7EB;border-radius:7px;background:#F9FAFB;flex:1;max-width:280px}
+.search-box input{border:none;background:none;outline:none;font-size:13px;color:#111827;width:100%}
+.search-box input::placeholder{color:#9CA3AF}
+.filter-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid #E5E7EB;border-radius:7px;background:white;font-size:13px;color:#374151;cursor:pointer;font-weight:400;transition:all .12s}
+.filter-btn:hover{background:#F9FAFB;border-color:#D1D5DB}
+.filter-btn.active{border-color:#3B39F5;color:#3B39F5;background:#EEEFFE}
+.filter-btn svg{opacity:.6}
+.filter-btn.active svg{opacity:1}
+.active-filters{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:8px 16px;border-bottom:1px solid #F3F4F6}
+.active-filter-chip{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;background:#EEEFFE;color:#3B39F5;border-radius:20px;font-size:12px;font-weight:500;border:1px solid #C7D2FE}
+.active-filter-chip button{background:none;border:none;color:#3B39F5;cursor:pointer;font-size:14px;line-height:1;padding:0;margin-left:2px;opacity:.7}
+.active-filter-chip button:hover{opacity:1}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}#merchants-table{table-layout:fixed}
+thead th{padding:12px 16px;text-align:left;font-size:12.5px;font-weight:400;color:#9CA3AF;background:white;border-bottom:1px solid #E5E7EB;white-space:nowrap;border-right:1px solid #F0F0F0}
+thead th:last-child{border-right:none}
+thead th .th-inner{display:flex;align-items:center;gap:5px}
+tbody td{padding:14px 16px;border-bottom:1px solid #F3F4F6;vertical-align:middle;border-right:1px solid #F8F8F8;overflow:hidden;max-width:0}
+.editable-td{position:relative;cursor:default}
+.cell-edit-btn{display:none;position:absolute;right:4px;top:50%;transform:translateY(-50%);background:white;border:1px solid #E5E7EB;border-radius:4px;width:22px;height:22px;cursor:pointer;color:#9CA3AF;align-items:center;justify-content:center;padding:0;flex-shrink:0;z-index:1}
+.editable-td:hover .cell-edit-btn{display:flex}
+.cell-edit-btn:hover{border-color:#3B39F5!important;color:#3B39F5!important}
+.cell-input{width:100%;border:1.5px solid #3B39F5;border-radius:6px;padding:5px 8px;font-size:12.5px;outline:none;font-family:inherit;box-sizing:border-box;color:#111827}
+tbody td:last-child{border-right:none}
+tbody tr:last-child td{border-bottom:none}
+tbody tr{transition:background .1s}
+tbody tr:hover td{background:#FAFAFA}
+tbody tr.cl{cursor:pointer}
+.copy-btn{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border:1px solid #E5E7EB;border-radius:4px;background:white;cursor:pointer;color:#9CA3AF;vertical-align:middle;margin-left:4px;transition:all .12s;flex-shrink:0}
+.copy-btn:hover{background:#F3F4F6;color:#374151;border-color:#D1D5DB}
+.copy-btn svg{width:11px;height:11px}
+
+/* ===== COLUMN MANAGEMENT ===== */
+thead th{position:relative;user-select:none}
+thead th.dragging{opacity:.35;background:#F3F4F6}
+thead th.drag-left{box-shadow:inset 2px 0 0 #3B39F5}
+thead th.drag-right{box-shadow:inset -2px 0 0 #3B39F5}
+.resize-handle{position:absolute;right:-4px;top:0;bottom:0;width:9px;cursor:col-resize;z-index:30;display:flex;align-items:center;justify-content:center}
+.resize-handle::after{content:'';width:2px;height:60%;background:transparent;border-radius:2px;transition:background .15s}
+.resize-handle:hover::after,.resize-handle.active::after{background:#3B39F5}
+.col-picker-wrap{position:relative}
+.col-picker{position:absolute;top:calc(100% + 6px);right:0;background:white;border:1px solid #E5E7EB;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.12);width:220px;z-index:50;overflow:hidden}
+.col-picker-title{padding:11px 16px 8px;font-size:11px;font-weight:600;color:#9CA3AF;text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid #F3F4F6}
+.col-picker-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;font-size:13.5px;color:#374151;transition:background .1s}
+.col-picker-item:hover{background:#F9FAFB}
+.col-ck{width:16px;height:16px;border:1.5px solid #D1D5DB;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s}
+.col-ck.on{background:#3B39F5;border-color:#3B39F5}
+.col-ck.on::after{content:'';width:8px;height:5px;border-left:2px solid white;border-bottom:2px solid white;transform:rotate(-45deg) translate(1px,-1px);display:block}
+.col-picker-footer{padding:8px 12px;border-top:1px solid #F3F4F6}
+.drag-ghost{opacity:.001;position:fixed;pointer-events:none}
+
+/* ===== FILTER PANEL ===== */
+.filter-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:150;display:flex;align-items:flex-start;justify-content:flex-start;padding:52px 0 0 260px}
+.filter-panel{background:white;width:680px;height:calc(100vh - 52px);display:flex;box-shadow:4px 0 20px rgba(0,0,0,.12);border-right:1px solid #E5E7EB}
+.fp-categories{width:220px;border-right:1.5px solid #E5E7EB;overflow-y:auto;padding:8px 0;flex-shrink:0}
+.fp-cat-item{display:flex;align-items:center;gap:10px;padding:11px 20px;cursor:pointer;font-size:14px;color:#374151;transition:all .12s;border-left:3px solid transparent}
+.fp-cat-item:hover{background:#F9FAFB;color:#111827}
+.fp-cat-item.active{color:#3B39F5;font-weight:500;border-left-color:#3B39F5}
+.fp-cat-icon{width:18px;height:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;opacity:.7}
+.fp-cat-item.active .fp-cat-icon{opacity:1}
+.fp-cat-icon svg{width:16px;height:16px}
+.fp-options{flex:1;overflow-y:auto;padding:20px 24px}
+.fp-options-title{font-size:13px;font-weight:600;color:#111827;margin-bottom:16px}
+.fp-option{display:flex;align-items:center;gap:12px;padding:10px 0;cursor:pointer;border-bottom:1px solid #F3F4F6}
+.fp-option:last-child{border-bottom:none}
+.fp-option:hover .fp-radio{border-color:#3B39F5}
+.fp-radio{width:18px;height:18px;border-radius:50%;border:2px solid #D1D5DB;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.fp-radio.checked{border-color:#3B39F5;background:#3B39F5}
+.fp-radio.checked::after{content:'';width:6px;height:6px;border-radius:50%;background:white}
+.fp-checkbox{width:16px;height:16px;border-radius:4px;border:1.5px solid #D1D5DB;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.fp-checkbox.checked{border-color:#3B39F5;background:#3B39F5}
+.fp-checkbox.checked::after{content:'✓';color:white;font-size:10px;line-height:1}
+.fp-option-label{flex:1;font-size:14px;color:#111827}
+.fp-option-sub{font-size:12px;color:#9CA3AF;margin-left:auto}
+.fp-header{padding:16px 20px;border-bottom:1px solid #E5E7EB;display:flex;align-items:center;justify-content:space-between}
+.fp-header-title{font-size:14px;font-weight:600;color:#111827}
+.fp-close{width:28px;height:28px;border-radius:6px;background:none;border:none;cursor:pointer;font-size:18px;color:#9CA3AF;display:flex;align-items:center;justify-content:center}
+.fp-close:hover{background:#F3F4F6;color:#374151}
+.fp-footer{padding:12px 20px;border-top:1px solid #E5E7EB;display:flex;justify-content:flex-end;gap:8px}
+.fp-wrap{display:flex;flex-direction:column;flex:1;overflow:hidden}
+.fp-body{display:flex;flex:1;overflow:hidden}
+.m-cell{display:flex;align-items:center;gap:10px}
+.m-avatar{width:30px;height:30px;border-radius:8px;background:#EEEFFE;color:#3B39F5;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
+.m-name{font-size:13.5px;font-weight:500;color:#111827;transition:color .12s}
+.cl:hover .m-name{color:#3B39F5}
+.org-id{font-family:'SF Mono',monospace;font-size:11px;color:#EF4444;background:#FEF2F2;padding:2px 6px;border-radius:4px}
+
+/* ===== TAGS ===== */
+.tags{display:flex;flex-wrap:wrap;gap:4px}
+.tag{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11.5px;font-weight:500;white-space:nowrap}
+.tb{background:#EFF6FF;color:#1D4ED8}
+.ti{background:#EEEFFE;color:#3B39F5}
+.tp{background:#F5F3FF;color:#6D28D9}
+.tk{background:#FDF2F8;color:#9D174D}
+.tg{background:#F0FDF4;color:#166534}
+.ty{background:#FEFCE8;color:#854D0E}
+.to{background:#FFF7ED;color:#9A3412}
+.tgr{background:#F9FAFB;color:#374151;border:1px solid #E5E7EB}
+.tr{background:#FEF2F2;color:#991B1B}
+.tt{background:#F0FDFA;color:#0F766E}
+.kam{padding:3px 10px;border-radius:20px;font-size:12px;font-weight:500}
+.kf{background:#FEF3C7;color:#92400E}
+.kp{background:#FCE7F3;color:#9D174D}
+.km{background:#D1FAE5;color:#065F46}
+.kpa{background:#EDE9FE;color:#5B21B6}
+
+/* ===== STATUS BADGES ===== */
+.sbadge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:500;white-space:nowrap}
+.s-done{background:#F0FDF4;color:#166534;border:1px solid #BBF7D0}
+.s-done::before{content:'●';font-size:8px;color:#22C55E}
+.s-prog{background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE}
+.s-prog::before{content:'●';font-size:8px;color:#3B82F6}
+.s-sb{background:#FEFCE8;color:#854D0E;border:1px solid #FEF08A}
+.s-sb::before{content:'●';font-size:8px;color:#EAB308}
+.s-wait{background:#FEF2F2;color:#991B1B;border:1px solid #FECACA}
+.s-wait::before{content:'●';font-size:8px;color:#EF4444}
+.s-merchant{background:#FFF7ED;color:#C2410C;border:1px solid #FED7AA}
+.s-merchant::before{content:'●';font-size:8px;color:#F97316}
+.s-provider{background:#F5F3FF;color:#6D28D9;border:1px solid #DDD6FE}
+.s-provider::before{content:'●';font-size:8px;color:#8B5CF6}
+.s-ativo{background:#F0FDF4;color:#166534;border:1px solid #BBF7D0;font-size:11px;padding:2px 8px}
+.s-ativo::before{content:'✓';font-size:9px;color:#22C55E}
+
+/* ===== BACK ===== */
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:#6B7280;font-size:13px;cursor:pointer;margin-bottom:18px;background:none;border:none;padding:5px 0;transition:color .12s}
+.back-btn:hover{color:#3B39F5}
+
+/* ===== MERCHANT DETAIL HEADER ===== */
+.mdh{background:white;border:1px solid #E5E7EB;border-radius:10px;padding:22px 24px;margin-bottom:16px;display:flex;align-items:flex-start;gap:16px}
+.mdh-icon{width:46px;height:46px;border-radius:10px;background:#EEEFFE;color:#3B39F5;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;flex-shrink:0}
+.mdh-info{flex:1}
+.mdh-info h2{font-size:18px;font-weight:700;color:#111827}
+.mdh-org{font-family:monospace;font-size:11px;color:#EF4444;margin-top:3px}
+.mdh-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.mdh-actions{display:flex;gap:8px}
+
+/* ===== TABS ===== */
+.tabs{display:flex;background:white;border:1px solid #E5E7EB;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.tab-btn{flex:1;padding:12px 16px;font-size:13.5px;font-weight:500;color:#6B7280;cursor:pointer;background:none;border:none;border-bottom:2px solid transparent;transition:all .15s;text-align:center}
+.tab-btn:hover{color:#111827;background:#F9FAFB}
+.tab-btn.active{color:#3B39F5;border-bottom-color:#3B39F5;background:#EEEFFE;font-weight:600}
+
+/* ===== INFO GERAL ===== */
+.info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.info-card{background:white;border:1px solid #E5E7EB;border-radius:10px;padding:18px 20px}
+.info-card-hdr{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#9CA3AF;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid #F3F4F6}
+.info-row{margin-bottom:12px}
+.info-row:last-child{margin-bottom:0}
+.info-lbl{font-size:11px;color:#9CA3AF;font-weight:500;margin-bottom:4px}
+.info-val{font-size:13.5px;color:#111827}
+.info-val a{color:#3B39F5}
+
+/* ===== PLACEHOLDER ===== */
+.placeholder{background:white;border:1px solid #E5E7EB;border-radius:10px;padding:60px 24px;text-align:center}
+.ph-icon{font-size:36px;margin-bottom:12px}
+.placeholder h3{font-size:16px;font-weight:600;color:#374151;margin-bottom:8px}
+.placeholder p{font-size:13px;color:#9CA3AF;max-width:420px;margin:0 auto;line-height:1.6}
+
+/* ===== DEMANDS ===== */
+.sec-hdr{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.sec-title{font-size:15px;font-weight:600;color:#111827}
+.sec-count{background:#F3F4F6;color:#6B7280;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px}
+.chips{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.chip{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1.5px solid #E5E7EB;color:#6B7280;background:white;transition:all .12s}
+.chip:hover{border-color:#3B39F5;color:#3B39F5}
+.chip.active{border-color:#3B39F5;color:#3B39F5;background:#EEEFFE}
+.demand-list{display:flex;flex-direction:column;gap:8px}
+.demand-card{background:white;border:1px solid #E5E7EB;border-radius:10px;overflow:hidden;transition:box-shadow .15s}
+.demand-card:hover{box-shadow:0 2px 8px rgba(71,71,229,.08);border-color:#C7D2FE}
+.dc-hdr{display:flex;align-items:center;gap:12px;padding:16px 18px;cursor:pointer}
+.dc-main{flex:1;min-width:0}
+.dc-title{font-size:13.5px;font-weight:600;color:#111827;margin-bottom:3px}
+.dc-desc{font-size:12.5px;color:#6B7280;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.dc-meta{display:flex;align-items:center;gap:14px;margin-top:6px}
+.dc-meta-item{font-size:11.5px;color:#9CA3AF}
+.dc-chevron{color:#9CA3AF;font-size:12px;transition:transform .2s;flex-shrink:0}
+.demand-card.open .dc-chevron{transform:rotate(180deg)}
+.demand-detail{display:none;padding:0 18px 18px;border-top:1px solid #F3F4F6}
+.demand-card.open .demand-detail{display:block}
+.dd-inner{padding-top:16px}
+.dd-sec{margin-bottom:18px}
+.dd-sec:last-child{margin-bottom:0}
+.dd-lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#9CA3AF;margin-bottom:8px}
+.dd-desc{font-size:13px;color:#374151;line-height:1.6;background:#F9FAFB;padding:12px 14px;border-radius:8px;border:1px solid #F3F4F6}
+.timeline{position:relative}
+.tl-entry{display:flex;gap:12px;padding-bottom:16px}
+.tl-entry:last-child{padding-bottom:0}
+.tl-left{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.tl-dot{width:8px;height:8px;border-radius:50%;background:#3B39F5;flex-shrink:0;margin-top:4px}
+.tl-line{flex:1;width:1px;background:#E5E7EB;margin-top:4px;min-height:16px}
+.tl-entry:last-child .tl-line{display:none}
+.tl-body{flex:1}
+.tl-text{font-size:13px;color:#374151;line-height:1.6}
+.tl-date{font-size:11px;color:#9CA3AF;margin-top:4px}
+.comment-area{margin-top:16px;padding-top:14px;border-top:1px solid #F3F4F6}
+.comment-input{width:100%;padding:10px 14px;border:1.5px solid #E5E7EB;border-radius:8px;font-size:13px;resize:none;outline:none;font-family:inherit;color:#374151;background:#F9FAFB;transition:border-color .15s,background .15s}
+.comment-input:focus{border-color:#3B39F5;background:white}
+.comment-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:8px}
+.btn-sm{padding:6px 14px;border-radius:6px;font-size:12.5px;font-weight:500;cursor:pointer;border:none;transition:all .12s}
+.btn-sm-o{background:white;border:1.5px solid #E5E7EB;color:#374151}
+.btn-sm-o:hover{background:#F9FAFB}
+.btn-sm-p{background:#3B39F5;color:white}
+.btn-sm-p:hover{background:#2D2BC4}
+
+/* ===== MODAL ===== */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+.modal{background:white;border-radius:12px;width:660px;max-height:85vh;overflow-y:auto;box-shadow:0 20px 50px rgba(0,0,0,.2)}
+.modal-hdr{padding:20px 24px;border-bottom:1px solid #E5E7EB;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:white;z-index:1}
+.modal-title{font-size:16px;font-weight:700;color:#111827}
+.modal-close{width:28px;height:28px;border-radius:6px;background:none;border:none;cursor:pointer;font-size:18px;color:#9CA3AF;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.modal-close:hover{background:#F3F4F6;color:#374151}
+.modal-body{padding:24px}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.mf{display:flex;flex-direction:column;gap:5px}
+.mf.full{grid-column:1/-1}
+.mf label{font-size:12px;font-weight:500;color:#374151}
+.mf input,.mf select,.mf textarea{padding:9px 12px;border:1.5px solid #E5E7EB;border-radius:7px;font-size:13px;outline:none;font-family:inherit;color:#111827;background:white;transition:border-color .15s}
+.mf input:focus,.mf select:focus,.mf textarea:focus{border-color:#3B39F5}
+.mf textarea{resize:vertical;min-height:80px}
+.modal-sec{margin-bottom:22px}
+.modal-sec-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#9CA3AF;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #F3F4F6}
+.modal-footer{padding:16px 24px;border-top:1px solid #E5E7EB;display:flex;justify-content:flex-end;gap:10px;position:sticky;bottom:0;background:white}
+.btn-cancel{padding:9px 18px;border:1.5px solid #E5E7EB;border-radius:7px;background:white;font-size:13.5px;font-weight:500;color:#374151;cursor:pointer}
+.btn-cancel:hover{background:#F9FAFB}
+.btn-save{padding:9px 20px;background:#3B39F5;color:white;border:none;border-radius:7px;font-size:13.5px;font-weight:600;cursor:pointer}
+.btn-save:hover{background:#2D2BC4}
+
+/* ===== MERCHANT HERO ===== */
+.m-hero{background:linear-gradient(135deg,#3B39F5,#6366F1);border-radius:12px;padding:24px;color:white;margin-bottom:20px}
+.m-hero-label{font-size:12px;opacity:.7;margin-bottom:4px}
+.m-hero-name{font-size:22px;font-weight:800}
+.m-hero-meta{font-size:12px;opacity:.6;margin-top:6px}
+
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#D1D5DB;border-radius:10px}
+::-webkit-scrollbar-thumb:hover{background:#9CA3AF}
+.tam-seg{background:none;border:none;padding:7px 14px;border-radius:7px;font-size:13px;font-weight:500;color:#6B7280;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s}
+.tam-seg.active{background:white;color:#3B39F5;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.tam-seg:hover:not(.active){color:#374151}
+.dc-edit-btn{opacity:0;width:26px;height:26px;border:1px solid #E5E7EB;border-radius:6px;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#6B7280;transition:all .12s;flex-shrink:0}
+.demand-card:hover .dc-edit-btn{opacity:1}
+.dc-edit-btn:hover{background:#F3F4F6;color:#3B39F5}
+.plan-card{background:white;border:1px solid #E5E7EB;border-radius:10px;padding:16px 18px;margin-bottom:8px;transition:box-shadow .15s}
+.plan-card:hover{box-shadow:0 2px 8px rgba(71,71,229,.08);border-color:#C7D2FE}
+.plan-title{font-size:13.5px;font-weight:600;color:#111827;margin-bottom:4px}
+.plan-desc{font-size:12.5px;color:#6B7280;line-height:1.5;margin-bottom:10px}
+.plan-tag{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:11.5px;font-weight:500;white-space:nowrap}
+.plan-tag.integracao{background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE}
+.plan-tag.melhoria{background:#F0FDF4;color:#166534;border:1px solid #BBF7D0}
+.plan-tag.estrategico{background:#FDF4FF;color:#7E22CE;border:1px solid #E9D5FF}
+.plan-tag.reducao{background:#FFF7ED;color:#C2410C;border:1px solid #FED7AA}
+.plan-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.plan-edit-btn{opacity:0;padding:3px 10px;border:1px solid #E5E7EB;border-radius:6px;background:white;cursor:pointer;font-size:12px;color:#6B7280;transition:all .12s}
+.plan-card:hover .plan-edit-btn{opacity:1}
+.mf-row{margin-bottom:14px}
+.mf-label{font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;display:block}
+.mf-input,.mf-select,.mf-textarea{width:100%;padding:8px 11px;border:1px solid #D1D5DB;border-radius:7px;font-size:13.5px;color:#111827;background:white;outline:none;transition:border .12s;box-sizing:border-box;font-family:inherit}
+.mf-input:focus,.mf-select:focus,.mf-textarea:focus{border-color:#3B39F5;box-shadow:0 0 0 2px rgba(59,57,245,.08)}
+.mf-textarea{resize:vertical;min-height:80px}
+.mf-select{appearance:none;-webkit-appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%236B7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+.mf-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mf-sec{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#9CA3AF;margin:18px 0 12px;padding-bottom:8px;border-bottom:1px solid #F3F4F6}
+.metas-wrap{overflow-x:auto;border:1px solid #E5E7EB;border-radius:10px;background:white}
+.metas-table{width:100%;border-collapse:collapse;font-size:13px;min-width:400px}
+.metas-table th{padding:9px 14px;text-align:left;font-size:11.5px;font-weight:600;color:#6B7280;border-bottom:1.5px solid #E5E7EB;white-space:nowrap;background:#F9FAFB;position:relative}
+.metas-table th:first-child{border-radius:10px 0 0 0;min-width:180px}
+.metas-table th.add-col-th{width:42px;padding:0}
+.metas-table td{padding:8px 14px;border-bottom:1px solid #F3F4F6;color:#374151;vertical-align:middle;max-width:260px}
+.metas-table tr:last-child td{border-bottom:none}
+.metas-table tr:hover td{background:#FAFBFF}
+.meta-cell{display:block;min-height:22px;border-radius:4px;padding:2px 4px;cursor:text;transition:background .1s;word-break:break-word}
+.meta-cell:hover{background:#EFF6FF}
+.meta-cell.empty{color:#D1D5DB}
+.meta-del-col{position:absolute;top:50%;right:6px;transform:translateY(-50%);width:18px;height:18px;border-radius:4px;background:none;border:none;cursor:pointer;color:#FCA5A5;font-size:13px;opacity:0;display:flex;align-items:center;justify-content:center;padding:0;transition:opacity .1s}
+.metas-table th:hover .meta-del-col{opacity:1}
+.meta-del-col:hover{background:#FEE2E2;color:#EF4444}
+.meta-add-col{width:42px;height:100%;border:none;background:none;cursor:pointer;color:#D1D5DB;font-size:20px;display:flex;align-items:center;justify-content:center;transition:color .12s;padding:8px}
+.meta-add-col:hover{color:#3B39F5}
+.meta-row-actions{opacity:0;transition:opacity .1s}
+.metas-table tr:hover .meta-row-actions{opacity:1}
+.meta-del-row{background:none;border:none;cursor:pointer;color:#FCA5A5;font-size:13px;padding:0;width:20px;height:20px;display:flex;align-items:center;justify-content:center;border-radius:4px}
+.meta-del-row:hover{background:#FEE2E2;color:#EF4444}
+.metas-footer{padding:10px 14px;border-top:1px solid #F3F4F6;background:#FAFAFA;border-radius:0 0 10px 10px}
+
+/* ===== KANBAN ===== */
+.kb-board{display:flex;gap:14px;overflow-x:auto;padding:4px 2px 12px;align-items:flex-start;min-height:calc(100vh - 220px)}
+.kb-col{width:280px;min-width:280px;background:#F3F4F6;border-radius:10px;display:flex;flex-direction:column;max-height:calc(100vh - 230px)}
+.kb-col-header{display:flex;align-items:center;gap:8px;padding:12px 14px 8px;font-size:13px;font-weight:600;color:#374151;user-select:none}
+.kb-col-count{font-size:11px;font-weight:500;color:#9CA3AF;background:#E5E7EB;border-radius:10px;padding:1px 7px;margin-left:auto}
+.kb-col-menu{margin-left:4px;background:none;border:none;cursor:pointer;color:#9CA3AF;font-size:16px;padding:0 2px;border-radius:4px;transition:all .12s;line-height:1}
+.kb-col-menu:hover{color:#374151;background:#E5E7EB}
+.kb-col-cards{flex:1;overflow-y:auto;padding:0 8px 8px;display:flex;flex-direction:column;gap:8px}
+.kb-card{background:white;border:1.5px solid #E5E7EB;border-radius:8px;padding:10px 12px;cursor:grab;transition:box-shadow .15s,border-color .15s;user-select:none}
+.kb-card:hover{box-shadow:0 2px 8px rgba(59,57,245,.12);border-color:#C7D2FE}
+.kb-card:active{cursor:grabbing}
+.kb-card.kb-dragging{opacity:.4;border-color:#3B39F5}
+.kb-card-title{font-size:13px;font-weight:500;color:#111827;margin-bottom:4px;word-break:break-word}
+.kb-card-desc{font-size:11.5px;color:#6B7280;line-height:1.4;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+.kb-card-footer{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.kb-card-prio{font-size:10.5px;font-weight:600;padding:2px 7px;border-radius:10px}
+.kb-prio-alta{background:#FEF2F2;color:#EF4444}
+.kb-prio-media{background:#FFFBEB;color:#D97706}
+.kb-prio-baixa{background:#F0FDF4;color:#22C55E}
+.kb-card-comments{font-size:10.5px;color:#9CA3AF;display:flex;align-items:center;gap:3px}
+.kb-card-await{font-size:10px;font-weight:600;background:#DBEAFE;color:#2563EB;padding:2px 7px;border-radius:10px}
+.kb-col-footer{padding:6px 8px}
+.kb-add-btn{width:100%;padding:7px 10px;background:none;border:1.5px dashed #D1D5DB;border-radius:7px;color:#9CA3AF;font-size:12.5px;cursor:pointer;transition:all .12s;text-align:left}
+.kb-add-btn:hover{border-color:#3B39F5;color:#3B39F5;background:#EEEFFE}
+.kb-new-col{min-width:260px;width:260px;background:none;border:2px dashed #D1D5DB;border-radius:10px;padding:14px;cursor:pointer;color:#9CA3AF;font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .12s;height:fit-content}
+.kb-new-col:hover{border-color:#3B39F5;color:#3B39F5;background:#EEEFFE}
+.kb-inline-form{padding:0 8px 8px}
+.kb-inline-input{width:100%;padding:8px 10px;border:1.5px solid #3B39F5;border-radius:7px;font-size:13px;outline:none;font-family:inherit;color:#111827;resize:none}
+.kb-inline-actions{display:flex;gap:6px;margin-top:6px}
+.kb-inline-save{padding:5px 12px;background:#3B39F5;color:white;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer}
+.kb-inline-save:hover{background:#2D2BC4}
+.kb-inline-cancel{padding:5px 10px;background:none;border:1px solid #E5E7EB;border-radius:6px;font-size:12px;color:#6B7280;cursor:pointer}
+.kb-inline-cancel:hover{background:#F3F4F6}
+.kb-col.kb-dragover{background:#E8E7FE;border:1.5px dashed #3B39F5;border-radius:10px}
+
+/* Slide-out detail panel */
+.kb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:200;opacity:0;transition:opacity .2s;pointer-events:none}
+.kb-overlay.open{opacity:1;pointer-events:auto}
+.kb-detail{position:fixed;top:0;right:0;width:480px;height:100vh;background:white;box-shadow:-4px 0 24px rgba(0,0,0,.12);z-index:210;transform:translateX(100%);transition:transform .25s ease;display:flex;flex-direction:column;overflow:hidden}
+.kb-detail.open{transform:translateX(0)}
+.kb-detail-header{padding:18px 20px;border-bottom:1px solid #E5E7EB;display:flex;align-items:flex-start;gap:12px}
+.kb-detail-close{width:30px;height:30px;border-radius:6px;background:none;border:none;cursor:pointer;font-size:20px;color:#9CA3AF;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s}
+.kb-detail-close:hover{background:#F3F4F6;color:#374151}
+.kb-detail-title{flex:1}
+.kb-detail-title h3{font-size:16px;font-weight:600;color:#111827;margin-bottom:4px;outline:none}
+.kb-detail-title h3:focus{background:#F9FAFB;border-radius:4px;padding:2px 4px;margin:-2px -4px}
+.kb-detail-body{flex:1;overflow-y:auto;padding:20px}
+.kb-detail-field{margin-bottom:18px}
+.kb-detail-label{font-size:11.5px;font-weight:600;color:#9CA3AF;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.kb-detail-desc{font-size:13.5px;color:#374151;line-height:1.6;min-height:40px;outline:none;border:1px solid transparent;border-radius:6px;padding:6px 8px;transition:border-color .12s}
+.kb-detail-desc:focus{border-color:#3B39F5;background:#F9FAFB}
+.kb-detail-row{display:flex;gap:12px;margin-bottom:18px}
+.kb-detail-row .kb-detail-field{flex:1;margin-bottom:0}
+.kb-detail-select{width:100%;padding:8px 10px;border:1.5px solid #E5E7EB;border-radius:7px;font-size:13px;color:#111827;outline:none;background:white;cursor:pointer;font-family:inherit}
+.kb-detail-select:focus{border-color:#3B39F5}
+.kb-detail-comments{border-top:1px solid #F3F4F6;padding-top:16px}
+.kb-comment{display:flex;gap:10px;margin-bottom:14px}
+.kb-comment-avatar{width:28px;height:28px;border-radius:50%;background:#EEEFFE;color:#3B39F5;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.kb-comment-body{flex:1}
+.kb-comment-meta{font-size:11px;color:#9CA3AF;margin-bottom:3px}
+.kb-comment-meta strong{color:#374151;font-weight:500}
+.kb-comment-text{font-size:13px;color:#374151;line-height:1.5}
+.kb-comment-input{display:flex;gap:10px;margin-top:12px}
+.kb-comment-textarea{flex:1;padding:8px 10px;border:1.5px solid #E5E7EB;border-radius:7px;font-size:13px;outline:none;font-family:inherit;resize:none;min-height:60px;color:#111827}
+.kb-comment-textarea:focus{border-color:#3B39F5}
+.kb-comment-send{align-self:flex-end;padding:7px 14px;background:#3B39F5;color:white;border:none;border-radius:7px;font-size:12.5px;font-weight:600;cursor:pointer}
+.kb-comment-send:hover{background:#2D2BC4}
+.kb-detail-footer{padding:14px 20px;border-top:1px solid #E5E7EB;display:flex;justify-content:flex-end}
+.kb-delete-btn{padding:7px 14px;background:#FEF2F2;color:#EF4444;border:1px solid #FECACA;border-radius:7px;font-size:12.5px;font-weight:500;cursor:pointer;transition:all .12s}
+.kb-delete-btn:hover{background:#FEE2E2;border-color:#EF4444}
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div id="view-login">
+  <!-- Language selector — fixed top-right, visible from the start -->
+  <div style="position:fixed;top:18px;right:24px;z-index:200;display:flex;gap:2px;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border:1px solid #E5E7EB;border-radius:8px;padding:3px;box-shadow:0 2px 8px rgba(0,0,0,.08)">
+    <button class="lang-btn" data-lang="pt" onclick="setLang('pt')" title="Português" style="background:#3B39F5;color:white;border:none;border-radius:5px;padding:4px 9px;font-size:12px;font-weight:600;cursor:pointer">🇧🇷 PT</button>
+    <button class="lang-btn" data-lang="en" onclick="setLang('en')" title="English" style="background:transparent;color:#6B7280;border:none;border-radius:5px;padding:4px 9px;font-size:12px;font-weight:600;cursor:pointer">🇺🇸 EN</button>
+    <button class="lang-btn" data-lang="es" onclick="setLang('es')" title="Español" style="background:transparent;color:#6B7280;border:none;border-radius:5px;padding:4px 9px;font-size:12px;font-weight:600;cursor:pointer">🇪🇸 ES</button>
+  </div>
+  <div class="login-page">
+    <div class="login-left">
+      <div class="login-left-logo" style="display:flex;align-items:center;gap:10px">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="white"><circle cx="3" cy="3" r="2.8"/><circle cx="10" cy="3" r="2.8"/><circle cx="17" cy="3" r="2.4"/><circle cx="24" cy="3" r="1.8"/><circle cx="31" cy="3" r="1.2"/><circle cx="3" cy="10" r="2.8"/><circle cx="10" cy="10" r="2.4"/><circle cx="17" cy="10" r="1.8"/><circle cx="24" cy="10" r="1.2"/><circle cx="31" cy="10" r="0.8"/><circle cx="3" cy="17" r="2.4"/><circle cx="10" cy="17" r="1.8"/><circle cx="17" cy="17" r="1.2"/><circle cx="24" cy="17" r="0.8"/><circle cx="31" cy="17" r="0.5"/><circle cx="3" cy="24" r="1.8"/><circle cx="10" cy="24" r="1.2"/><circle cx="17" cy="24" r="0.8"/><circle cx="24" cy="24" r="0.5"/><circle cx="31" cy="24" r="0.3"/><circle cx="3" cy="31" r="1.2"/><circle cx="10" cy="31" r="0.8"/><circle cx="17" cy="31" r="0.5"/><circle cx="24" cy="31" r="0.3"/><circle cx="31" cy="31" r="0.2"/></svg>
+        <span style="font-size:26px;font-weight:800;color:white;letter-spacing:-0.5px;overflow:visible;padding-bottom:3px">yuno</span>
+      </div>
+      <h1 id="login-left-title">Portal de Gestão<br>de Merchants</h1>
+      <p id="login-left-desc">Acompanhe implementações, updates de demandas técnicas e planos de melhorias.</p>
+    </div>
+    <div class="login-right">
+      <div class="login-card">
+        <div class="login-card-logo" style="display:flex;align-items:center;gap:8px">
+          <svg width="28" height="28" viewBox="0 0 36 36" fill="#3B39F5"><circle cx="3" cy="3" r="2.8"/><circle cx="10" cy="3" r="2.8"/><circle cx="17" cy="3" r="2.4"/><circle cx="24" cy="3" r="1.8"/><circle cx="31" cy="3" r="1.2"/><circle cx="3" cy="10" r="2.8"/><circle cx="10" cy="10" r="2.4"/><circle cx="17" cy="10" r="1.8"/><circle cx="24" cy="10" r="1.2"/><circle cx="31" cy="10" r="0.8"/><circle cx="3" cy="17" r="2.4"/><circle cx="10" cy="17" r="1.8"/><circle cx="17" cy="17" r="1.2"/><circle cx="24" cy="17" r="0.8"/><circle cx="31" cy="17" r="0.5"/><circle cx="3" cy="24" r="1.8"/><circle cx="10" cy="24" r="1.2"/><circle cx="17" cy="24" r="0.8"/><circle cx="24" cy="24" r="0.5"/><circle cx="31" cy="24" r="0.3"/><circle cx="3" cy="31" r="1.2"/><circle cx="10" cy="31" r="0.8"/><circle cx="17" cy="31" r="0.5"/><circle cx="24" cy="31" r="0.3"/><circle cx="31" cy="31" r="0.2"/></svg>
+          <span style="font-size:18px;font-weight:800;color:#111827;letter-spacing:-0.5px;overflow:visible;padding-bottom:3px">yuno</span>
+        </div>
+        <h2 data-i18n="login.title">Entrar</h2>
+        <p class="login-subtitle" id="login-subtitle">Acesse como administrador Yuno</p>
+        <div style="display:flex;background:#F3F4F6;border-radius:9px;padding:3px;margin-bottom:24px;gap:0">
+          <button id="login-role-adm" onclick="setLoginRole('adm')" style="flex:1;padding:8px 12px;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;background:#3B39F5;color:white;box-shadow:0 1px 4px rgba(59,57,245,.18)">
+            Administrador
+          </button>
+          <button id="login-role-mer" onclick="setLoginRole('mer')" style="flex:1;padding:8px 12px;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;background:transparent;color:#6B7280">
+            Merchant
+          </button>
+        </div>
+        <div class="form-field">
+          <label data-i18n="login.email">E-mail</label>
+          <input type="email" id="login-email" placeholder="nome@y.uno">
+        </div>
+        <div class="form-field">
+          <label data-i18n="login.pass">Senha</label>
+          <div style="position:relative">
+            <input type="password" id="login-pass" placeholder="••••••••" style="padding-right:40px;width:100%;box-sizing:border-box">
+            <button type="button" onclick="toggleSenha()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#9CA3AF;padding:0;display:flex;align-items:center" title="Ver senha">
+              <svg id="eye-icon" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 9s3-5 8-5 8 5 8 5-3 5-8 5-8-5-8-5z"/><circle cx="9" cy="9" r="2.5"/></svg>
+            </button>
+          </div>
+        </div>
+        <button class="btn-login" onclick="doLogin()" data-i18n="login.btn">Entrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== APP ===== -->
+<div id="view-app" class="hidden">
+  <div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo" style="display:flex;align-items:center;gap:8px">
+          <svg width="26" height="26" viewBox="0 0 36 36" fill="#3B39F5"><circle cx="3" cy="3" r="2.8"/><circle cx="10" cy="3" r="2.8"/><circle cx="17" cy="3" r="2.4"/><circle cx="24" cy="3" r="1.8"/><circle cx="31" cy="3" r="1.2"/><circle cx="3" cy="10" r="2.8"/><circle cx="10" cy="10" r="2.4"/><circle cx="17" cy="10" r="1.8"/><circle cx="24" cy="10" r="1.2"/><circle cx="31" cy="10" r="0.8"/><circle cx="3" cy="17" r="2.4"/><circle cx="10" cy="17" r="1.8"/><circle cx="17" cy="17" r="1.2"/><circle cx="24" cy="17" r="0.8"/><circle cx="31" cy="17" r="0.5"/><circle cx="3" cy="24" r="1.8"/><circle cx="10" cy="24" r="1.2"/><circle cx="17" cy="24" r="0.8"/><circle cx="24" cy="24" r="0.5"/><circle cx="31" cy="24" r="0.3"/><circle cx="3" cy="31" r="1.2"/><circle cx="10" cy="31" r="0.8"/><circle cx="17" cy="31" r="0.5"/><circle cx="24" cy="31" r="0.3"/><circle cx="31" cy="31" r="0.2"/></svg>
+          <span style="font-size:16px;font-weight:800;color:#111827;letter-spacing:-0.3px;overflow:visible;padding-bottom:3px">yuno</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <!-- Admin nav -->
+        <div id="nav-admin">
+          <div class="nav-section">
+            <div class="nav-section-title" data-i18n="nav.overview">Visão Geral</div>
+            <div class="nav-item active" onclick="navTo('overview',this)">
+              <span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="6" height="6" rx="1"/><rect x="10" y="2" width="6" height="6" rx="1"/><rect x="2" y="10" width="6" height="6" rx="1"/><rect x="10" y="10" width="6" height="6" rx="1"/></svg></span> <span data-i18n="nav.merchants">Merchants</span>
+            </div>
+          </div>
+          <div class="nav-section">
+            <div class="nav-section-title" data-i18n="nav.areas">Áreas</div>
+            <div class="nav-item" onclick="navTo('implementacao',this)">
+              <span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6.5,4.5 2,9 6.5,13.5"/><polyline points="11.5,4.5 16,9 11.5,13.5"/><line x1="10.5" y1="2.5" x2="7.5" y2="15.5"/></svg></span> <span data-i18n="nav.impl">Implementação</span>
+            </div>
+            <div class="nav-item" onclick="navTo('tam',this)">
+              <span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="2" width="12" height="14" rx="1.5"/><line x1="6" y1="7" x2="12" y2="7"/><line x1="6" y1="10" x2="12" y2="10"/><line x1="6" y1="13" x2="9" y2="13"/></svg></span> <span data-i18n="nav.tam">TAM</span>
+            </div>
+          </div>
+          <div class="sidebar-divider"></div>
+          <div class="nav-section">
+            <div class="nav-section-title" data-i18n="nav.config">Configurações</div>
+            <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.5 16v-1a3.5 3.5 0 0 0-3.5-3.5h-3A3.5 3.5 0 0 0 2.5 15v1"/><circle cx="7" cy="6" r="3"/><path d="M15.5 16v-1a3.5 3.5 0 0 0-2.5-3.35"/><path d="M12.5 3.15a3 3 0 0 1 0 5.7"/></svg></span> <span data-i18n="nav.team">Equipe Yuno</span></div>
+            <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2a5 5 0 0 1 5 5v3.5l1.5 2h-13L4 10.5V7a5 5 0 0 1 5-5z"/><path d="M7 14.5a2 2 0 0 0 4 0"/></svg></span> <span data-i18n="nav.notif">Notificações</span></div>
+            <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 10.5a4 4 0 0 0 5.3.4l2-2a4 4 0 0 0-5.7-5.7l-1.1 1.1"/><path d="M10.5 7.5a4 4 0 0 0-5.3-.4l-2 2a4 4 0 0 0 5.7 5.7l1.1-1.1"/></svg></span> <span data-i18n="nav.webhooks">Webhooks / Email</span></div>
+          </div>
+        </div>
+        <!-- Merchant nav -->
+        <div id="nav-merchant" class="hidden">
+          <div class="nav-section">
+            <div class="nav-item active" onclick="navTo('mv-home',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5L9 3l6 5.5V16H12v-4.5H6V16H3z"/></svg></span> <span data-i18n="nav.home">Início</span></div>
+            <div class="nav-item" onclick="navTo('mv-board-fr',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="5" height="12" rx="1"/><rect x="9" y="3" width="5" height="8" rx="1"/></svg></span> <span data-i18n="nav.board_fr">Feature Requests</span></div>
+            <div class="nav-item" onclick="navTo('mv-board-dt',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="2" width="12" height="14" rx="1.5"/><path d="M7 2.5V2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v.5"/><line x1="6" y1="8" x2="12" y2="8"/><line x1="6" y1="11" x2="12" y2="11"/></svg></span> <span data-i18n="nav.board_dt">Demanda Técnica</span></div>
+            <div class="nav-item" onclick="navTo('mv-board-pc',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3.5h4A3.5 3.5 0 0 1 10.5 7v8.5H3z"/><path d="M15 3.5h-4A3.5 3.5 0 0 0 7.5 7v8.5H15z"/></svg></span> <span data-i18n="nav.board_pc">Projetos e Consultorias</span></div>
+            <div class="nav-item" onclick="navTo('mv-impl',this)"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6.5,4.5 2,9 6.5,13.5"/><polyline points="11.5,4.5 16,9 11.5,13.5"/><line x1="10.5" y1="2.5" x2="7.5" y2="15.5"/></svg></span> <span data-i18n="nav.impl">Implementação</span></div>
+            <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2H5a1.5 1.5 0 0 0-1.5 1.5v11A1.5 1.5 0 0 0 5 16h8a1.5 1.5 0 0 0 1.5-1.5V6Z"/><polyline points="11,2 11,6 14.5,6"/><line x1="6" y1="9.5" x2="12" y2="9.5"/><line x1="6" y1="12.5" x2="12" y2="12.5"/></svg></span> <span data-i18n="nav.contract">Contrato</span></div>
+            <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3.5h4A3.5 3.5 0 0 1 10.5 7v8.5H3z"/><path d="M15 3.5h-4A3.5 3.5 0 0 0 7.5 7v8.5H15z"/></svg></span> <span data-i18n="nav.docs">Documentação</span></div>
+          </div>
+        </div>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="s-avatar" id="s-avatar">A</div>
+        <div class="s-info">
+          <div class="s-name" id="s-name">Admin Yuno</div>
+          <div class="s-role" id="s-role">Administrador</div>
+        </div>
+        <button class="logout-btn" onclick="doLogout()" data-i18n="nav.logout">Sair</button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main">
+      <div class="topbar">
+        <span class="topbar-title" id="topbar-title">Merchants</span>
+        <div class="topbar-actions">
+          <div style="display:flex;gap:2px;background:#F3F4F6;border-radius:7px;padding:2px;margin-right:6px">
+            <button class="lang-btn" data-lang="pt" onclick="setLang('pt')" title="Português" style="background:#3B39F5;color:white;border:none;border-radius:5px;padding:3px 7px;font-size:11.5px;font-weight:600;cursor:pointer">🇧🇷 PT</button>
+            <button class="lang-btn" data-lang="en" onclick="setLang('en')" title="English" style="background:transparent;color:#6B7280;border:none;border-radius:5px;padding:3px 7px;font-size:11.5px;font-weight:600;cursor:pointer">🇺🇸 EN</button>
+            <button class="lang-btn" data-lang="es" onclick="setLang('es')" title="Español" style="background:transparent;color:#6B7280;border:none;border-radius:5px;padding:3px 7px;font-size:11.5px;font-weight:600;cursor:pointer">🇪🇸 ES</button>
+          </div>
+          <div style="position:relative">
+            <button class="icon-btn" id="notif-btn" onclick="toggleNotifPanel()" title="Notificações">
+              <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2a5 5 0 0 1 5 5v3.5l1.5 2h-13L4 10.5V7a5 5 0 0 1 5-5z"/><path d="M7 14.5a2 2 0 0 0 4 0"/></svg>
+            </button>
+            <span id="notif-badge" class="hidden" style="position:absolute;top:-4px;right:-4px;background:#EF4444;color:white;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;pointer-events:none"></span>
+            <div id="notif-panel" class="hidden" style="position:absolute;top:calc(100% + 8px);right:0;background:white;border:1px solid #E5E7EB;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.12);width:340px;z-index:100;overflow:hidden">
+              <div style="padding:12px 16px;border-bottom:1px solid #F3F4F6;display:flex;align-items:center;justify-content:space-between">
+                <span style="font-size:13.5px;font-weight:600;color:#111827">Notificações</span>
+                <span id="notif-panel-count" style="font-size:12px;color:#9CA3AF"></span>
+              </div>
+              <div id="notif-list" style="max-height:360px;overflow-y:auto"></div>
+              <div style="padding:10px 16px;border-top:1px solid #F3F4F6;background:#FAFAFA">
+                <button onclick="refreshNotifs()" style="font-size:12px;color:#3B39F5;background:none;border:none;cursor:pointer;font-weight:500">↻ Atualizar</button>
+              </div>
+            </div>
+          </div>
+          <div class="topbar-user">
+            <div class="t-avatar" id="t-avatar">A</div>
+            <span style="font-size:13px;color:#374151" id="t-name">Sarah</span>
+            <span style="color:#9CA3AF;font-size:12px">▾</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+
+        <!-- PANEL: OVERVIEW -->
+        <div id="panel-overview">
+          <div class="page-header">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div>
+                <div class="page-title">Merchants</div>
+                <div class="page-desc">Gerencie todos os clientes da Yuno</div>
+              </div>
+              <button class="btn-primary" onclick="openModal()">+ Novo Merchant</button>
+            </div>
+          </div>
+          <div class="stats-row">
+            <div class="stat-card hi">
+              <div class="stat-label" data-i18n="stat.total">Total de Merchants</div>
+              <div class="stat-value">7</div>
+              <div class="stat-sub">+2 este trimestre</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label" data-i18n="stat.impl">Em Implementação</div>
+              <div class="stat-value">3</div>
+              <div class="stat-sub">2 em andamento</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label" data-i18n="stat.demands">Demandas Abertas</div>
+              <div class="stat-value">5</div>
+              <div class="stat-sub">2 aguardando tech</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label" data-i18n="stat.golive">Go-live este mês</div>
+              <div class="stat-value">1</div>
+              <div class="stat-sub">Dux</div>
+            </div>
+          </div>
+          <div class="table-container">
+            <div class="table-toolbar">
+              <div class="search-box">
+                <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="5"/><line x1="12" y1="12" x2="16" y2="16"/></svg>
+                <input type="text" data-i18n-ph="merchants.search" placeholder="Buscar merchant..." oninput="filterTable(this.value)">
+              </div>
+              <button class="filter-btn" onclick="openFilters()" id="filter-toggle-btn">
+                <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="2" y1="5" x2="16" y2="5"/><line x1="5" y1="9" x2="13" y2="9"/><line x1="8" y1="13" x2="10" y2="13"/></svg>
+                <span data-i18n="merchants.filters">Filtros</span>
+              </button>
+              <button class="filter-btn">
+                <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="9" y1="2" x2="9" y2="16"/><polyline points="4,7 9,2 14,7"/></svg>
+                <span data-i18n="merchants.sort">Ordenar</span>
+              </button>
+              <div class="col-picker-wrap" style="margin-left:auto">
+                <button class="filter-btn" id="col-btn" onclick="toggleColPicker()">
+                  <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="14" height="3" rx="1"/><rect x="2" y="7.5" width="14" height="3" rx="1"/><rect x="2" y="13" width="14" height="3" rx="1"/></svg>
+                  <span data-i18n="merchants.columns">Colunas</span>
+                </button>
+                <div class="col-picker hidden" id="col-picker"></div>
+              </div>
+            </div>
+            <div class="active-filters hidden" id="active-filters-row"></div>
+            <div class="table-wrap">
+              <table id="merchants-table">
+                <colgroup id="merchants-colgroup"></colgroup>
+                <thead><tr></tr></thead>
+                <tbody id="merchants-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL: MERCHANT DETAIL -->
+        <div id="panel-merchant" class="hidden">
+          <button class="back-btn" onclick="goBack()" data-i18n="merchants.back">← Voltar para Merchants</button>
+          <div id="merchant-detail-content"></div>
+        </div>
+
+
+        <!-- PANEL: IMPLEMENTAÇÃO -->
+        <div id="panel-implementacao" class="hidden">
+          <div class="page-header">
+            <div class="page-title">Implementação</div>
+            <div class="page-desc">Setup técnico, testes e go-live</div>
+          </div>
+          <div class="placeholder"><div class="ph-icon"><svg width="36" height="36" viewBox="0 0 18 18" fill="none" stroke="#D1D5DB" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="3"/><path d="M9 1v2M9 15v2M1 9h2M15 9h2M3.22 3.22l1.42 1.42M13.36 13.36l1.42 1.42M3.22 14.78l1.42-1.42M13.36 4.64l1.42-1.42"/></svg></div><h3>Área de Implementação</h3><p>Checklists de setup, status de homologação e acompanhamento do processo de go-live por merchant.</p></div>
+        </div>
+
+        <!-- PANEL: TAM GLOBAL -->
+        <div id="panel-tam" class="hidden">
+          <div class="page-header">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+              <div>
+                <div class="page-title">TAM</div>
+                <div class="page-desc" id="tam-top-desc">Selecione uma área</div>
+              </div>
+              <div id="tam-top-actions"><button class="btn-primary" style="font-size:12px;padding:6px 14px" onclick="openModal()">+ Novo Merchant</button></div>
+            </div>
+            <!-- Toggle top-level -->
+            <div style="display:flex;gap:0;margin-top:16px;background:#F3F4F6;border-radius:9px;padding:3px;width:fit-content">
+              <button class="tam-seg active" id="tam-top-seg-dem" onclick="switchTamTop('dem')">
+                <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="2" width="12" height="14" rx="1.5"/><line x1="6" y1="7" x2="12" y2="7"/><line x1="6" y1="10" x2="12" y2="10"/><line x1="6" y1="13" x2="9" y2="13"/></svg>
+                Demandas Técnicas
+              </button>
+              <button class="tam-seg" id="tam-top-seg-met" onclick="switchTamTop('met')">
+                <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="7"/><polyline points="6,9 8.5,11.5 13,6.5"/></svg>
+                Metas
+              </button>
+            </div>
+          </div>
+          <!-- Demandas por merchant -->
+          <div id="tam-top-dem">
+            <div id="tam-global-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;padding:0 24px 24px"></div>
+          </div>
+          <!-- Metas global -->
+          <div id="tam-top-met" class="hidden" style="padding:0 24px 24px">
+
+            <!-- QUADRO DE METAS GERAIS -->
+            <div id="metas-gerais-quadro" style="background:white;border:1px solid #E5E7EB;border-radius:12px;margin-bottom:24px;overflow:hidden">
+              <div style="padding:14px 20px;border-bottom:1px solid #F3F4F6;display:flex;align-items:center;gap:8px;background:#FAFAFA">
+                <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="#3B39F5" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="9" r="7"/><polyline points="6,9 8.5,11.5 13,6.5"/></svg>
+                <span style="font-size:13px;font-weight:700;color:#111827">Metas Gerais</span>
+                <span style="font-size:11px;color:#9CA3AF;margin-left:4px">fixadas · visíveis em todos os TAMs</span>
+              </div>
+              <div id="metas-gerais-list"></div>
+            </div>
+
+            <!-- METAS ESPECÍFICAS POR TAM -->
+            <div class="sec-hdr" style="margin-bottom:12px">
+              <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6B7280">Metas Específicas por TAM</span>
+              <span class="sec-count" id="met-tam-count" style="margin-left:8px">0 metas</span>
+              <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+                <select id="met-tam-filter" onchange="switchMetaTam(this.value)" style="font-size:12px;padding:5px 10px;border:1px solid #E5E7EB;border-radius:7px;background:white;color:#374151;outline:none;cursor:pointer">
+                  <option value="__global__">Todos os TAMs</option>
+                </select>
+                <button class="btn-outline" style="font-size:12px;padding:6px 12px" onclick="addMetaCol(currentMetaTam)">+ Coluna</button>
+                <button class="btn-primary" style="font-size:12px;padding:6px 12px" onclick="addMetaRow(currentMetaTam)">+ Nova Meta</button>
+              </div>
+            </div>
+            <div id="met-table-tam"></div>
+
+            <!-- GRÁFICOS -->
+            <div style="margin-top:28px">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+                <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6B7280">Análise Geral</span>
+                <span id="chart-scope-badge" style="font-size:11px;font-weight:600;color:#3B39F5;background:#EEEFFE;border-radius:20px;padding:2px 10px">Todos os TAMs</span>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                <div style="background:white;border:1px solid #E5E7EB;border-radius:12px;padding:20px">
+                  <div style="font-size:12px;color:#6B7280;margin-bottom:4px;display:flex;align-items:center;gap:6px">
+                    <span style="width:10px;height:10px;border-radius:2px;background:#3B39F5;display:inline-block"></span> Metas por Status
+                  </div>
+                  <canvas id="chart-status" height="160" style="width:100%;margin-top:12px"></canvas>
+                </div>
+                <div style="background:white;border:1px solid #E5E7EB;border-radius:12px;padding:20px">
+                  <div style="font-size:12px;color:#6B7280;margin-bottom:4px;display:flex;align-items:center;gap:6px">
+                    <span style="width:10px;height:10px;border-radius:2px;background:#3B39F5;display:inline-block"></span> % Atingido por Meta
+                    <span style="width:16px;height:2px;background:#22C55E;display:inline-block;margin-left:8px;border-radius:2px"></span> Média
+                  </div>
+                  <canvas id="chart-pct" height="160" style="width:100%;margin-top:12px"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL: MERCHANT VIEW -->
+        <div id="panel-mv" class="hidden"></div>
+
+      </div>
+
+<!-- Kanban slide-out detail -->
+<div id="kb-detail-overlay" class="kb-overlay" onclick="closeKanbanDetail()"></div>
+<div id="kb-detail-panel" class="kb-detail"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FILTER PANEL ===== -->
+<div class="filter-overlay hidden" id="filter-overlay" onclick="closeFiltersOut(event)">
+  <div class="filter-panel" onclick="event.stopPropagation()">
+    <div class="fp-wrap">
+      <div class="fp-header">
+        <span class="fp-header-title">Filtros</span>
+        <button class="fp-close" onclick="closeFilters()">✕</button>
+      </div>
+      <div class="fp-body">
+        <!-- Left: categories -->
+        <div class="fp-categories" id="fp-cats"></div>
+        <!-- Right: options -->
+        <div class="fp-options" id="fp-opts"></div>
+      </div>
+      <div class="fp-footer">
+        <button class="btn-cancel" onclick="clearAllFilters()">Limpar filtros</button>
+        <button class="btn-save" onclick="applyFilters()">Aplicar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: NOVO/EDITAR MERCHANT -->
+<div class="modal-overlay hidden" id="modal-overlay" onclick="closeModalOut(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-hdr">
+      <span class="modal-title" id="merchant-modal-title">Novo Merchant</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-sec">
+        <div class="modal-sec-title">Informações Básicas</div>
+        <div class="modal-grid">
+          <div class="mf full"><label>Nome do Cliente *</label><input type="text" id="nm-name" placeholder="Ex: Empresa XPTO"></div>
+          <div class="mf"><label>Website</label><input type="text" id="nm-website" placeholder="empresa.com.br"></div>
+          <div class="mf"><label>Negócio</label><input type="text" id="nm-negocio" placeholder="E-commerce, Jurídico..."></div>
+          <div class="mf"><label>Organization ID (opcional)</label><input type="text" id="nm-orgid" placeholder="UUID do Yuno Dashboard"></div>
+          <div class="mf"><label>Países de Operação</label><input type="text" id="nm-paises" placeholder="Brasil, Argentina..."></div>
+        </div>
+      </div>
+      <div class="modal-sec">
+        <div class="modal-sec-title">Equipe Yuno Responsável</div>
+        <div class="modal-grid">
+          <div class="mf"><label>KAM Responsável</label>
+            <select id="nm-kam" onchange="handleListSelect(this,'kams')">
+              <option value="">Selecionar...</option>
+            </select>
+          </div>
+          <div class="mf"><label>TAM</label>
+            <select id="nm-tam" onchange="handleListSelect(this,'tams')">
+              <option value="">Selecionar...</option>
+            </select>
+          </div>
+          <div class="mf"><label>Implementation Manager</label>
+            <select id="nm-impl" onchange="handleListSelect(this,'implementations')">
+              <option value="">Selecionar...</option>
+            </select>
+          </div>
+          <div class="mf"><label>Canal de Comunicação</label>
+            <select id="nm-canal" onchange="handleListSelect(this,'canais')">
+              <option value="">Selecionar...</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-sec">
+        <div class="modal-sec-title">Integração & Pagamentos</div>
+        <div class="modal-grid">
+          <div class="mf"><label>Tipo de Integração</label>
+            <select id="nm-integracao" onchange="handleListSelect(this,'integracoes')">
+              <option value="">Selecionar...</option>
+            </select>
+          </div>
+          <div class="mf"><label>Tipos de Cobrança</label>
+            <select id="nm-cobranca" onchange="handleListSelect(this,'cobrancas')">
+              <option value="">Selecionar...</option>
+            </select>
+          </div>
+          <div class="mf full"><label>Métodos de Pagamento</label><input type="text" id="nm-metodos" placeholder="Card, PIX, Boleto, ApplePay..."></div>
+          <div class="mf full"><label>Provedores</label><input type="text" id="nm-provedores" placeholder="Adyen, MercadoPago, Pagarme..."></div>
+        </div>
+      </div>
+      <div class="modal-sec">
+        <div class="modal-sec-title">Acesso do Merchant</div>
+        <div class="modal-grid">
+          <div class="mf"><label>E-mail de acesso</label><input type="email" id="nm-email" placeholder="contato@empresa.com"></div>
+          <div class="mf"><label>Senha inicial</label><input type="password" id="nm-senha" placeholder="Senha temporária"></div>
+        </div>
+      </div>
+      <div class="modal-sec">
+        <div class="modal-sec-title">Notas Internas</div>
+        <div class="mf full"><label>Observações</label><textarea id="nm-notas" placeholder="Informações sobre onboarding, contrato, contexto..."></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-save" onclick="saveMerchant()">Salvar Merchant</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: DEMANDA -->
+<div class="modal-overlay hidden" id="demand-modal-overlay" onclick="closeDemandaModalOut(event)">
+  <div class="modal" onclick="event.stopPropagation()" style="width:580px">
+    <div class="modal-hdr">
+      <span class="modal-title" id="demand-modal-title">Nova Demanda</span>
+      <button class="modal-close" onclick="closeDemandaModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="mf-row">
+        <label class="mf-label">Título</label>
+        <input class="mf-input" id="dm-title" placeholder="Ex: Erro no campo de expiração do cartão">
+      </div>
+      <div class="mf-row">
+        <label class="mf-label">Descrição</label>
+        <textarea class="mf-textarea" id="dm-desc" rows="3" placeholder="Descreva o problema ou demanda em detalhes..."></textarea>
+      </div>
+      <div class="mf-grid">
+        <div class="mf-row">
+          <label class="mf-label">Status</label>
+          <select class="mf-select" id="dm-status">
+            <option value="progress">Em andamento</option>
+            <option value="waiting">Aguardando time tech</option>
+            <option value="merchant">Aguardando merchant</option>
+            <option value="provider">Aguardando provedor</option>
+            <option value="standby">Standby</option>
+            <option value="done">Feito</option>
+          </select>
+        </div>
+        <div class="mf-row">
+          <label class="mf-label">Prioridade</label>
+          <select class="mf-select" id="dm-prioridade">
+            <option value="alta">🔴 Alta</option>
+            <option value="media" selected>🟡 Média</option>
+            <option value="baixa">⚪ Baixa</option>
+          </select>
+        </div>
+        <div class="mf-row">
+          <label class="mf-label">Prazo estimado</label>
+          <input class="mf-input" id="dm-prazo" placeholder="Ex: 15/03/26 ou TBD">
+        </div>
+      </div>
+      <div class="mf-row">
+        <label class="mf-label">Primeiro update / observação</label>
+        <textarea class="mf-textarea" id="dm-update" rows="2" placeholder="Contexto inicial, passo atual, etc..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeDemandaModal()">Cancelar</button>
+      <button class="btn-save" onclick="saveDemandaModal()">Salvar Demanda</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: PLANO DE MELHORIA -->
+<div class="modal-overlay hidden" id="plan-modal-overlay" onclick="closePlanoModalOut(event)">
+  <div class="modal" onclick="event.stopPropagation()" style="width:600px">
+    <div class="modal-hdr">
+      <span class="modal-title" id="plan-modal-title">Novo Plano de Melhoria</span>
+      <button class="modal-close" onclick="closePlanoModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="mf-row">
+        <label class="mf-label">Título do Plano</label>
+        <input class="mf-input" id="pm-title" placeholder="Ex: Migração para SDK Headless">
+      </div>
+      <div class="mf-row">
+        <label class="mf-label">Descrição / Contexto</label>
+        <textarea class="mf-textarea" id="pm-desc" rows="3" placeholder="Descreva a iniciativa, motivação e escopo..."></textarea>
+      </div>
+      <div class="mf-grid">
+        <div class="mf-row">
+          <label class="mf-label">Tipo</label>
+          <select class="mf-select" id="pm-tipo">
+            <option value="integracao">Nova Integração</option>
+            <option value="melhoria">Melhoria de Produto</option>
+            <option value="estrategico">Estratégico / Consultivo</option>
+            <option value="reducao">Redução de Atrito</option>
+          </select>
+        </div>
+        <div class="mf-row">
+          <label class="mf-label">Prioridade</label>
+          <select class="mf-select" id="pm-prioridade">
+            <option value="alta">Alta</option>
+            <option value="media">Média</option>
+            <option value="baixa">Baixa</option>
+          </select>
+        </div>
+      </div>
+      <div class="mf-grid">
+        <div class="mf-row">
+          <label class="mf-label">Status</label>
+          <select class="mf-select" id="pm-status">
+            <option value="ideia">Ideia</option>
+            <option value="analise">Em análise</option>
+            <option value="aprovado">Aprovado</option>
+            <option value="desenvolvimento">Em desenvolvimento</option>
+          </select>
+        </div>
+        <div class="mf-row">
+          <label class="mf-label">Propositor</label>
+          <select class="mf-select" id="pm-propositor">
+            <option value="yuno">Yuno (proativo)</option>
+            <option value="merchant">Merchant (solicitado)</option>
+          </select>
+        </div>
+      </div>
+      <div class="mf-row">
+        <label class="mf-label">Impacto esperado</label>
+        <input class="mf-input" id="pm-impacto" placeholder="Ex: Redução de 20% no churn, melhora na aprovação">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closePlanoModal()">Cancelar</button>
+      <button class="btn-save" onclick="savePlanoModal()">Salvar Plano</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== DATA =====
+const merchants = [
+  { id:'jusbrasil', orgId:null, name:'JusBrasil', countries:['🇧🇷 Brasil'], website:'jusbrasil.com.br', canal:['WhatsApp'], negocio:'Jurídico', metodos:['Card'], provedores:['Pagarme'], kam:'Felipe Geraldelli', tam:'', implementation:'', integracao:['Headless SDK (Enrollment)'], cobranca:['Subscription'] },
+  { id:'tembici', orgId:'095b08fe-bced-4fa5-98ba-3fdf75f6fccb', name:'Tembici', countries:['🇧🇷 Brasil','🇨🇴 Colômbia','🇨🇱 Chile','🇦🇷 Argentina'], website:'tembici.com.br/pt/', canal:['WhatsApp','Google Chat'], negocio:'Aluguel de Bike', metodos:['Card'], provedores:['Adyen','MercadoPago','Pagarme'], kam:'Phillip Kraus', tam:'Sarah Santiago', implementation:'Helio Cantelli', integracao:['Direct WorkFlow','Secure Fields (Payment)'], cobranca:['Subscription','Pagamento único','Recorrência'] },
+  { id:'q2ingressos', orgId:null, name:'Q2 Ingressos', countries:['🇧🇷 Brasil','🇺🇸 Estados Unidos'], website:'q2ingressos.com.br/', canal:['E-mail','WhatsApp'], negocio:'Compra de Ingressos', metodos:['ApplePay','GooglePay','Card'], provedores:['ClearSale','MercadoPago','PagBank','Stripe','3DS Yuno'], kam:'Felipe Geraldelli', tam:'Sarah Santiago', implementation:'Helio Cantelli', integracao:['Lite SDK'], cobranca:['Pagamento único'] },
+  { id:'perfectpay', orgId:null, name:'PerfectPay/Centerpag', countries:['🇧🇷 Brasil','🇦🇷 Argentina','🇨🇴 Colômbia','🇮🇹 Itália'], website:'perfectpay.com.br/', canal:['WhatsApp'], negocio:'PSP', metodos:['Card','Click To Pay'], provedores:['Adyen','PayPal','Stripe','WorldPay'], kam:'Phillip Kraus', tam:'', implementation:'', integracao:['Direct WorkFlow'], cobranca:[] },
+  { id:'goold', orgId:null, name:'Goold/Rockty', countries:['🇧🇷 Brasil'], website:'goold.shop/', canal:['Slack'], negocio:'E-commerce', metodos:['Card','PIX','PIX Parcelado'], provedores:['Cielo','Pagarme'], kam:'Martin Maximillian', tam:'', implementation:'', integracao:['Lite SDK'], cobranca:['Subscription','Pagamento único','Recorrência'] },
+  { id:'hubla', orgId:null, name:'Hubla', countries:['🇧🇷 Brasil'], website:'lp.hub.la/', canal:['Slack'], negocio:'Infoproduto', metodos:['Boleto','Card','PIX','PIX Parcelado'], provedores:['Adyen','Koin','PagBank','Stripe','MercadoPago','Transfera','Unlimit','Vindi','3DS Yuno'], kam:'Phillip Kraus', tam:'', implementation:'', integracao:[], cobranca:[] },
+  { id:'dux', orgId:null, name:'Dux', countries:['🇧🇷 Brasil'], website:'duxhumanhealth.com/', canal:['Slack','E-mail'], negocio:'Health and Care', metodos:['Card','PIX'], provedores:['ClearSale','MercadoPago'], kam:'Paola Brajao', tam:'', implementation:'', integracao:['Pluging VTEX'], cobranca:['Pagamento único'] }
+];
+
+const demands = { q2ingressos:[
+  { id:1, title:'C2P: Data de expiração enviada errada', desc:'Para C2P, a data de expiração do cartão é submetida com o valor correto mas enviada ao portador com um valor errado (sempre 02/2029).', status:'done', inicio:'21/01/26', prazo:'TBD', updates:[{ date:'22/01', text:'Ao que tudo indica, o campo é originado pela Mastercard. Iniciamos contato para entender a causa raiz.' },{ date:'09/02', text:'Mantivemos o contato com a Mastercard. Retorno mais lento do que o esperado.' },{ date:'10/02', text:'Deploy em sandbox realizado. Cenário em fase de testes com QA. Problema ocorre apenas em casos específicos.' }] },
+  { id:2, title:'Mecanismo de comunicação real time + fallback', desc:'Mecanismo de comunicação real time (retirando Kafka) focando em eficiência. Sistema de fallback para possíveis intermitências.', status:'done', inicio:'19/01/26', prazo:'06/02/26', updates:[{ date:'26/01', text:'Em desenvolvimento, estimativa de entrega: 06/02.' },{ date:'03/02', text:'Deploy feito.' }] },
+  { id:3, title:'Ajuste campo event_date na integração MP', desc:'Yuno envia o dado event_date dentro do objeto event. MP solicitou para esse dado ser enviado dentro do objeto items.', status:'done', inicio:'20/01/26', prazo:'02/02/26', updates:[{ date:'03/02', text:'Finalizado do lado da Yuno. Em 04/02 Q2 deve fazer o deploy em prod.' }] },
+  { id:4, title:'Melhoria Integração Message-based com ClearSale', desc:'Aprimorar a integração atual message-based com ClearSale para aumentar performance e reduzir atrasos. Testes de regressão e stress.', status:'done', inicio:'19/01/26', prazo:'29/01/26', updates:[{ date:'29/01', text:'Finalizado.' }] },
+  { id:5, title:'Documentação para Stripe', desc:'Stripe solicitou documentação para Q2 para sua análise de integração.', status:'done', inicio:'10/25', prazo:'TBD', updates:[{ date:'27/01', text:'Q2 atualizou que segue em tratativa diretamente com Stripe.' },{ date:'10/02', text:'Documentação atualizada e Stripe desbloqueou pay out.' }] },
+  { id:6, title:'C2P campo de endereço sempre solicitando preenchimento', desc:'Time Yuno ajustando novo desenvolvimento, deploy em sandbox feito e sendo testado. Sugestão para Q2 utilizar o vaulted token.', status:'done', inicio:null, prazo:null, updates:[{ date:'09/02', text:'Time implementando novo ajuste. Deploy em sandbox realizado. Revisando pontos para viabilizar uso do vaulted token.' }] },
+  { id:7, title:'PIX continue payment', desc:'Investigar por que o QRCode do PIX congela para o usuário no front.', status:'done', inicio:null, prazo:null, updates:[{ date:'13/02', text:'Time solicitou vídeo do PIX da Q2, não encontraram intermitência do lado da Yuno.' },{ date:'15/02', text:'Ajuste feito.' }] },
+  { id:8, title:'C2P Direcionamento de rotas', desc:'C2P seguindo rotas diferentes das que precisam seguir.', status:'done', inicio:null, prazo:null, updates:[{ date:'12/02', text:'Time tech analisando.' },{ date:'13/02', text:'Follow-up time tech.' }] },
+  { id:9, title:'Ajuste campo metadata', desc:'Ajuste no campo metadata da integração.', status:'done', inicio:null, prazo:null, updates:[{ date:'20/02', text:'Sarah testando e elaborando step by step.' },{ date:'23/02', text:'Enviado à Débora. Doc de API atualizada. Q2 deverá atualizar e testar.' }] },
+  { id:10, title:'Implementação SDK Headless', desc:'Q2 Ingressos está analisando mudar para o SDK headless para ter mais autonomia sobre o checkout.', status:'standby', inicio:null, prazo:'TBD', updates:[{ date:'10/02', text:'Acordado que a integração será iniciada após resolução das demais pendências. Possível realizar testes antecipados.' }] },
+  { id:11, title:'Integração Apple Pay com Stripe', desc:'Q2 Ingressos está integrando Apple Pay utilizando Stripe como provedor.', status:'done', inicio:'10/25', prazo:'TBD', updates:[{ date:'27/01', text:'Q2 realizou novo teste após ajustes da Stripe, porém o erro persistiu.' },{ date:'09/02', text:'Yuno entrou em contato com Stripe por email. Retorno pendente.' },{ date:'12/02', text:'Mesmo problema persiste. Enviado email à Stripe com feedback.' },{ date:'27/02', text:'Feedback Stripe: caso em análise do lado deles.' }] },
+  { id:12, title:'C2P sandbox testes', desc:'C2P em ambiente de teste retornando erro 400 INVALID_STATE: "Client specified an invalid argument."', status:'waiting', inicio:null, prazo:null, updates:[{ date:'24/02', text:'Débora enviou o issue.' },{ date:'25/02', text:'Follow-up time tech Yuno feito.' },{ date:'27/02', text:'Segundo follow-up feito. Aguardando retorno.' }] },
+  { id:13, title:'Stripe nova conta', desc:'Configurar nova conta Stripe com Q2 para Apple Pay. Stripe Gates: RawPAN, BYOT, Wallet Decryption.', status:'progress', inicio:null, prazo:null, updates:[{ date:'04/03', text:'Sarah solicitando acesso ao link para geração de ID Stripe.' }] }
+]};
+
+// ===== TAG COLORS =====
+const tagColor = { 'Card':'tgr','PIX':'tg','Boleto':'to','ApplePay':'tgr','GooglePay':'tb','Click To Pay':'ti','PIX Parcelado':'tt','Adyen':'tb','MercadoPago':'ty','Pagarme':'tk','Stripe':'ti','ClearSale':'tp','PagBank':'to','3DS Yuno':'ti','PayPal':'tb','WorldPay':'tp','Cielo':'tt','Koin':'tk','Transfera':'tgr','Unlimit':'to','Vindi':'tp','Subscription':'ti','Pagamento único':'tp','Recorrência':'tk','Headless SDK (Enrollment)':'tb','Headless SDK':'tb','Lite SDK':'tg','Direct WorkFlow':'tp','Secure Fields (Payment)':'tk','Pluging VTEX':'to','WhatsApp':'tg','Slack':'ti','E-mail':'tgr','Google Chat':'tb' };
+const kamCls = { 'Felipe Geraldelli':'kf','Phillip Kraus':'kp','Martin Seggewiss':'km','Paola B.':'kpa' };
+
+function tags(items) {
+  if (!items?.length) return '<span style="color:#D1D5DB">—</span>';
+  let h = '<div class="tags">';
+  items.forEach(i => h += `<span class="tag ${tagColor[i]||'tgr'}">${i}</span>`);
+  return h+'</div>';
+}
+
+// ===== I18N =====
+let currentLang = 'pt';
+const translations = {
+  pt: {
+    'login.portal.title':'Portal de Gestão\nde Merchants','login.portal.desc':'Acompanhe implementações, updates de demandas técnicas e planos de melhorias.',
+    'login.title':'Entrar','login.sub.adm':'Acesse como administrador Yuno','login.sub.mer':'Acesse como merchant',
+    'login.role.adm':'Administrador','login.role.mer':'Merchant','login.email':'E-mail','login.pass':'Senha','login.btn':'Entrar',
+    'nav.overview':'Visão Geral','nav.merchants':'Merchants','nav.areas':'Áreas','nav.impl':'Implementação','nav.tam':'TAM',
+    'nav.config':'Configurações','nav.team':'Equipe Yuno','nav.notif':'Notificações','nav.webhooks':'Webhooks / Email',
+    'nav.home':'Início','nav.board_fr':'Feature Requests','nav.board_dt':'Demanda Técnica','nav.board_pc':'Projetos e Consultorias','nav.contract':'Contrato','nav.docs':'Documentação','nav.logout':'Sair',
+    'merchants.title':'Merchants','merchants.desc':'Gerencie todos os clientes da Yuno','merchants.new':'+ Novo Merchant',
+    'merchants.search':'Buscar merchant...','merchants.filters':'Filtros','merchants.sort':'Ordenar','merchants.columns':'Colunas',
+    'merchants.edit':'Editar','merchants.delete':'Excluir','merchants.back':'← Voltar para Merchants',
+    'stat.total':'Total de Merchants','stat.impl':'Em Implementação','stat.demands':'Demandas Abertas','stat.golive':'Go-live este mês',
+    'col.orgid':'Org ID','col.cliente':'Cliente','col.paises':'Países','col.canal':'Canal','col.negocio':'Negócio',
+    'col.metodos':'Métodos de Pagamento','col.provedores':'Provedores','col.kam':'KAM Responsável',
+    'col.integracao':'Integração','col.cobranca':'Cobrança','col.website':'Website','col.acoes':'Ações',
+    'tam.desc':'Acompanhe demandas técnicas por merchant','tam.demands':'Demandas Técnicas','tam.goals':'Metas',
+    'tam.newmer':'+ Novo Merchant','tam.view':'Ver TAM','tam.newdem':'+ Demanda','tam.delete':'Excluir',
+    'tam.nodem':'Sem demandas','tam.notam':'Sem TAM','tam.open':'aberta','tam.opens':'abertas','tam.plan':'plano','tam.plans':'planos','tam.improve':'de melhoria',
+    'dem.total':'total','dem.new':'+ Nova','dem.all':'Todas','dem.progress':'Em andamento',
+    'dem.waiting':'Aguardando tech','dem.standby':'Standby','dem.done':'Feito',
+    'impl.title':'Implementação','impl.desc':'Setup técnico, testes e go-live',
+  },
+  en: {
+    'login.portal.title':'Merchant\nManagement Portal','login.portal.desc':'Track implementations, technical demand updates and improvement plans.',
+    'login.title':'Sign In','login.sub.adm':'Access as Yuno administrator','login.sub.mer':'Access as merchant',
+    'login.role.adm':'Administrator','login.role.mer':'Merchant','login.email':'Email','login.pass':'Password','login.btn':'Sign In',
+    'nav.overview':'Overview','nav.merchants':'Merchants','nav.areas':'Areas','nav.impl':'Implementation','nav.tam':'TAM',
+    'nav.config':'Settings','nav.team':'Yuno Team','nav.notif':'Notifications','nav.webhooks':'Webhooks / Email',
+    'nav.home':'Home','nav.board_fr':'Feature Requests','nav.board_dt':'Technical Demand','nav.board_pc':'Projects & Consulting','nav.contract':'Contract','nav.docs':'Documentation','nav.logout':'Sign out',
+    'merchants.title':'Merchants','merchants.desc':'Manage all Yuno clients','merchants.new':'+ New Merchant',
+    'merchants.search':'Search merchant...','merchants.filters':'Filters','merchants.sort':'Sort','merchants.columns':'Columns',
+    'merchants.edit':'Edit','merchants.delete':'Delete','merchants.back':'← Back to Merchants',
+    'stat.total':'Total Merchants','stat.impl':'In Implementation','stat.demands':'Open Demands','stat.golive':'Go-live this month',
+    'col.orgid':'Org ID','col.cliente':'Client','col.paises':'Countries','col.canal':'Channel','col.negocio':'Business',
+    'col.metodos':'Payment Methods','col.provedores':'Providers','col.kam':'KAM Manager',
+    'col.integracao':'Integration','col.cobranca':'Billing','col.website':'Website','col.acoes':'Actions',
+    'tam.desc':'Track technical demands per merchant','tam.demands':'Technical Demands','tam.goals':'Goals',
+    'tam.newmer':'+ New Merchant','tam.view':'View TAM','tam.newdem':'+ Demand','tam.delete':'Delete',
+    'tam.nodem':'No demands','tam.notam':'No TAM','tam.open':'open','tam.opens':'open','tam.plan':'plan','tam.plans':'plans','tam.improve':'improvement',
+    'dem.total':'total','dem.new':'+ New','dem.all':'All','dem.progress':'In progress',
+    'dem.waiting':'Waiting tech','dem.standby':'Standby','dem.done':'Done',
+    'impl.title':'Implementation','impl.desc':'Technical setup, tests and go-live',
+  },
+  es: {
+    'login.portal.title':'Portal de Gestión\nde Merchants','login.portal.desc':'Seguimiento de implementaciones, actualizaciones de demandas técnicas y planes de mejora.',
+    'login.title':'Iniciar sesión','login.sub.adm':'Accede como administrador Yuno','login.sub.mer':'Accede como merchant',
+    'login.role.adm':'Administrador','login.role.mer':'Merchant','login.email':'Correo electrónico','login.pass':'Contraseña','login.btn':'Entrar',
+    'nav.overview':'Vista general','nav.merchants':'Merchants','nav.areas':'Áreas','nav.impl':'Implementación','nav.tam':'TAM',
+    'nav.config':'Configuración','nav.team':'Equipo Yuno','nav.notif':'Notificaciones','nav.webhooks':'Webhooks / Email',
+    'nav.home':'Inicio','nav.board_fr':'Feature Requests','nav.board_dt':'Demanda Técnica','nav.board_pc':'Proyectos y Consultorías','nav.contract':'Contrato','nav.docs':'Documentación','nav.logout':'Salir',
+    'merchants.title':'Merchants','merchants.desc':'Gestiona todos los clientes de Yuno','merchants.new':'+ Nuevo Merchant',
+    'merchants.search':'Buscar merchant...','merchants.filters':'Filtros','merchants.sort':'Ordenar','merchants.columns':'Columnas',
+    'merchants.edit':'Editar','merchants.delete':'Eliminar','merchants.back':'← Volver a Merchants',
+    'stat.total':'Total de Merchants','stat.impl':'En Implementación','stat.demands':'Demandas Abiertas','stat.golive':'Go-live este mes',
+    'col.orgid':'Org ID','col.cliente':'Cliente','col.paises':'Países','col.canal':'Canal','col.negocio':'Negocio',
+    'col.metodos':'Métodos de Pago','col.provedores':'Proveedores','col.kam':'KAM Responsable',
+    'col.integracao':'Integración','col.cobranca':'Facturación','col.website':'Sitio web','col.acoes':'Acciones',
+    'tam.desc':'Seguimiento de demandas técnicas por merchant','tam.demands':'Demandas Técnicas','tam.goals':'Metas',
+    'tam.newmer':'+ Nuevo Merchant','tam.view':'Ver TAM','tam.newdem':'+ Demanda','tam.delete':'Eliminar',
+    'tam.nodem':'Sin demandas','tam.notam':'Sin TAM','tam.open':'abierta','tam.opens':'abiertas','tam.plan':'plan','tam.plans':'planes','tam.improve':'de mejora',
+    'dem.total':'total','dem.new':'+ Nueva','dem.all':'Todas','dem.progress':'En progreso',
+    'dem.waiting':'Esperando tech','dem.standby':'Standby','dem.done':'Hecho',
+    'impl.title':'Implementación','impl.desc':'Setup técnico, pruebas y go-live',
+  }
+};
+function t(key) { return translations[currentLang]?.[key] ?? translations.pt[key] ?? key; }
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.style.background = b.dataset.lang === lang ? '#3B39F5' : 'transparent';
+    b.style.color = b.dataset.lang === lang ? 'white' : '#6B7280';
+  });
+  applyTranslations();
+  // re-render dynamic sections
+  renderTable();
+  renderTamGlobal();
+  const tamCont = document.getElementById('tc-tam');
+  if (tamCont && !tamCont.classList.contains('hidden') && tamCtx.mid) {
+    tamCont.innerHTML = buildTam(tamCtx.mid, demands[tamCtx.mid]||[], tamCtx.isMerchant);
+    renderPlanos(tamCtx.mid, tamCtx.isMerchant);
+  }
+}
+
+function applyTranslations() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.dataset.i18n);
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    el.placeholder = t(el.dataset.i18nPh);
+  });
+  // Login left panel
+  const ltitle = document.getElementById('login-left-title');
+  if (ltitle) ltitle.innerHTML = t('login.portal.title').replace('\n','<br>');
+  const ldesc = document.getElementById('login-left-desc');
+  if (ldesc) ldesc.textContent = t('login.portal.desc');
+  // Login form
+  if (document.getElementById('login-role-adm')) {
+    document.getElementById('login-role-adm').textContent = t('login.role.adm');
+    document.getElementById('login-role-mer').textContent = t('login.role.mer');
+    document.getElementById('login-subtitle').textContent = loginRole==='adm' ? t('login.sub.adm') : t('login.sub.mer');
+  }
+  // Sync all lang buttons across page
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.style.background = b.dataset.lang === currentLang ? '#3B39F5' : 'transparent';
+    b.style.color = b.dataset.lang === currentLang ? 'white' : '#6B7280';
+  });
+}
+
+// ===== STATE =====
+let currentUser = null;
+
+// ===== AUTH =====
+let loginRole = 'adm';
+function setLoginRole(role) {
+  loginRole = role;
+  const isAdm = role === 'adm';
+  document.getElementById('login-role-adm').style.cssText = isAdm
+    ? 'flex:1;padding:8px 12px;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;background:#3B39F5;color:white;box-shadow:0 1px 4px rgba(59,57,245,.18)'
+    : 'flex:1;padding:8px 12px;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;background:transparent;color:#6B7280';
+  document.getElementById('login-role-mer').style.cssText = !isAdm
+    ? 'flex:1;padding:8px 12px;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;background:#3B39F5;color:white;box-shadow:0 1px 4px rgba(59,57,245,.18)'
+    : 'flex:1;padding:8px 12px;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;background:transparent;color:#6B7280';
+  document.getElementById('login-subtitle').textContent = isAdm
+    ? 'Acesse como administrador Yuno'
+    : 'Acesse como merchant';
+  document.getElementById('login-email').placeholder = isAdm ? 'nome@y.uno' : 'merchant@empresa.com';
+}
+
+function doLogin() {
+  const e = document.getElementById('login-email').value;
+  const p = document.getElementById('login-pass').value;
+  if (e==='sarah@y.uno' && p==='yuno123') {
+    currentUser = { type:'admin', name:'Sarah', initial:'S' };
+    showApp();
+  } else if (e==='debora@q2ingressos.com.br' && p==='q2123') {
+    currentUser = { type:'merchant', name:'Débora', initial:'D', merchantId:'q2ingressos' };
+    showApp();
+  } else {
+    alert('Credenciais inválidas.\n\nAdmin: sarah@y.uno / yuno123\nMerchant: debora@q2ingressos.com.br / q2123');
+  }
+}
+
+function doLogout() {
+  document.getElementById('view-login').classList.remove('hidden');
+  document.getElementById('view-app').classList.add('hidden');
+}
+
+function showApp() {
+  document.getElementById('view-login').classList.add('hidden');
+  document.getElementById('view-app').classList.remove('hidden');
+  applyTranslations();
+  const u = currentUser;
+  ['s-avatar','t-avatar'].forEach(id => document.getElementById(id).textContent = u.initial);
+  document.getElementById('s-name').textContent = u.name;
+  document.getElementById('t-name').textContent = u.name;
+  if (u.type==='admin') {
+    document.getElementById('nav-admin').classList.remove('hidden');
+    document.getElementById('nav-merchant').classList.add('hidden');
+    document.getElementById('s-role').textContent = 'Admin Yuno';
+    renderTable();
+    showPanel('overview');
+    setTitle('Merchants');
+  } else {
+    document.getElementById('nav-admin').classList.add('hidden');
+    document.getElementById('nav-merchant').classList.remove('hidden');
+    document.getElementById('s-role').textContent = 'Q2 Ingressos';
+    renderMerchantView('home');
+    showPanel('mv');
+    setTitle('Início');
+  }
+}
+
+// ===== NAVIGATION =====
+function navTo(view, el) {
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  if (el) el.classList.add('active');
+  const map = { overview:'Merchants', implementacao:'Implementação', tam:'TAM — Demandas Técnicas', 'mv-home':'Início', 'mv-tam':'Minhas Demandas', 'mv-impl':'Implementação', 'mv-board-fr':'Feature Requests', 'mv-board-dt':'Demanda Técnica', 'mv-board-pc':'Projetos e Consultorias' };
+  setTitle(map[view]||view);
+  if (view==='overview') showPanel('overview');
+  else if (view==='implementacao') showPanel('implementacao');
+  else if (view==='tam') showPanel('tam');
+  else if (view.startsWith('mv-')) { renderMerchantView(view.replace('mv-','')); showPanel('mv'); }
+}
+
+function setTitle(t) { document.getElementById('topbar-title').textContent = t; }
+
+function showPanel(name) {
+  ['overview','merchant','implementacao','tam','mv'].forEach(p => {
+    document.getElementById('panel-'+p)?.classList.add('hidden');
+  });
+  document.getElementById('panel-'+name)?.classList.remove('hidden');
+  if (name === 'tam') { switchTamTop('dem'); }
+}
+
+function switchTamTop(type) {
+  ['dem','met'].forEach(t => {
+    document.getElementById(`tam-top-seg-${t}`)?.classList.toggle('active', t===type);
+    document.getElementById(`tam-top-${t}`)?.classList.toggle('hidden', t!==type);
+  });
+  if (type === 'dem') {
+    document.getElementById('tam-top-desc').textContent = 'Acompanhe demandas técnicas por merchant';
+    renderTamGlobal();
+  }
+  if (type === 'met') {
+    document.getElementById('tam-top-desc').textContent = 'Defina e acompanhe metas e objetivos';
+    renderMetasGerais();
+    renderMetaTamFilter();
+    switchMetaTam(currentMetaTam);
+  }
+}
+
+function renderTamGlobal() {
+  const container = document.getElementById('tam-global-list');
+  if (!container) return;
+  const statusMap = { done:['s-done','Feito'], progress:['s-prog','Em andamento'], standby:['s-sb','Standby'], waiting:['s-wait','Aguardando'] };
+  container.innerHTML = merchants.map(m => {
+    const dl = demands[m.id] || [];
+    const pl = planos[m.id] || [];
+    const open = dl.filter(d => d.status !== 'done').length;
+    const demCounts = dl.reduce((a,d) => { a[d.status]=(a[d.status]||0)+1; return a; }, {});
+    const badges = Object.entries(demCounts).map(([s,n]) => {
+      const [cls,lbl] = statusMap[s]||['',''];
+      return `<span class="sbadge ${cls}" style="font-size:11px;padding:2px 8px">${n} ${lbl}</span>`;
+    }).join('');
+    return `<div style="background:white;border:1px solid #E5E7EB;border-radius:10px;padding:16px 18px;cursor:pointer;transition:box-shadow .15s" onmouseenter="this.style.boxShadow='0 2px 8px rgba(71,71,229,.1)';this.style.borderColor='#C7D2FE'" onmouseleave="this.style.boxShadow='';this.style.borderColor='#E5E7EB'">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="m-avatar">${m.name.substring(0,2).toUpperCase()}</div>
+          <div>
+            <div style="font-size:13.5px;font-weight:600;color:#111827">${m.name}</div>
+            <div style="font-size:11.5px;color:#9CA3AF">${m.tam||'Sem TAM'} · ${m.kam||''}</div>
+          </div>
+        </div>
+        <span style="font-size:12px;color:${open>0?'#EF4444':'#22C55E'};font-weight:600">${open} ${open!==1?t('tam.opens'):t('tam.open')}</span>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">${badges||`<span style="font-size:12px;color:#9CA3AF">${t('tam.nodem')}</span>`}</div>
+      ${pl.length>0?`<div style="font-size:12px;color:#6B7280;margin-bottom:12px">${pl.length} ${pl.length!==1?t('tam.plans'):t('tam.plan')} ${t('tam.improve')}</div>`:''}
+      <div style="display:flex;gap:8px">
+        <button class="btn-primary" style="flex:1;font-size:12px;padding:6px 10px;justify-content:center" onclick="openMerchantToTam('${m.id}')">${t('tam.view')}</button>
+        <button class="btn-outline" style="font-size:12px;padding:6px 10px" onclick="openNovaDemandaModal('${m.id}')">${t('tam.newdem')}</button>
+        <button onclick="deleteMerchant('${m.id}')" style="background:none;border:1px solid #FECACA;border-radius:6px;padding:6px 10px;cursor:pointer;color:#EF4444;font-size:12px" onmouseenter="this.style.background='#FEF2F2'" onmouseleave="this.style.background='none'">${t('tam.delete')}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openMerchantToTam(id) {
+  openMerchant(id);
+  // After render, click the TAM tab
+  setTimeout(() => {
+    const tamBtn = [...document.querySelectorAll('.tab-btn')].find(b => b.textContent.trim().startsWith('TAM'));
+    if (tamBtn) tamBtn.click();
+  }, 50);
+}
+
+function goBack() {
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  document.querySelector('#nav-admin .nav-item')?.classList.add('active');
+  setTitle('Merchants');
+  showPanel('overview');
+}
+
+// ===== COLUMN CONFIG =====
+const colConfig = [
+  { id:'orgid',      label:'Org ID',               tk:'col.orgid', icon:true, minW:120, w:145, on:true,
+    render: m => m.orgId
+      ? `<span style="display:flex;align-items:center;gap:4px;min-width:0"><span class="org-id" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1">${m.orgId}</span><button class="copy-btn" style="flex-shrink:0" onclick="event.stopPropagation();copyText('${m.orgId}',this)" title="Copiar ID"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="7" y="7" width="8" height="9" rx="1"/><path d="M11 7V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h3"/></svg></button></span>`
+      : '<span style="color:#D1D5DB">—</span>' },
+  { id:'cliente',    label:'Cliente',               tk:'col.cliente',    minW:130, w:165, on:true,
+    render: m => `<div class="m-cell"><div class="m-avatar">${m.name.substring(0,2).toUpperCase()}</div><span class="m-name">${m.name}</span></div>` },
+  { id:'paises',     label:'Países',                tk:'col.paises',     minW:100, w:170, on:true,
+    render: m => tags(m.countries) },
+  { id:'canal',      label:'Canal',                 tk:'col.canal',      minW:100, w:130, on:true,
+    render: m => tags(m.canal) },
+  { id:'negocio',    label:'Negócio',               tk:'col.negocio',    minW:100, w:145, on:true,
+    render: m => `<span style="font-size:13px;color:#374151">${m.negocio}</span>` },
+  { id:'metodos',    label:'Métodos de Pagamento',  tk:'col.metodos',    minW:140, w:210, on:true,
+    render: m => tags(m.metodos) },
+  { id:'provedores', label:'Provedores',             tk:'col.provedores', minW:120, w:210, on:true,
+    render: m => tags(m.provedores) },
+  { id:'kam',        label:'KAM Responsável',        tk:'col.kam',        minW:120, w:165, on:true,
+    render: m => `<span class="kam ${kamCls[m.kam]||'tgr'}">${m.kam}</span>` },
+  { id:'integracao', label:'Integração',             tk:'col.integracao', minW:100, w:165, on:true,
+    render: m => tags(m.integracao) },
+  { id:'cobranca',   label:'Cobrança',               tk:'col.cobranca',   minW:100, w:165, on:true,
+    render: m => tags(m.cobranca) },
+  { id:'website',    label:'Website',                tk:'col.website',    minW:100, w:145, on:true,
+    render: m => `<a href="https://${m.website}" target="_blank" style="color:#3B39F5;font-size:12px" onclick="event.stopPropagation()">${m.website}</a>` },
+];
+
+// ===== INLINE CELL EDITING =====
+const colFieldMap = {
+  orgid:      { field:'orgId',         type:'text' },
+  cliente:    { field:'name',          type:'text' },
+  paises:     { field:'countries',     type:'array' },
+  canal:      { field:'canal',         type:'array' },
+  negocio:    { field:'negocio',       type:'text' },
+  metodos:    { field:'metodos',       type:'array' },
+  provedores: { field:'provedores',    type:'array' },
+  kam:        { field:'kam',           type:'text' },
+  integracao: { field:'integracao',    type:'array' },
+  cobranca:   { field:'cobranca',      type:'array' },
+  website:    { field:'website',       type:'text' },
+};
+
+function startCellEdit(btn, colId, mid) {
+  const td = btn.closest('td');
+  const m = merchants.find(x => x.id === mid);
+  if (!m) return;
+  const cfg = colFieldMap[colId];
+  if (!cfg) return;
+  const cur = cfg.type === 'array'
+    ? (m[cfg.field] || []).join(', ')
+    : (m[cfg.field] || '');
+  td.innerHTML = `<input class="cell-input" type="text" value="${cur.replace(/"/g,'&quot;')}"
+    onblur="saveCellEdit(this,'${colId}','${mid}')"
+    onkeydown="if(event.key==='Enter')this.blur();if(event.key==='Escape'){renderTable();}"
+  >`;
+  const inp = td.querySelector('input');
+  inp.focus(); inp.select();
+}
+
+function saveCellEdit(inp, colId, mid) {
+  const m = merchants.find(x => x.id === mid);
+  if (!m) return;
+  const cfg = colFieldMap[colId];
+  if (!cfg) return;
+  const val = inp.value.trim();
+  m[cfg.field] = cfg.type === 'array'
+    ? val.split(',').map(s => s.trim()).filter(Boolean)
+    : val;
+  persist();
+  renderTable();
+}
+
+// ===== TABLE =====
+function renderTable(data) {
+  const rows = data || merchants;
+  const vis = colConfig.filter(c => c.on);
+  const infoIcon = '<svg width="13" height="13" viewBox="0 0 18 18" fill="none" stroke="#C4C9D4" stroke-width="1.5"><circle cx="9" cy="9" r="7"/><line x1="9" y1="8" x2="9" y2="13"/><circle cx="9" cy="5.5" r=".5" fill="#C4C9D4" stroke="none"/></svg>';
+
+  // Colgroup
+  document.getElementById('merchants-colgroup').innerHTML =
+    vis.map(col => `<col data-col-id="${col.id}" style="width:${col.w}px">`).join('') +
+    `<col style="width:90px">`;
+
+  // Header
+  document.querySelector('#merchants-table thead tr').innerHTML = vis.map(col => `
+    <th data-col-id="${col.id}" draggable="true" style="width:${col.w}px;min-width:${col.minW}px">
+      <div class="th-inner">${col.icon ? infoIcon : ''} ${col.tk ? t(col.tk) : col.label}</div>
+      <div class="resize-handle" data-col-id="${col.id}"></div>
+    </th>
+  `).join('') + `<th><div class="th-inner">${t('col.acoes')}</div></th>`;
+
+  const editIcon = `<svg width="11" height="11" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3l2 2-9 9H4v-2L13 3z"/></svg>`;
+
+  // Rows
+  document.getElementById('merchants-tbody').innerHTML = rows.map(m => `
+    <tr class="cl" onclick="openMerchant('${m.id}')">
+      ${vis.map(col => `
+        <td class="editable-td">
+          ${col.render(m)}
+          ${colFieldMap[col.id] ? `<button class="cell-edit-btn" onclick="event.stopPropagation();startCellEdit(this,'${col.id}','${m.id}')" title="Editar">${editIcon}</button>` : ''}
+        </td>
+      `).join('')}
+      <td onclick="event.stopPropagation()" style="white-space:nowrap">
+        <button onclick="openEditMerchantModal('${m.id}')" style="background:none;border:1px solid #E5E7EB;border-radius:6px;padding:4px 8px;cursor:pointer;color:#6B7280;font-size:11px;margin-right:4px" onmouseenter="this.style.borderColor='#3B39F5';this.style.color='#3B39F5'" onmouseleave="this.style.borderColor='#E5E7EB';this.style.color='#6B7280'">${t('merchants.edit')}</button>
+        <button onclick="deleteMerchant('${m.id}')" style="background:none;border:1px solid #E5E7EB;border-radius:6px;padding:4px 8px;cursor:pointer;color:#6B7280;font-size:11px" onmouseenter="this.style.borderColor='#EF4444';this.style.color='#EF4444'" onmouseleave="this.style.borderColor='#E5E7EB';this.style.color='#6B7280'">${t('merchants.delete')}</button>
+      </td>
+    </tr>
+  `).join('');
+
+  updateTableWidth();
+  initColumnDrag();
+  initColumnResize();
+}
+
+function updateTableWidth() {
+  const vis = colConfig.filter(c => c.on);
+  const total = vis.reduce((s, c) => s + c.w, 0) + 90;
+  document.getElementById('merchants-table').style.width = total + 'px';
+}
+
+function filterTable(q) {
+  const rows = document.querySelectorAll('#merchants-tbody tr');
+  rows.forEach(r => {
+    r.style.display = r.textContent.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
+  });
+}
+
+// ===== COLUMN DRAG & DROP =====
+let dragSrcIdx = null;
+function initColumnDrag() {
+  const ths = [...document.querySelectorAll('#merchants-table thead th[data-col-id]')];
+  ths.forEach((th, idx) => {
+    th.addEventListener('dragstart', e => {
+      dragSrcIdx = idx;
+      th.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      // invisible ghost
+      const ghost = document.createElement('div');
+      ghost.className = 'drag-ghost';
+      document.body.appendChild(ghost);
+      e.dataTransfer.setDragImage(ghost, 0, 0);
+      setTimeout(() => ghost.remove(), 0);
+    });
+    th.addEventListener('dragend', () => {
+      th.classList.remove('dragging');
+      ths.forEach(t => t.classList.remove('drag-left','drag-right'));
+    });
+    th.addEventListener('dragover', e => {
+      e.preventDefault();
+      if (dragSrcIdx === idx) return;
+      ths.forEach(t => t.classList.remove('drag-left','drag-right'));
+      const { left, width } = th.getBoundingClientRect();
+      th.classList.add(e.clientX < left + width/2 ? 'drag-left' : 'drag-right');
+    });
+    th.addEventListener('dragleave', () => th.classList.remove('drag-left','drag-right'));
+    th.addEventListener('drop', e => {
+      e.preventDefault();
+      if (dragSrcIdx === null || dragSrcIdx === idx) return;
+      const vis = colConfig.filter(c => c.on);
+      const srcId = vis[dragSrcIdx].id;
+      const tgtId = vis[idx].id;
+      const srcReal = colConfig.findIndex(c => c.id === srcId);
+      const { left, width } = th.getBoundingClientRect();
+      const after = e.clientX > left + width/2;
+      const [col] = colConfig.splice(srcReal, 1);
+      const tgtReal = colConfig.findIndex(c => c.id === tgtId);
+      colConfig.splice(after ? tgtReal + 1 : tgtReal, 0, col);
+      renderTable();
+    });
+  });
+}
+
+// ===== COLUMN RESIZE =====
+function initColumnResize() {
+  document.querySelectorAll('#merchants-table .resize-handle').forEach(handle => {
+    handle.addEventListener('mousedown', e => {
+      e.preventDefault(); e.stopPropagation();
+      const colId = handle.dataset.colId;
+      const th = handle.closest('th');
+      const startX = e.clientX, startW = th.offsetWidth;
+      handle.classList.add('active');
+      const onMove = e => {
+        const col = colConfig.find(c => c.id === colId);
+        if (col) {
+          col.w = Math.max(col.minW, startW + e.clientX - startX);
+          th.style.width = col.w + 'px';
+          const colEl = document.querySelector(`#merchants-colgroup col[data-col-id="${colId}"]`);
+          if (colEl) colEl.style.width = col.w + 'px';
+          updateTableWidth();
+        }
+      };
+      const onUp = () => {
+        handle.classList.remove('active');
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+      };
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+  });
+}
+
+// ===== COLUMN PICKER =====
+function toggleColPicker() {
+  const p = document.getElementById('col-picker');
+  const btn = document.getElementById('col-btn');
+  if (p.classList.contains('hidden')) {
+    renderColPicker();
+    p.classList.remove('hidden');
+    btn.classList.add('active');
+  } else {
+    p.classList.add('hidden');
+    btn.classList.remove('active');
+  }
+}
+function renderColPicker() {
+  document.getElementById('col-picker').innerHTML =
+    `<div class="col-picker-title">Colunas visíveis</div>` +
+    colConfig.map((col, idx) => `
+      <div class="col-picker-item" style="justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:10px;flex:1" onclick="toggleCol('${col.id}')">
+          <div class="col-ck ${col.on?'on':''}"></div>
+          <span id="col-lbl-${col.id}">${col.label}</span>
+        </div>
+        <button onclick="event.stopPropagation();renameCol('${col.id}')" style="background:none;border:none;cursor:pointer;color:#D1D5DB;padding:0;font-size:11px" title="Renomear">✎</button>
+        ${col.custom ? `<button onclick="event.stopPropagation();removeCol('${col.id}')" style="background:none;border:none;cursor:pointer;color:#FCA5A5;padding:0;font-size:12px;margin-left:2px" title="Remover">✕</button>` : ''}
+      </div>
+    `).join('') +
+    `<div class="col-picker-footer" style="display:flex;gap:6px;flex-wrap:wrap">
+       <button class="btn-sm btn-sm-o" style="font-size:12px" onclick="colConfig.forEach(c=>c.on=true);renderColPicker();renderTable()">Mostrar todas</button>
+       <button class="btn-sm btn-sm-p" style="font-size:12px" onclick="addCustomCol()">+ Nova coluna</button>
+     </div>`;
+}
+
+function addCustomCol() {
+  const name = prompt('Nome da nova coluna:');
+  if (!name || !name.trim()) return;
+  const id = 'custom_' + Date.now();
+  colConfig.push({ id, label: name.trim(), minW: 100, w: 150, on: true, custom: true,
+    render: m => {
+      const val = (m.customData && m.customData[id]) || '';
+      return `<span class="editable-cell" onclick="event.stopPropagation();editCell('${id}',this,'${m.id}')" style="cursor:text;min-width:60px;display:inline-block;border-radius:4px;padding:2px 4px" title="Clique para editar">${val||'<span style=color:#D1D5DB>—</span>'}</span>`;
+    }
+  });
+  renderColPicker();
+  renderTable();
+}
+
+function renameCol(id) {
+  const col = colConfig.find(c => c.id === id);
+  if (!col) return;
+  const name = prompt('Novo nome para a coluna:', col.label);
+  if (!name || !name.trim()) return;
+  col.label = name.trim();
+  renderColPicker();
+  renderTable();
+}
+
+function removeCol(id) {
+  const idx = colConfig.findIndex(c => c.id === id);
+  if (idx < 0) return;
+  colConfig.splice(idx, 1);
+  renderColPicker();
+  renderTable();
+}
+
+function editCell(colId, el, merchantId) {
+  if (el.querySelector('input')) return;
+  const current = el.textContent.trim() === '—' ? '' : el.textContent.trim();
+  const input = document.createElement('input');
+  input.value = current;
+  input.style.cssText = 'width:100%;padding:2px 4px;border:1px solid #3B39F5;border-radius:4px;font-size:inherit;font-family:inherit;outline:none;min-width:80px';
+  el.innerHTML = '';
+  el.appendChild(input);
+  input.focus();
+  const save = () => {
+    const val = input.value.trim();
+    const m = merchants.find(x => x.id === merchantId);
+    if (m) { if (!m.customData) m.customData = {}; m.customData[colId] = val; }
+    el.innerHTML = val || '<span style="color:#D1D5DB">—</span>';
+  };
+  input.addEventListener('blur', save);
+  input.addEventListener('keydown', e => { if (e.key==='Enter') { save(); input.blur(); } if (e.key==='Escape') { el.innerHTML = current||'<span style="color:#D1D5DB">—</span>'; } });
+}
+function toggleCol(id) {
+  const col = colConfig.find(c => c.id === id);
+  if (!col) return;
+  if (col.on && colConfig.filter(c=>c.on).length <= 1) return;
+  col.on = !col.on;
+  renderColPicker();
+  renderTable();
+}
+// close picker on outside click
+document.addEventListener('click', e => {
+  const wrap = document.querySelector('.col-picker-wrap');
+  if (wrap && !wrap.contains(e.target)) {
+    document.getElementById('col-picker')?.classList.add('hidden');
+    document.getElementById('col-btn')?.classList.remove('active');
+  }
+});
+
+// ===== MERCHANT DETAIL =====
+function openMerchant(id) {
+  const m = merchants.find(x => x.id===id);
+  setTitle(m?.name||id);
+  document.getElementById('merchant-detail-content').innerHTML = buildMerchantDetail(id);
+  showPanel('merchant');
+}
+
+function buildMerchantDetail(id) {
+  const m = merchants.find(x => x.id===id);
+  const dl = demands[id]||[];
+  const open = dl.filter(d => d.status!=='done').length;
+  return `
+    <div class="mdh">
+      <div class="mdh-icon">${m.name.substring(0,2).toUpperCase()}</div>
+      <div class="mdh-info">
+        <h2>${m.name}</h2>
+        ${m.orgId ? `<div class="mdh-org">${m.orgId}</div>` : ''}
+        <div class="mdh-tags">
+          ${m.countries.map(c=>`<span class="tag tgr" style="font-size:12px">${c}</span>`).join('')}
+          ${m.integracao.map(i=>`<span class="tag ${tagColor[i]||'tgr'}">${i}</span>`).join('')}
+          ${m.cobranca.map(c=>`<span class="tag ${tagColor[c]||'tgr'}">${c}</span>`).join('')}
+          <span class="sbadge s-ativo">Ativo</span>
+        </div>
+      </div>
+      <div class="mdh-actions">
+        <button class="btn-outline" onclick="openEditMerchantModal('${id}')"><svg width="13" height="13" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2l3 3-9 9H4v-3L13 2z"/></svg> Editar</button>
+        <button class="btn-primary" onclick="openNovaDemandaModal('${id}')">+ Nova Demanda</button>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('info',this,'${id}')"><svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="2" width="12" height="14" rx="1.5"/><path d="M7 2.5V2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v.5"/><line x1="6" y1="8" x2="12" y2="8"/><line x1="6" y1="11" x2="12" y2="11"/><line x1="6" y1="14" x2="9" y2="14"/></svg> Informações Gerais</button>
+      <button class="tab-btn" onclick="switchTab('impl',this,'${id}')"><svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6.5,4.5 2,9 6.5,13.5"/><polyline points="11.5,4.5 16,9 11.5,13.5"/><line x1="10.5" y1="2.5" x2="7.5" y2="15.5"/></svg> Implementação</button>
+      <button class="tab-btn" onclick="switchTab('tam',this,'${id}')"><svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="2" width="12" height="14" rx="1.5"/><line x1="6" y1="7" x2="12" y2="7"/><line x1="6" y1="10" x2="12" y2="10"/><line x1="6" y1="13" x2="9" y2="13"/></svg> TAM ${open>0?`<span style="background:#EF4444;color:white;border-radius:20px;padding:1px 6px;font-size:10px;margin-left:4px">${open}</span>`:''}</button>
+    </div>
+    <div id="tc-info">${buildInfoGeral(m)}</div>
+    <div id="tc-impl" class="hidden"><div class="placeholder"><div class="ph-icon"><svg width="36" height="36" viewBox="0 0 18 18" fill="none" stroke="#D1D5DB" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="3"/><path d="M9 1v2M9 15v2M1 9h2M15 9h2M3.22 3.22l1.42 1.42M13.36 13.36l1.42 1.42M3.22 14.78l1.42-1.42M13.36 4.64l1.42-1.42"/></svg></div><h3>Implementação — ${m.name}</h3><p>Checklist de setup técnico, status de homologação e acompanhamento do go-live.</p></div></div>
+    <div id="tc-tam" class="hidden">${buildTam(id, dl, false)}</div>
+  `;
+}
+
+function buildInfoGeral(m) {
+  return `<div class="info-grid">
+    <div class="info-card">
+      <div class="info-card-hdr">Dados Cadastrais</div>
+      <div class="info-row"><div class="info-lbl">Nome do Cliente</div><div class="info-val">${m.name}</div></div>
+      ${m.orgId ? `<div class="info-row"><div class="info-lbl">Organization ID</div><div class="info-val"><span class="org-id">${m.orgId}</span></div></div>` : ''}
+      <div class="info-row"><div class="info-lbl">Website</div><div class="info-val"><a href="https://${m.website}" target="_blank">${m.website}</a></div></div>
+      <div class="info-row"><div class="info-lbl">Negócio</div><div class="info-val">${m.negocio}</div></div>
+      <div class="info-row"><div class="info-lbl">Países</div><div class="info-val">${tags(m.countries)}</div></div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-hdr">Relacionamento</div>
+      <div class="info-row"><div class="info-lbl">KAM Responsável</div><div class="info-val"><span class="kam ${kamCls[m.kam]||'tgr'}">${m.kam}</span></div></div>
+      <div class="info-row"><div class="info-lbl">TAM</div><div class="info-val">${m.tam||'—'}</div></div>
+      <div class="info-row"><div class="info-lbl">Implementation Manager</div><div class="info-val">${m.implementation||'—'}</div></div>
+      <div class="info-row"><div class="info-lbl">Canal de Comunicação</div><div class="info-val">${tags(m.canal)}</div></div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-hdr">Integração Técnica</div>
+      <div class="info-row"><div class="info-lbl">Tipo de Integração</div><div class="info-val">${tags(m.integracao)}</div></div>
+      <div class="info-row"><div class="info-lbl">Métodos de Pagamento</div><div class="info-val">${tags(m.metodos)}</div></div>
+      <div class="info-row"><div class="info-lbl">Provedores</div><div class="info-val">${tags(m.provedores)}</div></div>
+      <div class="info-row"><div class="info-lbl">Tipos de Cobrança</div><div class="info-val">${tags(m.cobranca)}</div></div>
+    </div>
+  </div>`;
+}
+
+function buildTam(mid, dl, isMerchant) {
+  const statusMap = { done:['s-done','Feito'], progress:['s-prog','Em andamento'], standby:['s-sb','Standby'], waiting:['s-wait','Aguardando time tech'], merchant:['s-merchant','Aguardando merchant'], provider:['s-provider','Aguardando provedor'] };
+  const cnt = {};
+  dl.forEach(d => cnt[d.status]=(cnt[d.status]||0)+1);
+
+  // Sort: feitos sempre por último; demais ordenados por prioridade alta→média→baixa
+  const prioOrder = {alta:0, media:1, baixa:2};
+  const sorted = [...dl].sort((a, b) => {
+    const aDone = a.status === 'done', bDone = b.status === 'done';
+    if (aDone !== bDone) return aDone ? 1 : -1;
+    return (prioOrder[a.prioridade||'media'] ?? 1) - (prioOrder[b.prioridade||'media'] ?? 1);
+  });
+
+  const prioBadge = {
+    alta: `<span style="display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:600;color:#EF4444;background:#FEF2F2;border:1px solid #FECACA;border-radius:20px;padding:1px 7px">● Alta</span>`,
+    media: `<span style="display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:600;color:#D97706;background:#FFFBEB;border:1px solid #FDE68A;border-radius:20px;padding:1px 7px">● Média</span>`,
+    baixa: `<span style="display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:600;color:#9CA3AF;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:20px;padding:1px 7px">● Baixa</span>`,
+  };
+
+  const cards = sorted.map(d => {
+    const [cls, lbl] = statusMap[d.status]||['tgr',d.status];
+    const tl = d.updates.map(u => `
+      <div class="tl-entry">
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-body"><div class="tl-text">${u.text}</div><div class="tl-date">${u.date}</div></div>
+      </div>`).join('');
+    return `<div class="demand-card" id="dc-${mid}-${d.id}">
+      <div class="dc-hdr" onclick="toggleDemand('${mid}',${d.id})">
+        <div class="dc-main">
+          <div class="dc-title">${d.title}</div>
+          <div class="dc-desc">${d.desc}</div>
+          <div class="dc-meta">
+            ${d.inicio?`<span class="dc-meta-item">📅 ${d.inicio}</span>`:''}
+            ${d.prazo?`<span class="dc-meta-item">⏱ Prazo: ${d.prazo}</span>`:''}
+            <span class="dc-meta-item">🕐 ${d.updates[d.updates.length-1].date}</span>
+          </div>
+        </div>
+        ${prioBadge[d.prioridade||'media']}
+        <button class="dc-edit-btn" onclick="event.stopPropagation();openEditDemandaModal('${mid}',${d.id})" title="Editar demanda"><svg width="13" height="13" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3l2 2-9 9H4v-2L13 3z"/></svg></button>
+        <button class="dc-edit-btn" onclick="event.stopPropagation();deleteDemanda('${mid}',${d.id})" title="Excluir demanda" style="color:#EF4444;border-color:#FECACA" onmouseenter="this.style.background='#FEF2F2'" onmouseleave="this.style.background=''"><svg width="13" height="13" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,5 15,5"/><path d="M6 5V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M14 5l-1 10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1L4 5"/></svg></button>
+        <span class="sbadge ${cls}">${lbl}</span>
+        <span class="dc-chevron">▾</span>
+      </div>
+      <div class="demand-detail">
+        <div class="dd-inner">
+          <div class="dd-sec"><div class="dd-lbl">Descrição</div><div class="dd-desc">${d.desc}</div></div>
+          <div class="dd-sec" style="background:#FAFBFF;border:1px solid #E5E7EB;border-radius:8px;padding:12px 14px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+              <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="#3B39F5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2a5 5 0 0 1 5 5v3.5l1.5 2h-13L4 10.5V7a5 5 0 0 1 5-5z"/><path d="M7 14.5a2 2 0 0 0 4 0"/></svg>
+              <div class="dd-lbl" style="margin:0">Próximo Follow-up</div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap">
+              <div style="display:flex;align-items:center;gap:6px">
+                <svg width="13" height="13" viewBox="0 0 18 18" fill="none" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="14" height="13" rx="1.5"/><path d="M2 7h14"/><path d="M6 1v4M12 1v4"/></svg>
+                <input type="date" id="fu-date-${mid}-${d.id}" style="border:1px solid #E5E7EB;border-radius:6px;padding:5px 8px;font-size:12.5px;color:#374151;outline:none;cursor:pointer;font-family:inherit" value="${d.followup?.date||''}" onchange="saveFollowup('${mid}',${d.id})">
+              </div>
+              <input type="text" id="fu-note-${mid}-${d.id}" style="flex:1;min-width:180px;border:1px solid #E5E7EB;border-radius:6px;padding:5px 10px;font-size:12.5px;color:#374151;outline:none;font-family:inherit" placeholder="Descreva a ação do follow-up..." value="${d.followup?.note||''}" onblur="saveFollowup('${mid}',${d.id})">
+              <button onclick="saveFollowup('${mid}',${d.id})" style="padding:5px 12px;background:#3B39F5;color:white;border:none;border-radius:6px;font-size:12px;cursor:pointer;font-weight:500;white-space:nowrap">Salvar</button>
+              ${d.followup?.date ? `<button onclick="clearFollowup('${mid}',${d.id})" style="padding:5px 10px;background:none;border:1px solid #E5E7EB;border-radius:6px;font-size:12px;cursor:pointer;color:#9CA3AF">Limpar</button>` : ''}
+            </div>
+            ${d.followup?.date ? `<div style="margin-top:8px;font-size:12px;color:#6B7280;display:flex;align-items:center;gap:6px"><span style="background:#EEF2FF;color:#3B39F5;border-radius:20px;padding:2px 10px;font-weight:500">📅 ${formatFollowupDate(d.followup.date)}</span>${d.followup.note?`<span style="color:#6B7280">${d.followup.note}</span>`:''}</div>` : ''}
+          </div>
+          <div class="dd-sec"><div class="dd-lbl">Histórico de Atualizações</div><div class="timeline" id="tl-${mid}-${d.id}">${tl}</div></div>
+          <div class="comment-area">
+            <div class="dd-lbl">${isMerchant ? 'Enviar comentário para a Yuno' : 'Adicionar Atualização'}</div>
+            <textarea class="comment-input" id="ta-${mid}-${d.id}" rows="3" placeholder="${isMerchant ? 'Escreva seu comentário ou dúvida...' : 'Descreva a atualização desta demanda...'}"></textarea>
+            <div style="display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap">
+              <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:160px">
+                <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="14" height="13" rx="1.5"/><path d="M2 7h14"/><path d="M6 1v4M12 1v4"/></svg>
+                <input type="date" id="td-${mid}-${d.id}" style="border:1px solid #E5E7EB;border-radius:6px;padding:5px 8px;font-size:12.5px;color:#374151;outline:none;cursor:pointer;font-family:inherit;flex:1" value="${new Date().toISOString().slice(0,10)}">
+              </div>
+              <div class="comment-actions" style="margin-top:0">
+                <button class="btn-sm btn-sm-o" onclick="document.getElementById('ta-${mid}-${d.id}').value=''">Cancelar</button>
+                <button class="btn-sm btn-sm-p" onclick="publishUpdate('${mid}',${d.id},this)">${isMerchant ? 'Enviar' : 'Publicar Update'}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  return `
+    <div style="display:flex;align-items:center;gap:0;margin-bottom:18px;background:#F3F4F6;border-radius:9px;padding:3px;width:fit-content">
+      <button class="tam-seg active" id="seg-dem-${mid}" onclick="switchTamSeg('dem','${mid}')">
+        <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="2" width="12" height="14" rx="1.5"/><line x1="6" y1="7" x2="12" y2="7"/><line x1="6" y1="10" x2="12" y2="10"/><line x1="6" y1="13" x2="9" y2="13"/></svg>
+        ${t('tam.demands')}
+      </button>
+      <button class="tam-seg" id="seg-pla-${mid}" onclick="switchTamSeg('pla','${mid}')">
+        <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="7"/><path d="M9 5v4l2.5 2.5"/></svg>
+        ${t('tam.improve')}
+      </button>
+    </div>
+
+    <div id="tam-dem-${mid}">
+      <div class="sec-hdr">
+        <span class="sec-title">${t('tam.demands')}</span>
+        <span class="sec-count">${dl.length} ${t('dem.total')}</span>
+        ${!isMerchant ? `<button class="btn-primary" style="margin-left:auto;font-size:12px;padding:6px 12px" onclick="openNovaDemandaModal('${mid}')">${t('dem.new')}</button>` : ''}
+      </div>
+      <div class="chips" id="chips-${mid}">
+        <div class="chip active" onclick="filterDemands('all',this,'${mid}')">${t('dem.all')} (${dl.length})</div>
+        <div class="chip" onclick="filterDemands('progress',this,'${mid}')">${t('dem.progress')} (${cnt.progress||0})</div>
+        <div class="chip" onclick="filterDemands('waiting',this,'${mid}')">${t('dem.waiting')} (${cnt.waiting||0})</div>
+        <div class="chip" onclick="filterDemands('standby',this,'${mid}')">${t('dem.standby')} (${cnt.standby||0})</div>
+        <div class="chip" onclick="filterDemands('done',this,'${mid}')">${t('dem.done')} (${cnt.done||0})</div>
+      </div>
+      <div class="demand-list">${cards}</div>
+    </div>
+
+    <div id="tam-pla-${mid}" class="hidden">
+      <div class="sec-hdr">
+        <span class="sec-title">Planos de Melhoria Consultiva</span>
+        <span class="sec-count" id="pla-count-${mid}">0 planos</span>
+        ${!isMerchant ? `<button class="btn-primary" style="margin-left:auto;font-size:12px;padding:6px 12px" onclick="openNovoPlanoModal('${mid}')">+ Novo Plano</button>` : ''}
+      </div>
+      <div id="pla-list-${mid}" class="demand-list"></div>
+      <div id="pla-empty-${mid}" class="placeholder">
+        <div class="ph-icon"><svg width="36" height="36" viewBox="0 0 18 18" fill="none" stroke="#D1D5DB" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="7"/><path d="M9 5v4l2.5 2.5"/></svg></div>
+        <h3>Nenhum plano cadastrado</h3>
+        <p>Registre aqui integrações futuras, melhorias de produto e iniciativas estratégicas proativas para este merchant.</p>
+      </div>
+    </div>
+
+    `;
+}
+
+function switchTab(tab, el, mid) {
+  ['info','impl','tam'].forEach(t => document.getElementById('tc-'+t)?.classList.add('hidden'));
+  document.getElementById('tc-'+tab)?.classList.remove('hidden');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  if (tab === 'tam') tamCtx = {mid, isMerchant: false};
+}
+
+function toggleDemand(mid, id) {
+  document.getElementById(`dc-${mid}-${id}`)?.classList.toggle('open');
+}
+
+function filterDemands(status, el, mid) {
+  document.querySelectorAll(`#chips-${mid} .chip`).forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.demand-card').forEach(c => {
+    c.style.display = status==='all' || c.querySelector('.'+{'progress':'s-prog','waiting':'s-wait','standby':'s-sb','done':'s-done'}[status]) ? '' : 'none';
+  });
+}
+
+// ===== MERCHANT VIEW =====
+function renderMerchantView(section='home') {
+  tamCtx = {mid: 'q2ingressos', isMerchant: true};
+  const dl = demands['q2ingressos']||[];
+  const open = dl.filter(d=>d.status!=='done').length;
+  let body = '';
+  if (section==='home' || section==='tam') {
+    body = `
+      <div class="m-hero">
+        <div class="m-hero-label">Bem-vinda de volta, Débora</div>
+        <div class="m-hero-name">Q2 Ingressos</div>
+        <div class="m-hero-meta">q2ingressos.com.br &nbsp;·&nbsp; KAM: Felipe Geraldelli &nbsp;·&nbsp; Integração: Lite SDK</div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card hi"><div class="stat-label">Demandas Abertas</div><div class="stat-value">${open}</div><div class="stat-sub">de ${dl.length} no total</div></div>
+        <div class="stat-card"><div class="stat-label">Aguardando Tech Yuno</div><div class="stat-value">${dl.filter(d=>d.status==='waiting').length}</div></div>
+        <div class="stat-card"><div class="stat-label">Em andamento</div><div class="stat-value">${dl.filter(d=>d.status==='progress').length}</div></div>
+        <div class="stat-card"><div class="stat-label">Concluídas</div><div class="stat-value">${dl.filter(d=>d.status==='done').length}</div></div>
+      </div>
+      ${buildTam('q2ingressos', dl, true)}`;
+  } else if (section==='impl') {
+    body = `<div id="kb-root" data-mid="q2ingressos" data-board="impl"></div>`;
+    document.getElementById('panel-mv').innerHTML = body;
+    renderKanban('q2ingressos', 'impl');
+    return;
+  } else if (section==='board-fr' || section==='board-dt' || section==='board-pc') {
+    const boardKey = section.replace('board-','');
+    body = `<div id="kb-root" data-mid="q2ingressos" data-board="${boardKey}"></div>`;
+    document.getElementById('panel-mv').innerHTML = body;
+    renderKanban('q2ingressos', boardKey);
+    return;
+  }
+  document.getElementById('panel-mv').innerHTML = body;
+}
+
+// ===== TOGGLE SENHA =====
+function toggleSenha() {
+  const input = document.getElementById('login-pass');
+  const icon = document.getElementById('eye-icon');
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.innerHTML = '<path d="M1 9s3-5 8-5 8 5 8 5-3 5-8 5-8-5-8-5z"/><line x1="3" y1="3" x2="15" y2="15"/>';
+  } else {
+    input.type = 'password';
+    icon.innerHTML = '<path d="M1 9s3-5 8-5 8 5 8 5-3 5-8 5-8-5-8-5z"/><circle cx="9" cy="9" r="2.5"/>';
+  }
+}
+
+// ===== EXTENSIBLE LISTS =====
+const listOptions = {
+  kams:            ['Felipe Geraldelli','Paola Brajao','Phillip Kraus','Martin Maximillian'],
+  tams:            ['Sarah Santiago','Amanda Lie','Emanuel Graciano'],
+  implementations: ['Helio Cantelli','Scarapicchia'],
+  canais:          ['WhatsApp','Slack','E-mail','Google Chat'],
+  integracoes:     ['Headless SDK','Headless SDK (Enrollment)','Lite SDK','Direct WorkFlow','Secure Fields (Payment)','Pluging VTEX'],
+  cobrancas:       ['Pagamento único','Subscription','Recorrência'],
+  paises:          ['🇧🇷 Brasil','🇦🇷 Argentina','🇨🇴 Colômbia','🇨🇱 Chile','🇺🇸 Estados Unidos','🇮🇹 Itália'],
+  metodos:         ['Card','PIX','PIX Parcelado','Boleto','ApplePay','GooglePay','Click To Pay'],
+  provedores:      ['Adyen','ClearSale','Cielo','Koin','MercadoPago','PagBank','Pagarme','PayPal','Stripe','Transfera','Unlimit','Vindi','WorldPay','3DS Yuno'],
+};
+
+function populateSelect(selId, listKey, currentVal) {
+  const sel = document.getElementById(selId);
+  if (!sel) return;
+  const opts = listOptions[listKey] || [];
+  sel.innerHTML = `<option value="">Selecionar...</option>` +
+    opts.map(o => `<option value="${o}"${o===currentVal?' selected':''}>${o}</option>`).join('') +
+    `<option value="__new__">+ Adicionar novo...</option>`;
+}
+
+function handleListSelect(sel, listKey) {
+  if (sel.value !== '__new__') return;
+  const nome = prompt(`Adicionar novo item à lista "${listKey.replace(/_/g,' ')}":`);
+  if (!nome || !nome.trim()) { sel.value = ''; return; }
+  const trimmed = nome.trim();
+  if (!listOptions[listKey]) listOptions[listKey] = [];
+  if (!listOptions[listKey].includes(trimmed)) listOptions[listKey].push(trimmed);
+  // Re-populate and select the new value
+  const currentSelId = sel.id;
+  populateSelect(currentSelId, listKey, trimmed);
+  sel.value = trimmed;
+  // If it's a people list, refresh all other selects with the same listKey
+  document.querySelectorAll(`[data-listkey="${listKey}"]`).forEach(s => {
+    if (s.id !== currentSelId) populateSelect(s.id, listKey, s.value);
+  });
+  sel.setAttribute('data-listkey', listKey);
+}
+
+// ===== MODAL =====
+let merchantModalCtx = {isNew: true, id: null};
+
+function openModal() {
+  merchantModalCtx = {isNew: true, id: null};
+  document.getElementById('merchant-modal-title').textContent = 'Novo Merchant';
+  ['nm-name','nm-website','nm-negocio','nm-orgid','nm-paises','nm-metodos','nm-provedores','nm-email','nm-notas'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('nm-senha').value = '';
+  populateSelect('nm-kam','kams','');
+  populateSelect('nm-tam','tams','');
+  populateSelect('nm-impl','implementations','');
+  populateSelect('nm-canal','canais','');
+  populateSelect('nm-integracao','integracoes','');
+  populateSelect('nm-cobranca','cobrancas','');
+  document.getElementById('modal-overlay').classList.remove('hidden');
+  setTimeout(() => document.getElementById('nm-name')?.focus(), 50);
+}
+
+function openEditMerchantModal(id) {
+  const m = merchants.find(x => x.id===id);
+  if (!m) return;
+  merchantModalCtx = {isNew: false, id};
+  document.getElementById('merchant-modal-title').textContent = 'Editar Merchant — ' + m.name;
+  document.getElementById('nm-name').value = m.name || '';
+  document.getElementById('nm-website').value = m.website || '';
+  document.getElementById('nm-negocio').value = m.negocio || '';
+  document.getElementById('nm-orgid').value = m.orgId || '';
+  document.getElementById('nm-paises').value = m.countries?.join(', ') || '';
+  document.getElementById('nm-metodos').value = m.metodos?.join(', ') || '';
+  document.getElementById('nm-provedores').value = m.provedores?.join(', ') || '';
+  document.getElementById('nm-email').value = '';
+  document.getElementById('nm-senha').value = '';
+  document.getElementById('nm-notas').value = '';
+  populateSelect('nm-kam','kams', m.kam||'');
+  populateSelect('nm-tam','tams', m.tam||'');
+  populateSelect('nm-impl','implementations', m.implementation||'');
+  populateSelect('nm-canal','canais', m.canal?.[0]||'');
+  populateSelect('nm-integracao','integracoes', m.integracao?.[0]||'');
+  populateSelect('nm-cobranca','cobrancas', m.cobranca?.[0]||'');
+  document.getElementById('modal-overlay').classList.remove('hidden');
+}
+
+function closeModal() { document.getElementById('modal-overlay').classList.add('hidden'); }
+function closeModalOut(e) { if (e.target===document.getElementById('modal-overlay')) closeModal(); }
+
+function deleteMerchant(id) {
+  const m = merchants.find(x => x.id===id);
+  if (!m) return;
+  if (!confirm(`Excluir o merchant "${m.name}"? Esta ação não pode ser desfeita.`)) return;
+  const idx = merchants.findIndex(x => x.id===id);
+  if (idx >= 0) merchants.splice(idx, 1);
+  persist();
+  renderTable();
+  renderTamGlobal();
+}
+
+function deleteDemanda(mid, id) {
+  if (!demands[mid]) return;
+  const d = demands[mid].find(x => x.id===id);
+  if (!d) return;
+  if (!confirm(`Excluir a demanda "${d.title}"? Esta ação não pode ser desfeita.`)) return;
+  demands[mid] = demands[mid].filter(x => x.id!==id);
+  persist();
+  // Re-render TAM view
+  const m = merchants.find(x => x.id===mid);
+  if (m) {
+    const dl = demands[mid] || [];
+    const tamContainer = document.getElementById('tc-tam');
+    if (tamContainer && !tamContainer.classList.contains('hidden')) {
+      tamContainer.innerHTML = buildTam(mid, dl, tamCtx.isMerchant);
+      renderPlanos(mid, tamCtx.isMerchant);
+    }
+    renderTamGlobal();
+  }
+}
+
+function saveMerchant() {
+  const name = document.getElementById('nm-name')?.value.trim();
+  if (!name) { document.getElementById('nm-name')?.focus(); return; }
+  const {isNew, id} = merchantModalCtx;
+  const data = {
+    name,
+    website: document.getElementById('nm-website')?.value.trim()||'',
+    negocio: document.getElementById('nm-negocio')?.value.trim()||'',
+    orgId: document.getElementById('nm-orgid')?.value.trim()||null,
+    countries: (document.getElementById('nm-paises')?.value||'').split(',').map(s=>s.trim()).filter(Boolean),
+    metodos: (document.getElementById('nm-metodos')?.value||'').split(',').map(s=>s.trim()).filter(Boolean),
+    provedores: (document.getElementById('nm-provedores')?.value||'').split(',').map(s=>s.trim()).filter(Boolean),
+    kam: document.getElementById('nm-kam')?.value||'',
+    tam: document.getElementById('nm-tam')?.value||'',
+    implementation: document.getElementById('nm-impl')?.value||'',
+    canal: [document.getElementById('nm-canal')?.value||''].filter(Boolean),
+    integracao: [document.getElementById('nm-integracao')?.value||''].filter(Boolean),
+    cobranca: [document.getElementById('nm-cobranca')?.value||''].filter(Boolean),
+  };
+  if (isNew) {
+    data.id = name.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+    merchants.push(data);
+  } else {
+    const idx = merchants.findIndex(m => m.id===id);
+    if (idx >= 0) merchants[idx] = {...merchants[idx], ...data};
+  }
+  closeModal();
+  renderTable();
+  persist();
+}
+
+// ===== COPY =====
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).catch(()=>{});
+  const orig = btn.innerHTML;
+  btn.innerHTML = '<svg viewBox="0 0 18 18" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round"><polyline points="3,9 7,13 15,5"/></svg>';
+  setTimeout(()=>btn.innerHTML=orig, 1200);
+}
+
+
+// ===== FILTER PANEL =====
+const filterConfig = [
+  { id:'kam', label:'KAM Responsável', icon:'<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12.5 16v-1a3.5 3.5 0 0 0-3.5-3.5h-3A3.5 3.5 0 0 0 2.5 15v1"/><circle cx="7" cy="6" r="3"/><path d="M15.5 16v-1a3.5 3.5 0 0 0-2.5-3.35"/><path d="M12.5 3.15a3 3 0 0 1 0 5.7"/></svg>', type:'checkbox', options:[{v:'Felipe Geraldelli'},{v:'Phillip Kraus'},{v:'Martin Seggewiss'},{v:'Paola B.'}] },
+  { id:'status', label:'Status', icon:'<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="2" width="12" height="14" rx="1.5"/><line x1="6" y1="7" x2="12" y2="7"/><line x1="6" y1="10" x2="12" y2="10"/><line x1="6" y1="13" x2="9" y2="13"/></svg>', type:'checkbox', options:[{v:'Ativo'},{v:'Em implementação'},{v:'Standby'},{v:'Inativo'}] },
+  { id:'integracao', label:'Integração', icon:'<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="6.5,4.5 2,9 6.5,13.5"/><polyline points="11.5,4.5 16,9 11.5,13.5"/><line x1="10.5" y1="2.5" x2="7.5" y2="15.5"/></svg>', type:'checkbox', options:[{v:'Headless SDK'},{v:'Lite SDK'},{v:'Direct WorkFlow'},{v:'Secure Fields'},{v:'Pluging VTEX'}] },
+  { id:'pais', label:'País', icon:'<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M9 2a5 5 0 0 1 0 10A5 5 0 0 1 9 2z"/><path d="M9 2c-1.5 2-2.5 3.5-2.5 5S7.5 11 9 12c1.5-1 2.5-2.5 2.5-5S10.5 4 9 2z"/><line x1="4" y1="7" x2="14" y2="7"/><path d="M9 12v4"/><path d="M6 16h6"/></svg>', type:'checkbox', options:[{v:'🇧🇷 Brasil'},{v:'🇦🇷 Argentina'},{v:'🇨🇴 Colômbia'},{v:'🇨🇱 Chile'},{v:'🇺🇸 Estados Unidos'},{v:'🇮🇹 Itália'}] },
+  { id:'metodo', label:'Métodos de Pagamento', icon:'<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="4" width="14" height="10" rx="1.5"/><line x1="2" y1="8" x2="16" y2="8"/><line x1="5" y1="12" x2="7" y2="12"/><line x1="9" y1="12" x2="11" y2="12"/></svg>', type:'checkbox', options:[{v:'Card'},{v:'PIX'},{v:'Boleto'},{v:'ApplePay'},{v:'GooglePay'},{v:'Click To Pay'},{v:'PIX Parcelado'}] },
+  { id:'provedor', label:'Provedores', icon:'<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="6.5,4.5 2,9 6.5,13.5"/><polyline points="11.5,4.5 16,9 11.5,13.5"/></svg>', type:'checkbox', options:[{v:'Adyen'},{v:'MercadoPago'},{v:'Pagarme'},{v:'Stripe'},{v:'ClearSale'},{v:'PagBank'},{v:'3DS Yuno'},{v:'PayPal'},{v:'WorldPay'},{v:'Cielo'}] },
+  { id:'canal', label:'Canal', icon:'<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M16 9A7 7 0 0 1 3.6 14.4L2 16l1.6-4A7 7 0 1 1 16 9z"/></svg>', type:'checkbox', options:[{v:'WhatsApp'},{v:'Slack'},{v:'E-mail'},{v:'Google Chat'}] },
+  { id:'cobranca', label:'Tipo de Cobrança', icon:'<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3" width="14" height="12" rx="1.5"/><path d="M6 3V2"/><path d="M12 3V2"/><line x1="2" y1="8" x2="16" y2="8"/></svg>', type:'checkbox', options:[{v:'Subscription'},{v:'Pagamento único'},{v:'Recorrência'}] },
+];
+
+let activeCat = 'kam';
+let filterSelections = {}; // { kamId: Set([...]) }
+
+function openFilters() {
+  document.getElementById('filter-overlay').classList.remove('hidden');
+  document.getElementById('filter-toggle-btn').classList.add('active');
+  renderFilterPanel();
+}
+function closeFilters() {
+  document.getElementById('filter-overlay').classList.add('hidden');
+  document.getElementById('filter-toggle-btn').classList.remove('active');
+}
+function closeFiltersOut(e) { if(e.target===document.getElementById('filter-overlay')) closeFilters(); }
+
+function renderFilterPanel() {
+  // Render categories
+  const cats = document.getElementById('fp-cats');
+  cats.innerHTML = filterConfig.map(f => `
+    <div class="fp-cat-item ${activeCat===f.id?'active':''}" onclick="selectCat('${f.id}')">
+      <span class="fp-cat-icon">${f.icon}</span>
+      ${f.label}
+    </div>
+  `).join('');
+  // Render options for active cat
+  renderCatOptions();
+}
+
+function selectCat(id) {
+  activeCat = id;
+  renderFilterPanel();
+}
+
+function renderCatOptions() {
+  const cat = filterConfig.find(f=>f.id===activeCat);
+  if(!cat) return;
+  const sel = filterSelections[cat.id] || new Set();
+  const opts = document.getElementById('fp-opts');
+  opts.innerHTML = `<div class="fp-options-title">${cat.label}</div>` +
+    cat.options.map(o => `
+      <div class="fp-option" onclick="toggleFilter('${cat.id}','${o.v}')">
+        <div class="${cat.type==='radio'?'fp-radio':'fp-checkbox'} ${sel.has(o.v)?'checked':''}"></div>
+        <span class="fp-option-label">${o.v}</span>
+        ${o.sub ? `<span class="fp-option-sub">${o.sub}</span>` : ''}
+      </div>
+    `).join('');
+}
+
+function toggleFilter(catId, value) {
+  if(!filterSelections[catId]) filterSelections[catId] = new Set();
+  const s = filterSelections[catId];
+  if(s.has(value)) s.delete(value); else s.add(value);
+  renderCatOptions();
+}
+
+function applyFilters() {
+  closeFilters();
+  updateActiveFiltersRow();
+  applyTableFilter();
+}
+
+function updateActiveFiltersRow() {
+  const row = document.getElementById('active-filters-row');
+  const chips = [];
+  Object.entries(filterSelections).forEach(([catId, vals]) => {
+    const cat = filterConfig.find(f=>f.id===catId);
+    vals.forEach(v => chips.push({ catId, val:v, label:`${cat.label}: ${v}` }));
+  });
+  if(!chips.length) { row.classList.add('hidden'); return; }
+  row.classList.remove('hidden');
+  row.innerHTML = '<span style="font-size:12px;color:#9CA3AF;margin-right:4px">Filtros:</span>' +
+    chips.map(c => `<span class="active-filter-chip">${c.label}<button onclick="removeFilter('${c.catId}','${c.val}')">×</button></span>`).join('') +
+    `<button style="font-size:12px;color:#3B39F5;background:none;border:none;cursor:pointer;margin-left:4px" onclick="clearAllFilters()">Limpar tudo</button>`;
+}
+
+function removeFilter(catId, val) {
+  filterSelections[catId]?.delete(val);
+  updateActiveFiltersRow();
+  applyTableFilter();
+}
+
+function clearAllFilters() {
+  filterSelections = {};
+  updateActiveFiltersRow();
+  applyTableFilter();
+  closeFilters();
+}
+
+function applyTableFilter() {
+  const rows = document.querySelectorAll('#merchants-tbody tr');
+  rows.forEach((row, i) => {
+    const m = merchants[i];
+    if(!m) return;
+    let show = true;
+    Object.entries(filterSelections).forEach(([catId, vals]) => {
+      if(!vals.size) return;
+      if(catId==='kam' && !vals.has(m.kam)) show=false;
+      if(catId==='integracao' && !m.integracao.some(v=>vals.has(v))) show=false;
+      if(catId==='pais' && !m.countries.some(v=>vals.has(v))) show=false;
+      if(catId==='metodo' && !m.metodos.some(v=>vals.has(v))) show=false;
+      if(catId==='provedor' && !m.provedores.some(v=>vals.has(v))) show=false;
+      if(catId==='canal' && !m.canal.some(v=>vals.has(v))) show=false;
+      if(catId==='cobranca' && !m.cobranca.some(v=>vals.has(v))) show=false;
+    });
+    row.style.display = show ? '' : 'none';
+  });
+}
+
+// ===== TAM CONTEXT =====
+let tamCtx = {mid: null, isMerchant: false};
+
+function reRenderTam() {
+  const {mid, isMerchant} = tamCtx;
+  if (!mid) return;
+  if (isMerchant) {
+    renderMerchantView('tam');
+  } else {
+    const tcTam = document.getElementById('tc-tam');
+    if (tcTam) tcTam.innerHTML = buildTam(mid, demands[mid]||[], false);
+  }
+}
+
+// ===== TAM SEGMENT TOGGLE =====
+function switchTamSeg(type, mid) {
+  ['dem','pla'].forEach(t => {
+    document.getElementById(`seg-${t}-${mid}`)?.classList.toggle('active', t===type);
+    document.getElementById(`tam-${t}-${mid}`)?.classList.toggle('hidden', t!==type);
+  });
+  if (type === 'pla') renderPlanos(mid);
+}
+
+// ===== PUBLISH UPDATE =====
+function publishUpdate(mid, id, btn) {
+  const ta = document.getElementById(`ta-${mid}-${id}`);
+  const text = ta?.value.trim();
+  if (!text) { ta?.focus(); return; }
+  const dl = demands[mid];
+  if (!dl) return;
+  const d = dl.find(d => d.id == id);
+  if (!d) return;
+  const dateInput = document.getElementById(`td-${mid}-${id}`);
+  let dateStr;
+  if (dateInput?.value) {
+    const [y,m,day] = dateInput.value.split('-');
+    dateStr = `${day}/${m}/${y.slice(2)}`;
+  } else {
+    dateStr = new Date().toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'});
+  }
+  d.updates.push({date: dateStr, text});
+  persist();
+  ta.value = '';
+  const tlEl = document.getElementById(`tl-${mid}-${id}`);
+  if (tlEl) {
+    tlEl.innerHTML = d.updates.map(u => `
+      <div class="tl-entry">
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-body"><div class="tl-text">${u.text}</div><div class="tl-date">${u.date}</div></div>
+      </div>`).join('');
+  }
+  const orig = btn.textContent;
+  btn.textContent = 'Publicado ✓';
+  btn.style.background = '#22C55E';
+  setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 1500);
+}
+
+// ===== DEMANDA MODAL =====
+let demandModalCtx = {mid: null, id: null, isNew: true};
+
+function openNovaDemandaModal(mid) {
+  demandModalCtx = {mid, id: null, isNew: true};
+  document.getElementById('demand-modal-title').textContent = 'Nova Demanda';
+  ['dm-title','dm-desc','dm-prazo','dm-update'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('dm-status').value = 'progress';
+  document.getElementById('dm-prioridade').value = 'media';
+  document.getElementById('demand-modal-overlay').classList.remove('hidden');
+  document.getElementById('dm-title').focus();
+}
+
+function openEditDemandaModal(mid, id) {
+  const d = (demands[mid]||[]).find(d => d.id == id);
+  if (!d) return;
+  demandModalCtx = {mid, id, isNew: false};
+  document.getElementById('demand-modal-title').textContent = 'Editar Demanda';
+  document.getElementById('dm-title').value = d.title;
+  document.getElementById('dm-desc').value = d.desc;
+  document.getElementById('dm-status').value = d.status;
+  document.getElementById('dm-prioridade').value = d.prioridade || 'media';
+  document.getElementById('dm-prazo').value = d.prazo || '';
+  document.getElementById('dm-update').value = '';
+  document.getElementById('demand-modal-overlay').classList.remove('hidden');
+}
+
+function closeDemandaModal() { document.getElementById('demand-modal-overlay').classList.add('hidden'); }
+function closeDemandaModalOut(e) { if (e.target === document.getElementById('demand-modal-overlay')) closeDemandaModal(); }
+
+function saveDemandaModal() {
+  const {mid, id, isNew} = demandModalCtx;
+  const title = document.getElementById('dm-title').value.trim();
+  const desc = document.getElementById('dm-desc').value.trim();
+  const status = document.getElementById('dm-status').value;
+  const prioridade = document.getElementById('dm-prioridade').value;
+  const prazo = document.getElementById('dm-prazo').value.trim() || null;
+  const updateText = document.getElementById('dm-update').value.trim();
+  if (!title) { document.getElementById('dm-title').focus(); return; }
+  if (!demands[mid]) demands[mid] = [];
+  const today = new Date().toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', year:'2-digit'});
+  if (isNew) {
+    demands[mid].push({id: Date.now(), title, desc, status, prioridade, inicio: today, prazo, updates: [{date: today, text: updateText || 'Demanda criada.'}]});
+  } else {
+    const d = demands[mid].find(d => d.id == id);
+    if (d) { d.title = title; d.desc = desc; d.status = status; d.prioridade = prioridade; d.prazo = prazo; if (updateText) d.updates.push({date: today, text: updateText}); }
+  }
+  closeDemandaModal();
+  reRenderTam();
+  persist();
+}
+
+// ===== PLANOS DATA + MODAL =====
+const planos = {};
+const boards = {};
+let planModalCtx = {mid: null, id: null, isNew: true};
+
+// ===== PERSISTÊNCIA =====
+function persist() {
+  try { localStorage.setItem('yuno_gm_data', JSON.stringify({merchants, demands, planos, metas, metasGerais, boards})); } catch(e) {}
+}
+(function restoreData() {
+  try {
+    const saved = localStorage.getItem('yuno_gm_data');
+    if (!saved) return;
+    const data = JSON.parse(saved);
+    if (data.merchants?.length) {
+      merchants.length = 0;
+      data.merchants.forEach(m => merchants.push(m));
+    }
+    if (data.demands) {
+      Object.keys(data.demands).forEach(k => { demands[k] = data.demands[k]; });
+    }
+    if (data.planos) {
+      Object.keys(data.planos).forEach(k => { planos[k] = data.planos[k]; });
+    }
+    if (data.metas) {
+      Object.keys(data.metas).forEach(k => { metas[k] = data.metas[k]; });
+    }
+    if (data.metasGerais?.length) {
+      data.metasGerais.forEach(saved => {
+        const mg = metasGerais.find(m => m.id === saved.id);
+        if (mg) mg.status = saved.status;
+      });
+    }
+    if (data.boards) {
+      Object.keys(data.boards).forEach(k => { boards[k] = data.boards[k]; });
+    }
+  } catch(e) {}
+})();
+
+function renderPlanos(mid) {
+  const pl = planos[mid] || [];
+  const list = document.getElementById(`pla-list-${mid}`);
+  const empty = document.getElementById(`pla-empty-${mid}`);
+  const countEl = document.getElementById(`pla-count-${mid}`);
+  if (!list) return;
+  const statusBadge = {ideia:'<span class="sbadge" style="background:#F3F4F6;color:#374151;border:1px solid #E5E7EB;font-size:11px;padding:2px 8px">Ideia</span>', analise:'<span class="sbadge s-sb" style="font-size:11px;padding:2px 8px">Em análise</span>', aprovado:'<span class="sbadge s-prog" style="font-size:11px;padding:2px 8px">Aprovado</span>', desenvolvimento:'<span class="sbadge s-done" style="font-size:11px;padding:2px 8px">Em desenvolvimento</span>'};
+  const tipoLabel = {integracao:'Nova Integração',melhoria:'Melhoria',estrategico:'Estratégico',reducao:'Redução de Atrito'};
+  const prioColor = {alta:'#EF4444',media:'#F59E0B',baixa:'#9CA3AF'};
+  if (countEl) countEl.textContent = `${pl.length} plano${pl.length!==1?'s':''}`;
+  if (pl.length === 0) { list.innerHTML = ''; if (empty) empty.classList.remove('hidden'); return; }
+  if (empty) empty.classList.add('hidden');
+  list.innerHTML = pl.map(p => `
+    <div class="plan-card">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:4px">
+        <div class="plan-title">${p.title}</div>
+        <button class="plan-edit-btn" onclick="openEditPlanoModal('${mid}',${p.id})">Editar</button>
+      </div>
+      <div class="plan-desc">${p.desc||''}</div>
+      <div class="plan-meta">
+        <span class="plan-tag ${p.tipo}">${tipoLabel[p.tipo]||p.tipo}</span>
+        ${statusBadge[p.status]||''}
+        <span style="font-size:11.5px;color:${prioColor[p.prioridade]}">● ${p.prioridade.charAt(0).toUpperCase()+p.prioridade.slice(1)}</span>
+        <span style="font-size:11.5px;color:#9CA3AF">Por: ${p.propositor==='yuno'?'Yuno':'Merchant'}</span>
+        ${p.impacto?`<span style="font-size:11.5px;color:#6B7280;font-style:italic">${p.impacto}</span>`:''}
+      </div>
+    </div>`).join('');
+}
+
+function openNovoPlanoModal(mid) {
+  planModalCtx = {mid, id: null, isNew: true};
+  document.getElementById('plan-modal-title').textContent = 'Novo Plano de Melhoria';
+  ['pm-title','pm-desc','pm-impacto'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('pm-tipo').value = 'melhoria';
+  document.getElementById('pm-prioridade').value = 'media';
+  document.getElementById('pm-status').value = 'ideia';
+  document.getElementById('pm-propositor').value = 'yuno';
+  document.getElementById('plan-modal-overlay').classList.remove('hidden');
+  document.getElementById('pm-title').focus();
+}
+
+function openEditPlanoModal(mid, id) {
+  const p = (planos[mid]||[]).find(p => p.id == id);
+  if (!p) return;
+  planModalCtx = {mid, id, isNew: false};
+  document.getElementById('plan-modal-title').textContent = 'Editar Plano';
+  document.getElementById('pm-title').value = p.title;
+  document.getElementById('pm-desc').value = p.desc;
+  document.getElementById('pm-tipo').value = p.tipo;
+  document.getElementById('pm-prioridade').value = p.prioridade;
+  document.getElementById('pm-status').value = p.status;
+  document.getElementById('pm-propositor').value = p.propositor;
+  document.getElementById('pm-impacto').value = p.impacto||'';
+  document.getElementById('plan-modal-overlay').classList.remove('hidden');
+}
+
+function closePlanoModal() { document.getElementById('plan-modal-overlay').classList.add('hidden'); }
+function closePlanoModalOut(e) { if (e.target === document.getElementById('plan-modal-overlay')) closePlanoModal(); }
+
+function savePlanoModal() {
+  const {mid, id, isNew} = planModalCtx;
+  const title = document.getElementById('pm-title').value.trim();
+  if (!title) { document.getElementById('pm-title').focus(); return; }
+  if (!planos[mid]) planos[mid] = [];
+  const data = {
+    id: isNew ? Date.now() : id,
+    title,
+    desc: document.getElementById('pm-desc').value.trim(),
+    tipo: document.getElementById('pm-tipo').value,
+    prioridade: document.getElementById('pm-prioridade').value,
+    status: document.getElementById('pm-status').value,
+    propositor: document.getElementById('pm-propositor').value,
+    impacto: document.getElementById('pm-impacto').value.trim()
+  };
+  if (isNew) { planos[mid].push(data); }
+  else { const idx = planos[mid].findIndex(p => p.id == id); if (idx >= 0) planos[mid][idx] = data; }
+  persist();
+  closePlanoModal();
+  renderPlanos(mid);
+}
+
+// ===== FOLLOW-UP =====
+function saveFollowup(mid, id) {
+  const dl = demands[mid];
+  if (!dl) return;
+  const d = dl.find(d => d.id == id);
+  if (!d) return;
+  const dateEl = document.getElementById(`fu-date-${mid}-${id}`);
+  const noteEl = document.getElementById(`fu-note-${mid}-${id}`);
+  if (!dateEl) return;
+  d.followup = { date: dateEl.value, note: noteEl?.value.trim() || '' };
+  persist();
+  // re-render just the followup display
+  const fuDisplay = document.getElementById(`fu-display-${mid}-${id}`);
+  if (fuDisplay && d.followup.date) {
+    fuDisplay.innerHTML = `<span style="background:#EEF2FF;color:#3B39F5;border-radius:20px;padding:2px 10px;font-weight:500">📅 ${formatFollowupDate(d.followup.date)}</span>${d.followup.note?`<span style="color:#6B7280;margin-left:6px">${d.followup.note}</span>`:''}`;
+  }
+  refreshNotifs();
+}
+
+function clearFollowup(mid, id) {
+  const dl = demands[mid];
+  if (!dl) return;
+  const d = dl.find(d => d.id == id);
+  if (d) d.followup = null;
+  persist();
+  reRenderTam();
+  refreshNotifs();
+}
+
+function formatFollowupDate(dateStr) {
+  if (!dateStr) return '';
+  const [y,m,d] = dateStr.split('-');
+  const date = new Date(y, m-1, d);
+  const today = new Date(); today.setHours(0,0,0,0);
+  const diff = Math.round((date - today) / 86400000);
+  const formatted = `${d}/${m}/${y.slice(2)}`;
+  if (diff < 0) return `${formatted} (${Math.abs(diff)}d atraso)`;
+  if (diff === 0) return `${formatted} (hoje)`;
+  if (diff === 1) return `${formatted} (amanhã)`;
+  if (diff <= 7) return `${formatted} (em ${diff}d)`;
+  return formatted;
+}
+
+// ===== NOTIFICATIONS =====
+function getAllFollowups() {
+  const items = [];
+  const today = new Date(); today.setHours(0,0,0,0);
+  Object.entries(demands).forEach(([mid, dl]) => {
+    const merchant = merchants.find(m => m.id === mid);
+    dl.forEach(d => {
+      if (!d.followup?.date) return;
+      const [y,m,day] = d.followup.date.split('-');
+      const fuDate = new Date(y, m-1, day);
+      const diff = Math.round((fuDate - today) / 86400000);
+      items.push({ mid, merchantName: merchant?.name || mid, demand: d, diff, fuDate });
+    });
+  });
+  items.sort((a,b) => a.diff - b.diff);
+  return items;
+}
+
+function refreshNotifs() {
+  const items = getAllFollowups();
+  const badge = document.getElementById('notif-badge');
+  const countEl = document.getElementById('notif-panel-count');
+  const list = document.getElementById('notif-list');
+  if (!badge) return;
+
+  const urgent = items.filter(i => i.diff <= 3);
+  if (urgent.length > 0) {
+    badge.textContent = urgent.length > 9 ? '9+' : urgent.length;
+    badge.classList.remove('hidden');
+  } else {
+    badge.classList.add('hidden');
+  }
+  if (countEl) countEl.textContent = `${items.length} follow-up${items.length!==1?'s':''}`;
+  if (!list) return;
+
+  if (items.length === 0) {
+    list.innerHTML = `<div style="padding:24px;text-align:center;color:#9CA3AF;font-size:13px">Nenhum follow-up agendado</div>`;
+    return;
+  }
+
+  list.innerHTML = items.map(item => {
+    const {merchantName, demand: d, diff} = item;
+    const urgency = diff < 0 ? 'color:#EF4444' : diff === 0 ? 'color:#F59E0B' : diff <= 3 ? 'color:#F59E0B' : 'color:#9CA3AF';
+    const label = diff < 0 ? `${Math.abs(diff)}d atraso` : diff === 0 ? 'Hoje' : diff === 1 ? 'Amanhã' : `em ${diff}d`;
+    return `<div onclick="openMerchantToTam('${item.mid}')" style="padding:12px 16px;border-bottom:1px solid #F9FAFB;cursor:pointer;transition:background .1s" onmouseenter="this.style.background='#F9FAFB'" onmouseleave="this.style.background=''">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:12px;font-weight:500;color:#374151">${merchantName}</span>
+        <span style="font-size:11px;font-weight:600;${urgency}">${label}</span>
+      </div>
+      <div style="font-size:13px;color:#111827;font-weight:500;margin-bottom:2px">${d.title}</div>
+      ${d.followup?.note ? `<div style="font-size:12px;color:#6B7280">${d.followup.note}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function toggleNotifPanel() {
+  const panel = document.getElementById('notif-panel');
+  if (!panel) return;
+  const isHidden = panel.classList.contains('hidden');
+  panel.classList.toggle('hidden', !isHidden);
+  if (isHidden) refreshNotifs();
+}
+
+document.addEventListener('click', e => {
+  const notifBtn = document.getElementById('notif-btn');
+  const notifPanel = document.getElementById('notif-panel');
+  if (notifPanel && notifBtn && !notifBtn.parentElement.contains(e.target)) {
+    notifPanel.classList.add('hidden');
+  }
+});
+
+// ===== METAS GERAIS (fixadas) =====
+const metasGerais = [
+  {id:'mg1', title:'Projetos de melhoria approval rate', status:'Em andamento'},
+  {id:'mg2', title:'1 Reunião presencial por quarter', status:'Em andamento'},
+  {id:'mg3', title:'Implementação de novos produtos e meios de pagamentos / provedores', status:'Em andamento'},
+];
+
+const mgStatusColors = {
+  'Atingida':    {bg:'#F0FDF4', color:'#166534', border:'#86EFAC', dot:'#16A34A'},
+  'Em andamento':{bg:'#EFF6FF', color:'#1D4ED8', border:'#93C5FD', dot:'#3B82F6'},
+  'Atrasada':    {bg:'#FEF2F2', color:'#991B1B', border:'#FCA5A5', dot:'#EF4444'},
+  'Não iniciada':{bg:'#F3F4F6', color:'#374151', border:'#D1D5DB', dot:'#9CA3AF'},
+};
+const mgStatusList = ['Em andamento','Atingida','Atrasada','Não iniciada'];
+
+function renderMetasGerais() {
+  const container = document.getElementById('metas-gerais-list');
+  if (!container) return;
+  container.innerHTML = metasGerais.map((mg, i) => {
+    const sc = mgStatusColors[mg.status] || mgStatusColors['Não iniciada'];
+    const opts = mgStatusList.map(s =>
+      `<option value="${s}"${mg.status===s?' selected':''}>${s}</option>`
+    ).join('');
+    const isLast = i === metasGerais.length - 1;
+    return `<div style="display:flex;align-items:center;gap:16px;padding:14px 20px;${isLast?'':'border-bottom:1px solid #F3F4F6'}">
+      <div style="width:26px;height:26px;border-radius:50%;background:#EEEFFE;color:#3B39F5;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">${i+1}</div>
+      <div style="flex:1;font-size:13.5px;font-weight:500;color:#111827;line-height:1.4">${mg.title}</div>
+      <select onchange="setMetaGeralStatus('${mg.id}',this.value)" style="appearance:none;-webkit-appearance:none;background:${sc.bg};color:${sc.color};border:1px solid ${sc.border};border-radius:20px;padding:5px 26px 5px 12px;font-size:12px;font-weight:600;cursor:pointer;outline:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2210%22 height=%2210%22 viewBox=%220 0 12 12%22%3E%3Cpath d=%22M2 4l4 4 4-4%22 stroke=%22${encodeURIComponent(sc.color)}%22 stroke-width=%221.5%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 8px center;flex-shrink:0">
+        ${opts}
+      </select>
+    </div>`;
+  }).join('');
+}
+
+function setMetaGeralStatus(id, status) {
+  const mg = metasGerais.find(m => m.id === id);
+  if (mg) { mg.status = status; persist(); renderMetasGerais(); }
+}
+
+// ===== METAS ESPECÍFICAS POR TAM =====
+const metas = {};
+let currentMetaTam = '__global__';
+
+function switchMetaTam(mid) {
+  currentMetaTam = mid;
+  const data = getMetasData(mid);
+  const countEl = document.getElementById('met-tam-count');
+  if (countEl) countEl.textContent = `${data.rows.length} meta${data.rows.length!==1?'s':''}`;
+  renderMetas(mid, 'met-table-tam');
+  setTimeout(() => renderMetaCharts(mid), 80);
+}
+
+function renderMetaCharts(mid) {
+  // Atualiza badge de escopo
+  const badge = document.getElementById('chart-scope-badge');
+  if (badge) {
+    if (mid === '__global__') {
+      badge.textContent = 'Todos os TAMs';
+    } else {
+      const m = merchants.find(x => x.id == mid);
+      badge.textContent = m ? m.name : mid;
+    }
+  }
+
+  // Agrega metas do TAM selecionado (ou todos)
+  let rows = [];
+  if (mid === '__global__') {
+    rows = [...(getMetasData('__global__').rows)];
+    merchants.forEach(m => { rows = rows.concat(getMetasData(m.id).rows); });
+  } else {
+    rows = getMetasData(mid).rows;
+  }
+
+  // --- Chart 1: Metas por Status ---
+  const c1 = document.getElementById('chart-status');
+  if (!c1) return;
+  const ctx1 = c1.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const W1 = c1.parentElement?.offsetWidth - 40 || 400, H1 = 160;
+  c1.width = W1 * dpr; c1.height = H1 * dpr;
+  c1.style.width = W1+'px'; c1.style.height = H1+'px';
+  ctx1.scale(dpr, dpr);
+
+  const statusList = ['Em andamento','Atingida','Atrasada','Não iniciada'];
+  const statusCounts = statusList.map(s => rows.filter(r => r.data.col_status === s).length);
+  const maxS = Math.max(...statusCounts, 1);
+  const barColors = ['#3B39F5','#22C55E','#EF4444','#9CA3AF'];
+
+  ctx1.clearRect(0,0,W1,H1);
+  const padL=10, padR=10, padT=10, padB=40;
+  const chartH = H1-padT-padB;
+  const bw = Math.floor((W1-padL-padR)/statusList.length * 0.55);
+  const gap = Math.floor((W1-padL-padR)/statusList.length);
+
+  // grid lines
+  ctx1.setLineDash([4,4]);
+  ctx1.strokeStyle='#E5E7EB';
+  ctx1.lineWidth=1;
+  for (let i=0;i<=4;i++) {
+    const y = padT + chartH - (chartH/4)*i;
+    ctx1.beginPath(); ctx1.moveTo(padL,y); ctx1.lineTo(W1-padR,y); ctx1.stroke();
+  }
+  ctx1.setLineDash([]);
+
+  statusList.forEach((s,i) => {
+    const x = padL + gap*i + (gap-bw)/2;
+    const bh = statusCounts[i] > 0 ? Math.max(4, (statusCounts[i]/maxS)*chartH) : 2;
+    const y = padT + chartH - bh;
+    // bar
+    ctx1.fillStyle = barColors[i];
+    const r = 4;
+    ctx1.beginPath();
+    ctx1.moveTo(x+r,y); ctx1.lineTo(x+bw-r,y);
+    ctx1.quadraticCurveTo(x+bw,y,x+bw,y+r);
+    ctx1.lineTo(x+bw,y+bh); ctx1.lineTo(x,y+bh); ctx1.lineTo(x,y+r);
+    ctx1.quadraticCurveTo(x,y,x+r,y); ctx1.closePath();
+    ctx1.fill();
+    // value label
+    if (statusCounts[i] > 0) {
+      ctx1.fillStyle='#374151'; ctx1.font='bold 11px Inter,sans-serif'; ctx1.textAlign='center';
+      ctx1.fillText(statusCounts[i], x+bw/2, y-4);
+    }
+    // x label
+    const short = ['Andamento','Atingida','Atrasada','N. iniciada'];
+    ctx1.fillStyle='#9CA3AF'; ctx1.font='10px Inter,sans-serif'; ctx1.textAlign='center';
+    ctx1.fillText(short[i], x+bw/2, H1-padB+14);
+  });
+
+  // --- Chart 2: % Atingido por meta ---
+  const c2 = document.getElementById('chart-pct');
+  if (!c2) return;
+  const ctx2 = c2.getContext('2d');
+  const W2 = c2.parentElement?.offsetWidth - 40 || 400, H2 = 160;
+  c2.width = W2 * dpr; c2.height = H2 * dpr;
+  c2.style.width = W2+'px'; c2.style.height = H2+'px';
+  ctx2.scale(dpr, dpr);
+
+  const pctRows = rows.filter(r => r.data.col_pct);
+  const labels2 = pctRows.map(r => (r.data.col_name||'Meta').substring(0,12));
+  const vals2 = pctRows.map(r => parseInt(r.data.col_pct)||0);
+  const avg = vals2.length ? Math.round(vals2.reduce((a,b)=>a+b,0)/vals2.length) : 0;
+
+  ctx2.clearRect(0,0,W2,H2);
+  const padL2=10, padR2=10, padT2=10, padB2=40;
+  const chartH2 = H2-padT2-padB2;
+
+  // grid lines
+  ctx2.setLineDash([4,4]);
+  ctx2.strokeStyle='#E5E7EB'; ctx2.lineWidth=1;
+  for (let i=0;i<=4;i++) {
+    const y = padT2 + chartH2 - (chartH2/4)*i;
+    ctx2.beginPath(); ctx2.moveTo(padL2,y); ctx2.lineTo(W2-padR2,y); ctx2.stroke();
+  }
+  ctx2.setLineDash([]);
+
+  if (vals2.length === 0) {
+    ctx2.fillStyle='#D1D5DB'; ctx2.font='12px Inter,sans-serif'; ctx2.textAlign='center';
+    ctx2.fillText('Sem dados de % Atingido', W2/2, H2/2);
+    return;
+  }
+
+  const bw2 = Math.max(16, Math.min(40, Math.floor((W2-padL2-padR2)/vals2.length * 0.55)));
+  const gap2 = Math.floor((W2-padL2-padR2)/vals2.length);
+
+  vals2.forEach((v,i) => {
+    const x = padL2 + gap2*i + (gap2-bw2)/2;
+    const bh = Math.max(2, (v/100)*chartH2);
+    const y = padT2 + chartH2 - bh;
+    ctx2.fillStyle = v===100 ? '#22C55E' : '#3B39F5';
+    const r = 4;
+    ctx2.beginPath();
+    ctx2.moveTo(x+r,y); ctx2.lineTo(x+bw2-r,y);
+    ctx2.quadraticCurveTo(x+bw2,y,x+bw2,y+r);
+    ctx2.lineTo(x+bw2,y+bh); ctx2.lineTo(x,y+bh); ctx2.lineTo(x,y+r);
+    ctx2.quadraticCurveTo(x,y,x+r,y); ctx2.closePath();
+    ctx2.fill();
+    ctx2.fillStyle='#374151'; ctx2.font='bold 10px Inter,sans-serif'; ctx2.textAlign='center';
+    ctx2.fillText(v+'%', x+bw2/2, y-4);
+    ctx2.fillStyle='#9CA3AF'; ctx2.font='10px Inter,sans-serif';
+    ctx2.fillText(labels2[i], x+bw2/2, H2-padB2+14);
+  });
+
+  // linha de média (verde)
+  if (vals2.length > 1) {
+    const avgY = padT2 + chartH2 - (avg/100)*chartH2;
+    ctx2.beginPath();
+    ctx2.strokeStyle='#22C55E'; ctx2.lineWidth=2; ctx2.setLineDash([]);
+    vals2.forEach((v,i) => {
+      const x = padL2 + gap2*i + gap2/2;
+      const y = padT2 + chartH2 - (v/100)*chartH2;
+      i===0 ? ctx2.moveTo(x,y) : ctx2.lineTo(x,y);
+    });
+    ctx2.stroke();
+  }
+}
+
+function renderMetaTamFilter() {
+  const sel = document.getElementById('met-tam-filter');
+  if (!sel) return;
+  const cur = sel.value || '__global__';
+  sel.innerHTML = `<option value="__global__">Todos os TAMs</option>` +
+    merchants.map(m => `<option value="${m.id}"${m.id==cur?' selected':''}>${m.name}</option>`).join('');
+}
+
+function getMetasData(mid) {
+  if (!metas[mid]) {
+    metas[mid] = {
+      columns: [
+        {id:'col_name', label:'Meta', fixed:true},
+        {id:'col_status', label:'Status'},
+        {id:'col_pct', label:'% Atingido'},
+        {id:'col_prazo', label:'Prazo'},
+        {id:'col_obs', label:'Observação'},
+      ],
+      rows: []
+    };
+  }
+  return metas[mid];
+}
+
+function pctBadge(val) {
+  const n = parseInt(val) || 0;
+  let bg, color, border;
+  if (n === 100) { bg='#F0FDF4'; color='#166534'; border='#86EFAC'; }
+  else if (n >= 70) { bg='#EFF6FF'; color='#1D4ED8'; border='#93C5FD'; }
+  else if (n >= 40) { bg='#FFFBEB'; color='#92400E'; border='#FCD34D'; }
+  else if (n > 0)   { bg='#FEF2F2'; color='#991B1B'; border='#FCA5A5'; }
+  else              { bg='#F3F4F6'; color='#9CA3AF'; border='#E5E7EB'; }
+  return val ? `style="background:${bg};color:${color};border:1px solid ${border};border-radius:20px;padding:2px 10px;font-size:12px;font-weight:600;display:inline-flex;align-items:center"` : '';
+}
+
+function renderMetas(mid, containerId) {
+  const cid = containerId || `met-table-${mid}`;
+  const container = document.getElementById(cid);
+  const countEl = document.getElementById(cid === 'met-table-tam' ? 'met-tam-count' : (mid === '__global__' ? 'met-global-count' : `met-count-${mid}`));
+  if (!container) return;
+  const data = getMetasData(mid);
+  if (countEl) countEl.textContent = `${data.rows.length} meta${data.rows.length!==1?'s':''}`;
+
+  if (data.rows.length === 0) {
+    container.innerHTML = `<div class="metas-wrap" style="padding:32px;text-align:center">
+      <div style="font-size:30px;margin-bottom:10px">📋</div>
+      <div style="font-size:14px;font-weight:600;color:#374151;margin-bottom:6px">Nenhuma meta cadastrada</div>
+      <div style="font-size:13px;color:#9CA3AF">Clique em "+ Nova Meta" para adicionar metas específicas por TAM.</div>
+    </div>`;
+    return;
+  }
+
+  const statusColors = {
+    'Atingida':'background:#F0FDF4;color:#166534;border:1px solid #BBF7D0',
+    'Em andamento':'background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE',
+    'Atrasada':'background:#FEF2F2;color:#991B1B;border:1px solid #FECACA',
+    'Não iniciada':'background:#F3F4F6;color:#374151;border:1px solid #E5E7EB',
+  };
+
+  const thead = `<tr>
+    ${data.columns.map(col => `
+      <th>
+        ${col.label}
+        ${!col.fixed ? `<button class="meta-del-col" onclick="removeMetaCol('${mid}','${col.id}')" title="Remover coluna">✕</button>` : ''}
+      </th>`).join('')}
+    <th style="width:30px;padding:0;background:#F9FAFB"></th>
+  </tr>`;
+
+  const tbody = data.rows.map(row => `
+    <tr id="metrow-${mid}-${row.id}">
+      ${data.columns.map(col => {
+        const val = row.data[col.id] || '';
+        const isStatus = col.label.toLowerCase()==='status';
+        const isPct = col.id === 'col_pct';
+        let style = '';
+        if (isStatus && statusColors[val]) style = `style="${statusColors[val]};border-radius:20px;padding:2px 10px;font-size:12px;font-weight:500;display:inline-flex;align-items:center"`;
+        if (isPct && val) style = pctBadge(val);
+        return `<td><span class="meta-cell${!val?' empty':''}" ${style} onclick="editMetaCell('${mid}','${row.id}','${col.id}',this,'${col.label}','${cid}')">${val || '—'}</span></td>`;
+      }).join('')}
+      <td style="width:30px;padding:4px"><button class="meta-del-row meta-row-actions" onclick="removeMetaRow('${mid}','${row.id}','${cid}')" title="Remover meta">✕</button></td>
+    </tr>`).join('');
+
+  container.innerHTML = `<div class="metas-wrap">
+    <table class="metas-table">
+      <thead>${thead}</thead>
+      <tbody>${tbody}</tbody>
+    </table>
+    <div class="metas-footer">
+      <button onclick="addMetaRow('${mid}','${cid}')" style="background:none;border:none;cursor:pointer;font-size:13px;color:#9CA3AF;display:flex;align-items:center;gap:6px;padding:0;transition:color .12s" onmouseover="this.style.color='#3B39F5'" onmouseout="this.style.color='#9CA3AF'">
+        <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="9" y1="3" x2="9" y2="15"/><line x1="3" y1="9" x2="15" y2="9"/></svg>
+        Adicionar meta
+      </button>
+    </div>
+  </div>`;
+}
+
+function addMetaRow(mid, containerId) {
+  const cid = containerId || `met-table-${mid}`;
+  const data = getMetasData(mid);
+  data.rows.push({id: Date.now(), data: {}});
+  persist();
+  renderMetas(mid, cid);
+  setTimeout(() => {
+    const rows = document.querySelectorAll(`#${cid} tbody tr`);
+    const lastRow = rows[rows.length - 1];
+    if (lastRow) lastRow.querySelector('.meta-cell')?.click();
+  }, 50);
+}
+
+function removeMetaRow(mid, rowId, containerId) {
+  const cid = containerId || `met-table-${mid}`;
+  const data = getMetasData(mid);
+  data.rows = data.rows.filter(r => r.id != rowId);
+  persist();
+  renderMetas(mid, cid);
+}
+
+function addMetaCol(mid) {
+  const name = prompt('Nome da nova coluna:');
+  if (!name || !name.trim()) return;
+  const data = getMetasData(mid);
+  data.columns.push({id: 'col_' + Date.now(), label: name.trim()});
+  persist();
+  renderMetas(mid);
+}
+
+function removeMetaCol(mid, colId) {
+  const data = getMetasData(mid);
+  data.columns = data.columns.filter(c => c.id !== colId);
+  persist();
+  renderMetas(mid);
+}
+
+function editMetaCell(mid, rowId, colId, el, colLabel, containerId) {
+  if (el.querySelector('input,textarea,select')) return;
+  const cid = containerId || `met-table-${mid}`;
+  const data = getMetasData(mid);
+  const row = data.rows.find(r => r.id == rowId);
+  if (!row) return;
+  const current = row.data[colId] || '';
+
+  const isStatus = colLabel.toLowerCase() === 'status';
+  const isPrazo  = colLabel.toLowerCase() === 'prazo';
+  const isPct    = colId === 'col_pct';
+
+  if (isPct) {
+    const sel = document.createElement('select');
+    sel.style.cssText = 'border:1px solid #3B39F5;border-radius:6px;padding:3px 8px;font-size:12px;font-weight:600;outline:none;cursor:pointer;background:white';
+    const opts = ['—', '10%','20%','30%','40%','50%','60%','70%','80%','90%','100%'];
+    opts.forEach(opt => {
+      const o = document.createElement('option');
+      o.value = opt === '—' ? '' : opt;
+      o.textContent = opt;
+      if ((opt === '—' && !current) || opt === current) o.selected = true;
+      sel.appendChild(o);
+    });
+    el.innerHTML = '';
+    el.appendChild(sel);
+    sel.focus();
+    const save = () => {
+      row.data[colId] = sel.value;
+      persist();
+      renderMetas(mid, cid);
+    };
+    sel.addEventListener('change', save);
+    sel.addEventListener('blur', save);
+    return;
+  }
+
+  if (isPrazo) {
+    const inp = document.createElement('input');
+    inp.type = 'date';
+    if (current && current.includes('/')) {
+      const [d, m, y] = current.split('/');
+      inp.value = `${y}-${m}-${d}`;
+    } else {
+      inp.value = current;
+    }
+    inp.style.cssText = 'border:1px solid #3B39F5;border-radius:6px;padding:3px 6px;font-size:12px;outline:none;cursor:pointer;font-family:inherit';
+    el.innerHTML = '';
+    el.appendChild(inp);
+    inp.focus();
+    inp.showPicker?.();
+    const save = () => {
+      if (inp.value) {
+        const [y, m, d] = inp.value.split('-');
+        row.data[colId] = `${d}/${m}/${y}`;
+      } else {
+        row.data[colId] = '';
+      }
+      persist();
+      renderMetas(mid, cid);
+    };
+    inp.addEventListener('change', save);
+    inp.addEventListener('blur', save);
+    return;
+  }
+
+  if (isStatus) {
+    const sel = document.createElement('select');
+    sel.style.cssText = 'border:1px solid #3B39F5;border-radius:6px;padding:3px 6px;font-size:12px;outline:none;cursor:pointer;background:white';
+    ['Não iniciada','Em andamento','Atingida','Atrasada',''].forEach(opt => {
+      const o = document.createElement('option');
+      o.value = opt; o.textContent = opt || '—';
+      if (opt === current) o.selected = true;
+      sel.appendChild(o);
+    });
+    el.innerHTML = '';
+    el.appendChild(sel);
+    sel.focus();
+    const save = () => {
+      row.data[colId] = sel.value;
+      persist();
+      renderMetas(mid, cid);
+    };
+    sel.addEventListener('change', save);
+    sel.addEventListener('blur', save);
+    return;
+  }
+
+  const input = document.createElement('input');
+  input.value = current;
+  input.style.cssText = 'width:100%;padding:3px 6px;border:1px solid #3B39F5;border-radius:4px;font-size:13px;font-family:inherit;outline:none;min-width:100px;box-sizing:border-box';
+  el.innerHTML = '';
+  el.appendChild(input);
+  input.focus();
+  input.select();
+  const save = () => {
+    row.data[colId] = input.value.trim();
+    persist();
+    renderMetas(mid, cid);
+  };
+  input.addEventListener('blur', save);
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { save(); }
+    if (e.key === 'Escape') { renderMetas(mid, cid); }
+    if (e.key === 'Tab') { e.preventDefault(); save(); }
+  });
+}
+
+// Init translations on page load
+applyTranslations();
+
+// ===== KANBAN =====
+const kbDefaultColumns = {
+  fr: [
+    {id:'backlog', name:'Backlog'},
+    {id:'analise', name:'Em análise'},
+    {id:'aprovado', name:'Aprovado'},
+    {id:'dev', name:'Em desenvolvimento'},
+    {id:'done', name:'Concluído'}
+  ],
+  dt: [
+    {id:'novo', name:'Novo'},
+    {id:'andamento', name:'Em andamento'},
+    {id:'await_merchant', name:'Aguardando Merchant'},
+    {id:'await_tech', name:'Aguardando Tech'},
+    {id:'done', name:'Concluído'}
+  ],
+  pc: [
+    {id:'ideia', name:'Ideia'},
+    {id:'analise', name:'Em análise'},
+    {id:'proposta', name:'Proposta enviada'},
+    {id:'execucao', name:'Em execução'},
+    {id:'entregue', name:'Entregue'}
+  ],
+  impl: [
+    {id:'setup', name:'Setup Técnico'},
+    {id:'config', name:'Configuração'},
+    {id:'testes', name:'Testes'},
+    {id:'homolog', name:'Homologação'},
+    {id:'golive', name:'Go-live'}
+  ]
+};
+
+let kbNextId = Date.now();
+function kbId() { return 'kb_' + (kbNextId++); }
+
+function getBoardData(mid, boardKey) {
+  if (!boards[mid]) boards[mid] = {};
+  if (!boards[mid][boardKey]) {
+    boards[mid][boardKey] = {
+      columns: (kbDefaultColumns[boardKey]||[]).map(c => ({...c})),
+      cards: []
+    };
+    persist();
+  }
+  return boards[mid][boardKey];
+}
+
+let kbDragCardId = null;
+let kbDragSourceColId = null;
+
+function renderKanban(mid, boardKey) {
+  const root = document.getElementById('kb-root');
+  if (!root) return;
+  const board = getBoardData(mid, boardKey);
+  let html = '<div class="kb-board">';
+  board.columns.forEach(col => {
+    const cards = board.cards.filter(c => c.columnId === col.id).sort((a,b) => (a.order||0) - (b.order||0));
+    html += renderKanbanColumn(col, cards, boardKey, mid);
+  });
+  html += `<button class="kb-new-col" onclick="addKanbanColumn('${mid}','${boardKey}')">+ Nova coluna</button>`;
+  html += '</div>';
+  root.innerHTML = html;
+}
+
+function renderKanbanColumn(col, cards, boardKey, mid) {
+  let html = `<div class="kb-col" data-colid="${col.id}" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'${mid}','${boardKey}','${col.id}')" ondragleave="kanbanDragLeave(event)">`;
+  html += `<div class="kb-col-header">
+    <span>${esc(col.name)}</span>
+    <span class="kb-col-count">${cards.length}</span>
+    <button class="kb-col-menu" title="Renomear" onclick="renameKanbanColumn('${mid}','${boardKey}','${col.id}')">✏</button>
+    <button class="kb-col-menu" title="Excluir coluna" onclick="deleteKanbanColumn('${mid}','${boardKey}','${col.id}')" style="color:#EF4444">✕</button>
+  </div>`;
+  html += '<div class="kb-col-cards">';
+  cards.forEach(card => {
+    html += renderKanbanCard(card, mid, boardKey);
+  });
+  html += '</div>';
+  html += `<div class="kb-col-footer">
+    <button class="kb-add-btn" onclick="openNewKanbanCard('${mid}','${boardKey}','${col.id}',this)">+ Adicionar cartão</button>
+  </div>`;
+  html += '</div>';
+  return html;
+}
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function renderKanbanCard(card, mid, boardKey) {
+  const prioClass = {'alta':'kb-prio-alta','media':'kb-prio-media','baixa':'kb-prio-baixa'}[card.prioridade]||'kb-prio-media';
+  const prioLabel = {'alta':'Alta','media':'Média','baixa':'Baixa'}[card.prioridade]||'Média';
+  const commentCount = (card.comments||[]).length;
+  let html = `<div class="kb-card" draggable="true" data-cardid="${card.id}" ondragstart="kanbanDragStart(event,'${card.id}','${card.columnId}')" ondragend="kanbanDragEnd(event)" onclick="openKanbanCardDetail('${mid}','${boardKey}','${card.id}')">`;
+  html += `<div class="kb-card-title">${esc(card.title)}</div>`;
+  if (card.desc) html += `<div class="kb-card-desc">${esc(card.desc)}</div>`;
+  html += '<div class="kb-card-footer">';
+  html += `<span class="kb-card-prio ${prioClass}">${prioLabel}</span>`;
+  if (commentCount > 0) html += `<span class="kb-card-comments">💬 ${commentCount}</span>`;
+  if (card.awaitingMerchant) html += `<span class="kb-card-await">Aguardando</span>`;
+  html += '</div></div>';
+  return html;
+}
+
+// Drag and Drop
+function kanbanDragStart(e, cardId, colId) {
+  kbDragCardId = cardId;
+  kbDragSourceColId = colId;
+  e.target.classList.add('kb-dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', cardId);
+}
+
+function kanbanDragEnd(e) {
+  e.target.classList.remove('kb-dragging');
+  document.querySelectorAll('.kb-col').forEach(c => c.classList.remove('kb-dragover'));
+  kbDragCardId = null;
+  kbDragSourceColId = null;
+}
+
+function kanbanDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  e.currentTarget.classList.add('kb-dragover');
+}
+
+function kanbanDragLeave(e) {
+  if (!e.currentTarget.contains(e.relatedTarget)) {
+    e.currentTarget.classList.remove('kb-dragover');
+  }
+}
+
+function kanbanDrop(e, mid, boardKey, targetColId) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('kb-dragover');
+  if (!kbDragCardId) return;
+  const board = getBoardData(mid, boardKey);
+  const card = board.cards.find(c => c.id === kbDragCardId);
+  if (!card) return;
+  card.columnId = targetColId;
+  card.updatedAt = new Date().toISOString();
+  // Set order to end of target column
+  const colCards = board.cards.filter(c => c.columnId === targetColId && c.id !== card.id);
+  card.order = colCards.length ? Math.max(...colCards.map(c => c.order||0)) + 1 : 0;
+  persist();
+  renderKanban(mid, boardKey);
+}
+
+// CRUD Cards
+function openNewKanbanCard(mid, boardKey, colId, btn) {
+  // Check if inline form already open in this column
+  const footer = btn.parentElement;
+  const col = footer.parentElement;
+  const existing = col.querySelector('.kb-inline-form');
+  if (existing) { existing.querySelector('textarea').focus(); return; }
+  btn.style.display = 'none';
+  const form = document.createElement('div');
+  form.className = 'kb-inline-form';
+  form.innerHTML = `
+    <textarea class="kb-inline-input" placeholder="Título do cartão..." rows="2"></textarea>
+    <div class="kb-inline-actions">
+      <button class="kb-inline-save" onclick="saveNewKanbanCard('${mid}','${boardKey}','${colId}',this)">Adicionar</button>
+      <button class="kb-inline-cancel" onclick="cancelNewKanbanCard(this)">Cancelar</button>
+    </div>`;
+  footer.before(form);
+  const ta = form.querySelector('textarea');
+  ta.focus();
+  ta.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); saveNewKanbanCard(mid, boardKey, colId, form.querySelector('.kb-inline-save')); }
+    if (e.key === 'Escape') cancelNewKanbanCard(form.querySelector('.kb-inline-cancel'));
+  });
+}
+
+function saveNewKanbanCard(mid, boardKey, colId, btn) {
+  const form = btn.closest('.kb-inline-form');
+  const title = form.querySelector('textarea').value.trim();
+  if (!title) return;
+  const board = getBoardData(mid, boardKey);
+  const colCards = board.cards.filter(c => c.columnId === colId);
+  board.cards.push({
+    id: kbId(),
+    columnId: colId,
+    title,
+    desc: '',
+    prioridade: 'media',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    awaitingMerchant: false,
+    comments: [],
+    order: colCards.length ? Math.max(...colCards.map(c => c.order||0)) + 1 : 0
+  });
+  persist();
+  renderKanban(mid, boardKey);
+}
+
+function cancelNewKanbanCard(btn) {
+  const form = btn.closest('.kb-inline-form');
+  const footer = form.nextElementSibling;
+  if (footer) footer.querySelector('.kb-add-btn').style.display = '';
+  form.remove();
+}
+
+function deleteKanbanCard(mid, boardKey, cardId) {
+  if (!confirm('Excluir este cartão?')) return;
+  const board = getBoardData(mid, boardKey);
+  board.cards = board.cards.filter(c => c.id !== cardId);
+  persist();
+  closeKanbanDetail();
+  renderKanban(mid, boardKey);
+}
+
+// Column Management
+function addKanbanColumn(mid, boardKey) {
+  const name = prompt('Nome da nova coluna:');
+  if (!name || !name.trim()) return;
+  const board = getBoardData(mid, boardKey);
+  board.columns.push({ id: kbId(), name: name.trim() });
+  persist();
+  renderKanban(mid, boardKey);
+}
+
+function renameKanbanColumn(mid, boardKey, colId) {
+  const board = getBoardData(mid, boardKey);
+  const col = board.columns.find(c => c.id === colId);
+  if (!col) return;
+  const name = prompt('Novo nome da coluna:', col.name);
+  if (!name || !name.trim() || name.trim() === col.name) return;
+  col.name = name.trim();
+  persist();
+  renderKanban(mid, boardKey);
+}
+
+function deleteKanbanColumn(mid, boardKey, colId) {
+  const board = getBoardData(mid, boardKey);
+  const col = board.columns.find(c => c.id === colId);
+  if (!col) return;
+  const cardCount = board.cards.filter(c => c.columnId === colId).length;
+  const msg = cardCount > 0
+    ? `Excluir coluna "${col.name}" e seus ${cardCount} cartão(s)?`
+    : `Excluir coluna "${col.name}"?`;
+  if (!confirm(msg)) return;
+  board.columns = board.columns.filter(c => c.id !== colId);
+  board.cards = board.cards.filter(c => c.columnId !== colId);
+  persist();
+  renderKanban(mid, boardKey);
+}
+
+// Slide-out Detail
+function openKanbanCardDetail(mid, boardKey, cardId) {
+  const board = getBoardData(mid, boardKey);
+  const card = board.cards.find(c => c.id === cardId);
+  if (!card) return;
+  const col = board.columns.find(c => c.id === card.columnId);
+  const panel = document.getElementById('kb-detail-panel');
+  const overlay = document.getElementById('kb-detail-overlay');
+
+  const colOptions = board.columns.map(c => `<option value="${c.id}"${c.id===card.columnId?' selected':''}>${esc(c.name)}</option>`).join('');
+  const prioOptions = ['alta','media','baixa'].map(p => {
+    const l = {alta:'Alta',media:'Média',baixa:'Baixa'}[p];
+    return `<option value="${p}"${p===card.prioridade?' selected':''}>${l}</option>`;
+  }).join('');
+
+  const commentsHtml = (card.comments||[]).map(c => `
+    <div class="kb-comment">
+      <div class="kb-comment-avatar">${(c.author||'U')[0].toUpperCase()}</div>
+      <div class="kb-comment-body">
+        <div class="kb-comment-meta"><strong>${esc(c.author||'Usuário')}</strong> · ${new Date(c.date).toLocaleDateString('pt-BR')} ${new Date(c.date).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</div>
+        <div class="kb-comment-text">${esc(c.text)}</div>
+      </div>
+    </div>`).join('');
+
+  panel.innerHTML = `
+    <div class="kb-detail-header">
+      <button class="kb-detail-close" onclick="closeKanbanDetail()">✕</button>
+      <div class="kb-detail-title">
+        <h3 contenteditable="true" id="kb-det-title" onblur="updateKanbanCardField('${mid}','${boardKey}','${cardId}','title',this.textContent)">${esc(card.title)}</h3>
+        <span style="font-size:11px;color:#9CA3AF">${col ? col.name : ''} · Criado em ${new Date(card.createdAt).toLocaleDateString('pt-BR')}</span>
+      </div>
+    </div>
+    <div class="kb-detail-body">
+      <div class="kb-detail-field">
+        <div class="kb-detail-label">Descrição</div>
+        <div class="kb-detail-desc" contenteditable="true" id="kb-det-desc" onblur="updateKanbanCardField('${mid}','${boardKey}','${cardId}','desc',this.textContent)">${card.desc ? esc(card.desc) : '<span style=color:#D1D5DB>Clique para adicionar descrição...</span>'}</div>
+      </div>
+      <div class="kb-detail-row">
+        <div class="kb-detail-field">
+          <div class="kb-detail-label">Prioridade</div>
+          <select class="kb-detail-select" onchange="updateKanbanCardField('${mid}','${boardKey}','${cardId}','prioridade',this.value)">${prioOptions}</select>
+        </div>
+        <div class="kb-detail-field">
+          <div class="kb-detail-label">Mover para coluna</div>
+          <select class="kb-detail-select" onchange="moveKanbanCard('${mid}','${boardKey}','${cardId}',this.value)">${colOptions}</select>
+        </div>
+      </div>
+      <div class="kb-detail-field">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+          <input type="checkbox" ${card.awaitingMerchant?'checked':''} onchange="updateKanbanCardField('${mid}','${boardKey}','${cardId}','awaitingMerchant',this.checked)">
+          <span style="font-size:13px;color:#374151">Aguardando merchant</span>
+        </label>
+      </div>
+      <div class="kb-detail-comments">
+        <div class="kb-detail-label">Comentários (${(card.comments||[]).length})</div>
+        ${commentsHtml}
+        <div class="kb-comment-input">
+          <textarea class="kb-comment-textarea" id="kb-comment-text" placeholder="Adicionar comentário..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();addKanbanComment('${mid}','${boardKey}','${cardId}')}"></textarea>
+        </div>
+        <div style="margin-top:8px;text-align:right">
+          <button class="kb-comment-send" onclick="addKanbanComment('${mid}','${boardKey}','${cardId}')">Enviar</button>
+        </div>
+      </div>
+    </div>
+    <div class="kb-detail-footer">
+      <button class="kb-delete-btn" onclick="deleteKanbanCard('${mid}','${boardKey}','${cardId}')">Excluir cartão</button>
+    </div>`;
+
+  requestAnimationFrame(() => {
+    overlay.classList.add('open');
+    panel.classList.add('open');
+  });
+}
+
+function closeKanbanDetail() {
+  document.getElementById('kb-detail-overlay').classList.remove('open');
+  document.getElementById('kb-detail-panel').classList.remove('open');
+}
+
+function updateKanbanCardField(mid, boardKey, cardId, field, value) {
+  const board = getBoardData(mid, boardKey);
+  const card = board.cards.find(c => c.id === cardId);
+  if (!card) return;
+  if (field === 'desc' || field === 'title') {
+    value = (value||'').trim();
+    if (!value && field === 'title') return; // don't allow empty title
+  }
+  card[field] = value;
+  card.updatedAt = new Date().toISOString();
+  persist();
+  renderKanban(mid, boardKey);
+}
+
+function moveKanbanCard(mid, boardKey, cardId, newColId) {
+  const board = getBoardData(mid, boardKey);
+  const card = board.cards.find(c => c.id === cardId);
+  if (!card || card.columnId === newColId) return;
+  card.columnId = newColId;
+  card.updatedAt = new Date().toISOString();
+  const colCards = board.cards.filter(c => c.columnId === newColId && c.id !== card.id);
+  card.order = colCards.length ? Math.max(...colCards.map(c => c.order||0)) + 1 : 0;
+  persist();
+  renderKanban(mid, boardKey);
+}
+
+function addKanbanComment(mid, boardKey, cardId) {
+  const ta = document.getElementById('kb-comment-text');
+  const text = (ta?.value||'').trim();
+  if (!text) return;
+  const board = getBoardData(mid, boardKey);
+  const card = board.cards.find(c => c.id === cardId);
+  if (!card) return;
+  if (!card.comments) card.comments = [];
+  card.comments.push({ date: new Date().toISOString(), author: 'Débora', text });
+  card.updatedAt = new Date().toISOString();
+  persist();
+  // Re-open the detail to refresh comments
+  openKanbanCardDetail(mid, boardKey, cardId);
+  renderKanban(mid, boardKey);
+}
+
+// ===== KEYBOARD =====
+document.addEventListener('keydown', e => {
+  if (e.key==='Enter' && !document.getElementById('view-login').classList.contains('hidden')) doLogin();
+  if (e.key==='Escape') { closeModal(); closeDemandaModal(); closePlanoModal(); closeKanbanDetail(); }
+});
+</script>
+</body>
+</html>
